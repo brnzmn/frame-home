@@ -38,12 +38,20 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
 - The TV lists `TV1` as connected and `HDMI1` to `HDMI4` as disconnected. Nothing was plugged in, so showing an HDMI input inside the app is untested.
 - `tizen.tvwindow.getSource` is synchronous; the probe called it with callbacks and failed.
 
-### Art controls: not working yet
+### Art controls: working, but only while Art Mode is on
 
 - Pairing works. The art channel opens and reports ready, from the Mac and from inside the TV app.
-- Requests get no reply: `api_version`, `get_artmode_status`, `get_matte_list`, `get_current_artwork`, the image list, the settings. Tested on the home screen and with the Art app in front, with `tools/frame/check.py`, the library's own diagnostic, and a socket opened from inside the app.
-- With the Art app in front the service does broadcast events: `image_selected` (including `matte_id`), `slideshow_image_changed`, `notify.sync_server`.
-- So the global mat is unproven. The service is alive, but ignores requests in the format the library sends.
+- On the home screen every request goes unanswered. With the Art app in front (Art Mode on) the service answers from the Mac over port 8002 with the pairing token. Art API version `5.0.1.0`.
+- The `samsungframetv` classes fail on this TV: the TV sends art events before the channel's own connect frame, which the library treats as a failed connection. `tools/frame/artws.py` is our own small client and works.
+- Answered: `api_version`, `get_artmode_status`, `get_matte_list`, `get_current_artwork`, `get_device_info`, `get_artmode_settings`, `get_photo_filter_list`, `get_slideshow_status`, `get_content_list`, `change_matte`.
+- Mat styles: none, modernthin, modern, modernwide, flexible, shadowbox, panoramic, triptych, mix, squares. Colours: black, neutral, antique, warm, polar, sand, seafoam, sage, burgandy, navy, apricot, byzantine, lavender, redorange, skyblue, turquoise. Filters: None, Aqua, ArtDeco, Ink, Wash, Pastel, Feuve.
+- **Changing a mat works.** `change_matte` on the artwork on screen (an Art Store stream image) was acknowledged, the TV sent `matte_changed`, and its content list and slideshow list both showed the new mat. The original was put back and confirmed the same way.
+- Two traps:
+  - `get_current_artwork` keeps returning the old mat after a change. Verify against `get_slideshow_status` or `get_content_list`.
+  - Sending only `matte_id` also rewrites `portrait_matte_id` (to the same mat, or to `shadowbox_black` when the mat is `none`). Always send both.
+- Baran's art is an Art Store stream: a slideshow of 30 images changing every 5 minutes. All 30 have landscape mat `none`; their portrait mats differ (shadowbox polar 7, shadowbox antique 11, none 8, flexible neutral 3, flexible polar 1). `get_content_list` with no category returned one item, so the slideshow list is the inventory to work from.
+- From inside the TV app the channel opens on port 8001, but requests there got no reply even with the Art app in front. Whether passing the pairing token on 8001 fixes that is untested, so for now the frame look runs from the Mac.
+- Not yet known: which of the two mat fields draws the band Baran sees on his landscape TV. A live preview with him watching settles it.
 
 ### Not tested yet
 

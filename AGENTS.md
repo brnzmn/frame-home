@@ -24,6 +24,12 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - 2025 Frames report `PowerState: standby` while in Art Mode.
 - The desktop app's preview servers cannot read `/Volumes/disk1` without a macOS removable-volume permission. Run local servers from the shell, or from a copy on the internal disk.
 - Animation frames stop while a page is hidden, so frame-rate numbers only count when the app is on screen.
+- Never take a debug-port screenshot while the app is hidden; it coincided with the app going silent.
+- A `.wgt` file name with a space fails to install with an empty log. `tools/deploy.mjs` renames it.
+- The art service answers only while Art Mode is on. Use `tools/frame/artws.py`; the `samsungframetv` classes fail on this TV's connect order.
+- After `change_matte`, `get_current_artwork` still shows the old mat. Verify with `get_slideshow_status` or `get_content_list`.
+- `change_matte` with only `matte_id` also rewrites `portrait_matte_id`. Always send both.
+- A hidden app brings itself forward by launching its own id, which reloads the page. Save state first.
 
 ## Commands
 
