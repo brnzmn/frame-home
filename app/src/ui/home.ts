@@ -2,10 +2,18 @@
 // Focus is drawn by us (a class), not by the browser: the remote only sends key presses.
 import { clampPos, move, type Direction, type FocusPos, type FocusRow } from '../focus/engine';
 import type { Glyph, Row, Tile } from '../data/catalog';
+import { fitIcon, type IconFit } from './iconfit';
 
 const DIRECTIONS: Record<number, Direction> = { 37: 'left', 38: 'up', 39: 'right', 40: 'down' };
 const KEY_ENTER = 13;
 const SAVED_FOCUS = 'frame-home.focus';
+// Keep in step with styles.css.
+const TILE_W = 264;
+const TILE_H = 148;
+const ROW_STEP = 200;
+/** Rows that fit on screen below the hero; focusing a later one scrolls the page up. */
+const ROWS_ON_SCREEN = 3;
+const SAMPLE = 48;
 
 const GLYPHS: Record<Glyph, string> = {
   frame:
@@ -54,12 +62,37 @@ function tileNode(tile: Tile, kind: Row['kind']): HTMLElement {
   if (tile.iconUrl) {
     const img = el('img', 'tile-icon');
     img.alt = '';
-    img.addEventListener('load', () => img.classList.add('is-loaded'));
+    img.addEventListener('load', () => placeIcon(img, face));
     img.src = tile.iconUrl;
     face.append(img);
   }
   node.append(face);
   return node;
+}
+
+/** Look at the loaded icon and decide how it sits on the tile, or drop it for the tile's own artwork. */
+function placeIcon(img: HTMLImageElement, face: HTMLElement): void {
+  let fit: IconFit = { use: true, size: TILE_W, ground: null };
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = SAMPLE;
+    canvas.height = SAMPLE;
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.drawImage(img, 0, 0, SAMPLE, SAMPLE);
+      fit = fitIcon(context.getImageData(0, 0, SAMPLE, SAMPLE).data, SAMPLE, TILE_W, TILE_H);
+    }
+  } catch {
+    // Reading the pixels is not allowed here; keep the default, which covers the tile.
+  }
+  if (!fit.use) {
+    img.remove();
+    return;
+  }
+  if (fit.ground) face.style.background = fit.ground;
+  img.style.width = `${fit.size}px`;
+  img.style.height = `${fit.size}px`;
+  img.classList.add('is-loaded');
 }
 
 function readSavedFocus(): FocusPos | null {
@@ -75,13 +108,15 @@ export function mountHome(root: HTMLElement, rows: Row[], options: HomeOptions):
   const stage = el('div', 'stage');
   const washes = [el('div', 'wash'), el('div', 'wash')];
   const clock = el('div', 'clock');
+  const content = el('div', 'content');
   const hero = el('div', 'hero');
   const heroName = el('h1', 'hero-name');
   const heroLine = el('p', 'hero-line');
   const rowsNode = el('div', 'rows');
   const noteNode = el('div', 'note');
   hero.append(heroName, heroLine);
-  stage.append(...washes, clock, hero, rowsNode, noteNode);
+  content.append(hero, rowsNode);
+  stage.append(...washes, content, clock, noteNode);
   root.replaceChildren(stage);
 
   const nodes: HTMLElement[][] = rows.map((row) => {
@@ -106,6 +141,10 @@ export function mountHome(root: HTMLElement, rows: Row[], options: HomeOptions):
 
     heroName.textContent = tile.name;
     heroLine.textContent = tile.line;
+
+    // Rows past the third sit below the screen; slide the page up to bring the focused one in.
+    const hiddenRows = Math.max(0, pos.row - (ROWS_ON_SCREEN - 1));
+    content.style.transform = `translateY(${-hiddenRows * ROW_STEP}px)`;
 
     // Cross-fade the ambient colour: paint the hidden layer, then swap which one is visible.
     activeWash = 1 - activeWash;

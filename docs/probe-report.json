@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "startedAt": "2026-11-10T19:26:10.739Z",
+  "startedAt": "2026-11-10T19:35:16.685Z",
   "checks": {
     "env": {
       "status": "ok",
@@ -48,26 +48,6 @@
         "status": 200
       }
     },
-    "art.local.8002": {
-      "status": "fail",
-      "detail": {
-        "ms": 91
-      }
-    },
-    "art.local.8001": {
-      "status": "ok",
-      "detail": {
-        "firstEvent": "ms.channel.connect",
-        "ms": 108
-      }
-    },
-    "net.tmdb": {
-      "status": "ok",
-      "detail": {
-        "status": 401,
-        "ms": 133
-      }
-    },
     "apps.list": {
       "status": "ok",
       "detail": {
@@ -95,6 +75,13 @@
         "AmbientFTE = com.samsung.tv.ambientfte",
         "Frame Probe = FrmHmPrb01.FrameProbe"
       ]
+    },
+    "net.tmdb": {
+      "status": "ok",
+      "detail": {
+        "status": 401,
+        "ms": 485
+      }
     },
     "apps.icons": {
       "status": "partial",
@@ -125,6 +112,19 @@
         ]
       }
     },
+    "art.local.8002": {
+      "status": "fail",
+      "detail": {
+        "ms": 752
+      }
+    },
+    "art.local.8001": {
+      "status": "ok",
+      "detail": {
+        "firstEvent": "ms.channel.connect",
+        "ms": 769
+      }
+    },
     "inputs.list": {
       "status": "ok",
       "detail": {
@@ -143,31 +143,142 @@
       "status": "ok",
       "detail": {
         "plain": {
-          "fps": 59,
+          "fps": 57,
           "worstFrameMs": 83
         },
         "shadow": {
-          "fps": 52,
-          "worstFrameMs": 367
+          "fps": 54,
+          "worstFrameMs": 283
         },
         "blur": {
-          "fps": 44,
-          "worstFrameMs": 517
+          "fps": 45,
+          "worstFrameMs": 500
         }
       }
     }
   },
   "events": [
     {
-      "t": "19:26:10.838",
+      "t": "19:35:16.810",
       "type": "started",
       "data": null,
       "visible": "visible"
     },
     {
-      "t": "19:26:10.840",
+      "t": "19:35:16.820",
       "type": "pageshow",
       "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:16.842",
+      "type": "focus",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:16.844",
+      "type": "focus",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.116",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.324",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.588",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.806",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.013",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.190",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.376",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.572",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.745",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.948",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:21.102",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
       "visible": "visible"
     }
   ],

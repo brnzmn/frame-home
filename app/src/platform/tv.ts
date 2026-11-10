@@ -6,6 +6,8 @@ import { createTizenTv } from './tizen';
 export interface TvApp {
   id: string;
   name: string;
+  /** False for the many background services and system parts the TV also lists. */
+  shown: boolean;
   /** Icon the TV ships for the app. Many do not load, so tiles always have their own artwork underneath. */
   iconUrl: string | null;
 }

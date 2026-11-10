@@ -18,7 +18,8 @@ const INSTALLED: TvApp[] = [
   ['com.samsung.tv.SmartThingsApp', 'SmartThings'],
   ['org.tizen.browser', 'Internet'],
   ['com.samsung.tv.store', 'Apps'],
-].map(([id, name]) => ({ id, name, iconUrl: null }));
+  ['WSRedi0001.WorkspaceRedi', 'Workspace'],
+].map(([id, name]) => ({ id, name, shown: true, iconUrl: null }));
 
 export function createMockTv(): Tv {
   return {

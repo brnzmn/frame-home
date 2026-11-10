@@ -27,6 +27,7 @@ export function createTizenTv(): Tv {
               list.map((a) => ({
                 id: a.id,
                 name: a.name,
+                shown: Boolean(a.show),
                 iconUrl: a.iconPath ? (a.iconPath.charAt(0) === '/' ? `file://${a.iconPath}` : a.iconPath) : null,
               })),
             ),

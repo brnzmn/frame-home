@@ -53,9 +53,12 @@ const MORE: Known[] = [
   { appId: 'com.samsung.tv.store', name: 'Apps', line: 'Samsung app store', from: '#34313B', to: '#24212A', ink: '#F3EFE8', glow: '#A9A3B2' },
 ];
 
+/** Tiles per row; six of them fill the 1920-wide screen. */
+export const PER_ROW = 6;
+
 // Store apps look like "MCmYXNxgcu.DisneyPlus". These ones are not worth a tile.
 const STORE_APP = /^[A-Za-z0-9]{10}\.[\w.-]+$/;
-const NEVER = new Set(['w2VwCK465D.OTApp', '2025ePop01.SmartTV', '25emanual2.emanual']);
+const NEVER = new Set(['w2VwCK465D.OTApp', '2025ePop01.SmartTV', '25emanual2.emanual', 'adplatform.ADPlayer', 'tv6pbVMQFF.PrivacyChoices', 'ByJlgt0XeD.CastSettingsApp']);
 const OURS = /^(FrameHome1|FrmHmPrb01)\./;
 
 export function buildRows(installed: TvApp[]): Row[] {
@@ -65,14 +68,16 @@ export function buildRows(installed: TvApp[]): Row[] {
 
   const known = new Set([...FRAME, ...DOCK, ...MORE].map((k) => k.appId));
   // Anything installed from the store later still gets a tile, with the TV's own name and icon.
+  // The TV also lists store-style ids for background services; `shown` separates the two.
   const extra: Tile[] = installed
-    .filter((a) => STORE_APP.test(a.id) && !known.has(a.id) && !NEVER.has(a.id) && !OURS.test(a.id) && a.iconUrl)
+    .filter((a) => a.shown && STORE_APP.test(a.id) && !known.has(a.id) && !NEVER.has(a.id) && !OURS.test(a.id))
     .map((a) => ({ appId: a.id, name: a.name, line: '', from: '#34313B', to: '#24212A', ink: '#F3EFE8', glow: '#A9A3B2', iconUrl: a.iconUrl }));
 
+  const more = [...present(MORE), ...extra];
   const rows: Row[] = [
     { kind: 'frame', tiles: present(FRAME).map((t) => ({ ...t, iconUrl: null })) },
     { kind: 'apps', tiles: present(DOCK) },
-    { kind: 'apps', tiles: [...present(MORE), ...extra] },
   ];
+  for (let i = 0; i < more.length; i += PER_ROW) rows.push({ kind: 'apps', tiles: more.slice(i, i + PER_ROW) });
   return rows.filter((r) => r.tiles.length > 0);
 }

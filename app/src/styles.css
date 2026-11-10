@@ -66,6 +66,13 @@ html, body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Hero and rows move together when the focus goes below the third row. */
+.content {
+  position: absolute;
+  inset: 0;
+  transition: transform 340ms var(--ease);
+}
+
 .hero {
   position: absolute;
   left: var(--edge);
@@ -127,12 +134,15 @@ html, body {
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+/* The TV's icons are square. Centred and drawn as wide as the tile they cover it; home.ts
+   draws the ones with tall logos smaller and continues their background colour. */
 .tile-icon {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  left: 50%;
+  top: 50%;
+  width: var(--tile-w);
+  height: var(--tile-w);
+  transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 220ms ease;
 }
@@ -189,5 +199,5 @@ html, body {
 .note.is-on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wash, .tile, .tile-face, .card, .note { transition: none; }
+  .wash, .content, .tile, .tile-face, .card, .note { transition: none; }
 }

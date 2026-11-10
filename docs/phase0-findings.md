@@ -59,6 +59,14 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
 - **Lists and opens apps:** confirmed above.
 - **A way back in without hunting:** return after an app closes is confirmed. The TV still opens Samsung's home at power-on, as expected; the SmartThings rule is the fix and is not set up yet.
 
+### Launcher on the TV (2026-11-10)
+
+- Frame Home 0.1.0 (`FrameHome1.FrameHome`) is installed and runs: three Frame cards and thirteen app tiles in rows of six. Screenshot taken from the TV: `docs/design/tv-second-install.png`.
+- Every icon the TV ships is square, 117 to 512 px. Reading an icon's pixels from a canvas is allowed, so the launcher measures each one. Icons with a flat background are sized to their logo and their colour continues across the tile; icons with a gradient cover the tile; rounded placeholders with transparent corners (YouTube, SmartThings, Workspace) are dropped for the launcher's own artwork. Prime Video and Internet have no loadable icon.
+- The app list's `show` flag separates real apps from the background services that also carry store-style ids.
+- The test app, Frame Probe, has been uninstalled. Further checks run through the launcher's debug port.
+- Still to confirm: what the "Choose art" (`com.samsung.tv.home.art`) and "Settings" (`com.samsung.tv.coba.setting`) cards open; that the launcher build returns after an app closes, as the probe did; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
+
 ### Not tested yet
 
 - The SmartThings power-on rule, and that it leaves Art Mode alone.
