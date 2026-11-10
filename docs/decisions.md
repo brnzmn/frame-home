@@ -18,4 +18,5 @@
 - **Look:** Baran sets the creative direction ("closer to Apple TV"). Original assets, no Apple artwork or fonts.
 - **Model note:** Fable 5.2's safeguard stopped one research pass on this topic. The next tier for blocked work is Opus 5.5.
 - **Certificate:** profile `framehome`; the author password is in the keychain as `samsung/tizen-author-cert`. Baran decided against a backup copy of the certificate files. If `~/SamsungCertificate/framehome/` is lost, uninstall the app from the TV and sign again with a new certificate.
-- **Phase 0 result so far:** the launcher's building blocks work on the TV, and mats can be changed while Art Mode is on. See `docs/phase0-findings.md`. Open before the gate closes: surviving a full power cycle.
+- **Gate passed (2026-11-10):** the test app survives a full power cycle, lists and opens apps, and returns by itself after an app closes. The launcher goes ahead. Mats can be changed while Art Mode is on. See `docs/phase0-findings.md`.
+- **Design rules from the TV's measurements:** no live backdrop blur (31 fps); transforms and shadows are fine (55 to 59 fps); the launcher keeps its own curated app list and its own fallback artwork, because the TV's list is mostly system parts and many icons do not load.

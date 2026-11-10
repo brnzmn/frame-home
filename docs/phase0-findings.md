@@ -53,9 +53,14 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
 - From inside the TV app the channel opens on port 8001, but requests there got no reply even with the Art app in front. Whether passing the pairing token on 8001 fixes that is untested, so for now the frame look runs from the Mac.
 - Not yet known: which of the two mat fields draws the band Baran sees on his landscape TV. A live preview with him watching settles it.
 
+### Gate: passed on 2026-11-10
+
+- **Survives a power cycle:** after Baran's full power cycle the probe was still in the TV's installed-app list and opened normally. Developer Mode, its Host PC IP and the developer connection survived too.
+- **Lists and opens apps:** confirmed above.
+- **A way back in without hunting:** return after an app closes is confirmed. The TV still opens Samsung's home at power-on, as expected; the SmartThings rule is the fix and is not set up yet.
+
 ### Not tested yet
 
-- Whether the installed app survives a full power cycle.
 - The SmartThings power-on rule, and that it leaves Art Mode alone.
 - An HDMI input shown inside the app, with a live source connected.
 - How long a hidden app keeps running beyond two minutes.
