@@ -1,0 +1,16 @@
+{
+  "name": "frame-home",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A tvOS-style launcher and a global frame look for a Samsung Frame Pro",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.26.2",
+  "scripts": {
+    "tv:find": "node tools/find-tv.mjs",
+    "tv:inspect": "node tools/tv-inspect.mjs",
+    "probe:server": "node tools/probe-server.mjs"
+  }
+}

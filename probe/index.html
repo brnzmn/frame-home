@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Frame Probe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Frame Probe</h1>
+    <div id="status">starting</div>
+  </header>
+  <main>
+    <section>
+      <h2>Checks</h2>
+      <ul id="checks"></ul>
+    </section>
+    <section>
+      <h2>Apps <small>up / down, then OK to open</small></h2>
+      <ul id="apps"></ul>
+    </section>
+    <section>
+      <h2>Events</h2>
+      <ul id="events"></ul>
+    </section>
+  </main>
+  <footer>1 come-back test · 2 HDMI test · 3 frame-rate test · 4 send report · 5 return-after-close on/off · 0 exit</footer>
+  <div id="fps-stage"></div>
+  <script src="$WEBAPIS/webapis/webapis.js"></script>
+  <script src="probe-config.js"></script>
+  <script src="probe.js"></script>
+</body>
+</html>
