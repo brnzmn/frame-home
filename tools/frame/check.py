@@ -4,7 +4,7 @@
   check.py --write-test     also change one image's mat and change it back
   check.py --artmode-test   also switch Art Mode over and back (changes what the screen shows)
 
-Writes docs/art-check.json. Device ids, addresses and tokens are never read or stored.
+Writes docs/private/art-check.json (not committed: error text can quote raw frames from the TV).
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import argparse
 import time
 from collections import Counter
 
-from tv import ROOT, connect, is_own, write_json
+from tv import PRIVATE_DIR, ROOT, connect, is_own, write_json
 
 
 def step(report: dict, name: str, fn):
@@ -114,7 +114,7 @@ def main() -> None:
     if args.artmode_test:
         step(report, "artmode_test", lambda: artmode_test(art))
 
-    out = ROOT / "docs" / "art-check.json"
+    out = PRIVATE_DIR / "art-check.json"
     write_json(out, report)
     for name, value in report.items():
         if isinstance(value, dict) and "status" in value:

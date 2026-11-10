@@ -86,8 +86,12 @@ if (!devices.includes(target)) fail(`the TV did not accept the developer connect
 
 console.log(`packaging ${appName} with certificate profile "${profile}"`);
 run(TIZEN, ['package', '-t', 'wgt', '-s', profile, '--', stage]);
-const wgt = fs.readdirSync(stage).find((f) => f.endsWith('.wgt'));
-if (!wgt) fail('packaging produced no .wgt file');
+const packaged = fs.readdirSync(stage).find((f) => f.endsWith('.wgt'));
+if (!packaged) fail('packaging produced no .wgt file');
+// The TV's installer fails on a file name with a space ("Failed to install Tizen application",
+// empty log), and the packager names the file after the app, so rename it first.
+const wgt = `${appId.split('.').pop()}.wgt`;
+if (packaged !== wgt) fs.renameSync(path.join(stage, packaged), path.join(stage, wgt));
 
 console.log(`installing ${wgt}`);
 run(TIZEN, ['install', '-n', wgt, '-s', target, '--', stage]);

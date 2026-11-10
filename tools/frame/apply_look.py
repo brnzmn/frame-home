@@ -25,7 +25,7 @@ from tv import LOOK_FILE, PRIVATE_DIR, ROOT, connect, is_own, write_json
 
 def load_look() -> dict:
     if not LOOK_FILE.exists():
-        sys.exit("No frame-look.json yet. Copy frame-look.example.json and set the mat from docs/art-check.json.")
+        sys.exit("No frame-look.json yet. Copy frame-look.example.json and set the mat from docs/private/art-check.json.")
     look = json.loads(LOOK_FILE.read_text())
     if not look.get("matte"):
         sys.exit('frame-look.json needs a "matte" value, e.g. "shadowbox_polar" or "none".')
