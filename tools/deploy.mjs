@@ -34,13 +34,20 @@ function run(bin, binArgs, { quiet = false } = {}) {
   return out;
 }
 
-function macLanIp() {
+// This Mac's address on the TV's own network. The house has more than one network, and the
+// TV can only reach the address that shares its subnet.
+function macLanIp(tvIp) {
+  const prefix = tvIp.split('.').slice(0, 3).join('.') + '.';
+  let first = null;
   for (const [name, addrs] of Object.entries(os.networkInterfaces())) {
     if (!/^(en|eth|wl)/.test(name)) continue;
-    const a = (addrs ?? []).find((x) => x.family === 'IPv4' && !x.internal);
-    if (a) return a.address;
+    for (const a of addrs ?? []) {
+      if (a.family !== 'IPv4' || a.internal) continue;
+      if (a.address.startsWith(prefix)) return a.address;
+      first ??= a.address;
+    }
   }
-  return null;
+  return first;
 }
 
 if (!appDirName) fail('usage: node tools/deploy.mjs <app folder> [--debug] [--profile NAME]');
@@ -58,7 +65,7 @@ const target = `${tv.ip}:26101`;
 
 // The probe posts its report to this Mac; write where that is right now.
 if (appDirName === 'probe') {
-  const ip = macLanIp();
+  const ip = macLanIp(tv.ip);
   if (!ip) fail('this Mac has no local network address');
   fs.writeFileSync(path.join(appDir, 'probe-config.js'), `window.PROBE_CONFIG = { server: 'http://${ip}:8787' };\n`);
 }

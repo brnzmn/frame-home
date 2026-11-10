@@ -16,7 +16,9 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 ## Gotchas
 
 - Tizen Studio's macOS binaries are x86_64 and run under Rosetta. `tizen` is in `~/tizen-studio/tools/ide/bin`, `sdb` in `~/tizen-studio/tools`.
-- After Developer Mode is switched on the TV needs a full power cycle, and its Host PC IP must equal this Mac's current address.
+- After Developer Mode is switched on the TV needs a full power cycle, and its Host PC IP must equal this Mac's address on the TV's own network.
+- The house has two networks: the router's `192.168.0.x` and the mesh Wi-Fi's `192.168.86.x`. The TV is on the mesh, so the Mac must be on that Wi-Fi to reach it. `node tools/find-tv.mjs` writes both addresses to `.tv.json`.
+- On 2024 and later sets the Developer Mode code 12345 is entered inside Apps > App Settings (bottom of the Apps page), not on the Apps page itself (owner reports; not yet confirmed on this TV).
 - The TV's debug port serves one client at a time.
 - Retail Samsung sets do not auto-start sideloaded apps; "Autorun Last App" ignores them.
 - 2025 Frames report `PowerState: standby` while in Art Mode.
