@@ -65,7 +65,12 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
 - Every icon the TV ships is square, 117 to 512 px. Reading an icon's pixels from a canvas is allowed, so the launcher measures each one. Icons with a flat background are sized to their logo and their colour continues across the tile; icons with a gradient cover the tile; rounded placeholders with transparent corners (YouTube, SmartThings, Workspace) are dropped for the launcher's own artwork. Prime Video and Internet have no loadable icon.
 - The app list's `show` flag separates real apps from the background services that also carry store-style ids.
 - The test app, Frame Probe, has been uninstalled. Further checks run through the launcher's debug port.
-- Still to confirm: what the "Choose art" (`com.samsung.tv.home.art`) and "Settings" (`com.samsung.tv.coba.setting`) cards open; that the launcher build returns after an app closes, as the probe did; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
+- Frame card targets, tested from the launcher by watching whether it loses the screen or the focus:
+  - `org.tizen.menu` (the TV's settings; its metadata lists `tvSettings.OpenSettings`) and `com.samsung.tv.quickpanel` open as overlays: the launcher stays visible and loses focus.
+  - `com.samsung.tv.home.art`, Samsung's art picker, fails with `UnknownError`. Baran saw "Could not open Choose art".
+  - `com.samsung.tv.coba.setting`, `org.tizen.homesetting`, `com.samsung.tv.wizard.art`, `com.samsung.tv.coba.art`, `com.samsung.tv.floating-menu`, `com.samsung.tv.ambient-support` and `org.tizen.SMSourceAPP` launch without error and show nothing.
+  - No way was found for an app to open Samsung's art picker. A "Choose art" screen would have to be our own, built on the art controls.
+- Still to confirm: what exactly the Settings and Quick settings overlays show; that the launcher build returns after an app closes, as the probe did; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
 
 ### Not tested yet
 

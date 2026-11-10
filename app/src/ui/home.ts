@@ -18,8 +18,8 @@ const SAMPLE = 48;
 const GLYPHS: Record<Glyph, string> = {
   frame:
     '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><rect x="5" y="9" width="38" height="30" rx="2"/><rect x="13" y="16" width="22" height="16"/></svg>',
-  pictures:
-    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="14" width="27" height="22" rx="2"/><path d="M16 10h25a2 2 0 0 1 2 2v19"/><path d="M9 31l7-7 6 6 4-4 6 6"/></svg>',
+  toggles:
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="7" y="9" width="34" height="12" rx="6"/><circle cx="35" cy="15" r="3.2" fill="currentColor" stroke="none"/><rect x="7" y="27" width="34" height="12" rx="6"/><circle cx="13" cy="33" r="3.2" fill="currentColor" stroke="none"/></svg>',
   sliders:
     '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 14h18M33 14h8M7 24h6M21 24h20M7 34h22M37 34h4"/><circle cx="29" cy="14" r="4"/><circle cx="17" cy="24" r="4"/><circle cx="33" cy="34" r="4"/></svg>',
 };

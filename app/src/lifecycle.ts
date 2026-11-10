@@ -54,6 +54,11 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
     opened(appId: string): void {
       openedId = appId;
       seenRunning = false;
+      // Settings and the quick panel open over the launcher without hiding it. If we are
+      // still on screen a few seconds later, there is no app to wait for.
+      window.setTimeout(() => {
+        if (document.visibilityState === 'visible' && openedId === appId) openedId = null;
+      }, 5000);
     },
   };
 }

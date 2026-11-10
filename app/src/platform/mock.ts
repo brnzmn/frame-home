@@ -4,8 +4,8 @@ import type { Tv, TvApp } from './tv';
 // so the browser preview shows the launcher's own tile artwork.
 const INSTALLED: TvApp[] = [
   ['org.tizen.art-app', 'ArtApp'],
-  ['com.samsung.tv.home.art', 'HomeArt'],
-  ['com.samsung.tv.coba.setting', 'Setting'],
+  ['org.tizen.menu', 'org.tizen.menu'],
+  ['com.samsung.tv.quickpanel', 'QuickPanel'],
   ['org.tizen.netflix-app', 'Netflix'],
   ['9Ur5IzDKqV.TizenYouTube', 'YouTube'],
   ['org.tizen.primevideo', 'Prime Video'],
