@@ -10,7 +10,7 @@ How to get an app onto the TV and how to use the frame tools. Steps marked *unve
 ## Developer Mode on the TV
 
 1. TV on, out of Art Mode, on the same Wi-Fi as the Mac.
-2. Apps, press 1 2 3 4 5 on the number pad, Developer mode On, Host PC IP = the Mac's address (`ipconfig getifaddr en0`).
+2. Apps, scroll to the bottom of the page, open **App Settings**. Press the remote's 123 button, choose the on-screen number pad and enter 1 2 3 4 5. In the box that appears set Developer mode On and Host PC IP = the Mac's address (`ipconfig getifaddr en0`). If the number pad does nothing, type 12345 from the SmartThings phone app's remote keypad instead. (*unverified on this TV*)
 3. Fully power-cycle the TV (hold power until it is off, wait 15 seconds; or unplug for 15 seconds).
 4. `node tools/find-tv.mjs --need-dev` must print the TV. It writes `.tv.json`.
 
