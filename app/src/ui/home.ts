@@ -1,0 +1,171 @@
+// The home screen: a Frame row of three wide cards, then rows of app tiles.
+// Focus is drawn by us (a class), not by the browser: the remote only sends key presses.
+import { clampPos, move, type Direction, type FocusPos, type FocusRow } from '../focus/engine';
+import type { Glyph, Row, Tile } from '../data/catalog';
+
+const DIRECTIONS: Record<number, Direction> = { 37: 'left', 38: 'up', 39: 'right', 40: 'down' };
+const KEY_ENTER = 13;
+const SAVED_FOCUS = 'frame-home.focus';
+
+const GLYPHS: Record<Glyph, string> = {
+  frame:
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><rect x="5" y="9" width="38" height="30" rx="2"/><rect x="13" y="16" width="22" height="16"/></svg>',
+  pictures:
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="14" width="27" height="22" rx="2"/><path d="M16 10h25a2 2 0 0 1 2 2v19"/><path d="M9 31l7-7 6 6 4-4 6 6"/></svg>',
+  sliders:
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 14h18M33 14h8M7 24h6M21 24h20M7 34h22M37 34h4"/><circle cx="29" cy="14" r="4"/><circle cx="17" cy="24" r="4"/><circle cx="33" cy="34" r="4"/></svg>',
+};
+
+export interface HomeOptions {
+  onOpen(tile: Tile): void;
+  /** In a desktop browser, scale the 1920x1080 stage to fit the window. */
+  fitToWindow: boolean;
+}
+
+export interface Home {
+  /** A short message at the bottom of the screen, for things that went wrong. */
+  note(text: string): void;
+}
+
+function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string): HTMLElementTagNameMap[K] {
+  const node = document.createElement(tag);
+  node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function tileNode(tile: Tile, kind: Row['kind']): HTMLElement {
+  const node = el('div', kind === 'frame' ? 'card' : 'tile');
+  node.style.setProperty('--from', tile.from);
+  node.style.setProperty('--to', tile.to);
+  node.style.setProperty('--ink', tile.ink);
+
+  if (kind === 'frame') {
+    const glyph = el('span', 'card-glyph');
+    if (tile.glyph) glyph.innerHTML = GLYPHS[tile.glyph];
+    const text = el('span', 'card-text');
+    text.append(el('span', 'card-name', tile.name), el('span', 'card-line', tile.line));
+    node.append(glyph, text);
+    return node;
+  }
+
+  const face = el('div', 'tile-face');
+  face.append(el('span', 'tile-word', tile.name));
+  if (tile.iconUrl) {
+    const img = el('img', 'tile-icon');
+    img.alt = '';
+    img.addEventListener('load', () => img.classList.add('is-loaded'));
+    img.src = tile.iconUrl;
+    face.append(img);
+  }
+  node.append(face);
+  return node;
+}
+
+function readSavedFocus(): FocusPos | null {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVED_FOCUS) ?? 'null');
+    return saved && Number.isInteger(saved.row) && Number.isInteger(saved.col) ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+export function mountHome(root: HTMLElement, rows: Row[], options: HomeOptions): Home {
+  const stage = el('div', 'stage');
+  const washes = [el('div', 'wash'), el('div', 'wash')];
+  const clock = el('div', 'clock');
+  const hero = el('div', 'hero');
+  const heroName = el('h1', 'hero-name');
+  const heroLine = el('p', 'hero-line');
+  const rowsNode = el('div', 'rows');
+  const noteNode = el('div', 'note');
+  hero.append(heroName, heroLine);
+  stage.append(...washes, clock, hero, rowsNode, noteNode);
+  root.replaceChildren(stage);
+
+  const nodes: HTMLElement[][] = rows.map((row) => {
+    const rowNode = el('div', `row row-${row.kind}`);
+    const tiles = row.tiles.map((tile) => tileNode(tile, row.kind));
+    rowNode.append(...tiles);
+    rowsNode.append(rowNode);
+    return tiles;
+  });
+
+  // Tile centres, measured once from the laid-out page. Transforms do not affect them.
+  const model: FocusRow[] = nodes.map((tiles) => ({ centers: tiles.map((t) => t.offsetLeft + t.offsetWidth / 2) }));
+
+  let focus: FocusPos | null = null;
+  let activeWash = 0;
+
+  function show(pos: FocusPos): void {
+    if (focus) nodes[focus.row][focus.col].classList.remove('is-focused');
+    focus = pos;
+    const tile = rows[pos.row].tiles[pos.col];
+    nodes[pos.row][pos.col].classList.add('is-focused');
+
+    heroName.textContent = tile.name;
+    heroLine.textContent = tile.line;
+
+    // Cross-fade the ambient colour: paint the hidden layer, then swap which one is visible.
+    activeWash = 1 - activeWash;
+    washes[activeWash].style.setProperty('--glow', tile.glow);
+    washes[activeWash].classList.add('is-on');
+    washes[1 - activeWash].classList.remove('is-on');
+
+    try {
+      localStorage.setItem(SAVED_FOCUS, JSON.stringify(pos));
+    } catch {
+      // Storage being unavailable only costs the remembered position.
+    }
+  }
+
+  // Start where the user left off; the first time, on the first app tile.
+  const firstApps = Math.max(0, rows.findIndex((r) => r.kind === 'apps'));
+  const start = clampPos(model, readSavedFocus() ?? { row: firstApps, col: 0 });
+  if (start) show(start);
+
+  document.addEventListener('keydown', (event) => {
+    if (!focus) return;
+    const dir = DIRECTIONS[event.keyCode];
+    if (dir) {
+      event.preventDefault();
+      const next = move(model, focus, dir);
+      if (next.row !== focus.row || next.col !== focus.col) show(next);
+      return;
+    }
+    if (event.keyCode === KEY_ENTER) {
+      event.preventDefault();
+      const node = nodes[focus.row][focus.col];
+      node.classList.add('is-pressed');
+      window.setTimeout(() => node.classList.remove('is-pressed'), 140);
+      options.onOpen(rows[focus.row].tiles[focus.col]);
+    }
+  });
+
+  const time = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' });
+  const tick = (): void => {
+    clock.textContent = time.format(new Date());
+  };
+  tick();
+  window.setInterval(tick, 15000);
+
+  if (options.fitToWindow) {
+    const fit = (): void => {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      stage.style.transform = `scale(${scale})`;
+    };
+    fit();
+    window.addEventListener('resize', fit);
+  }
+
+  let noteTimer: number | undefined;
+  return {
+    note(text: string): void {
+      noteNode.textContent = text;
+      noteNode.classList.add('is-on');
+      window.clearTimeout(noteTimer);
+      noteTimer = window.setTimeout(() => noteNode.classList.remove('is-on'), 4000);
+    },
+  };
+}

@@ -1,0 +1,78 @@
+// The launcher's own curated app list and tile artwork.
+// The TV reports 526 "apps", most of them system parts, and many icons do not load
+// (docs/phase0-findings.md), so the launcher decides what to show and how each tile looks.
+import type { TvApp } from '../platform/tv';
+
+export type Glyph = 'frame' | 'pictures' | 'sliders';
+
+export interface Tile {
+  appId: string;
+  name: string;
+  /** One plain line shown under the name while the tile has the focus. */
+  line: string;
+  /** The launcher's own tile artwork: a two-colour ground and an ink colour for the name. */
+  from: string;
+  to: string;
+  ink: string;
+  /** Colour of the ambient wash behind the screen while the tile has the focus. */
+  glow: string;
+  /** The TV's own icon for the app, laid over the artwork when it loads. */
+  iconUrl: string | null;
+  glyph?: Glyph;
+}
+
+export interface Row {
+  kind: 'frame' | 'apps';
+  tiles: Tile[];
+}
+
+type Known = Omit<Tile, 'iconUrl'>;
+
+// The Frame's own features. What the second and third ids open is still to be confirmed on the TV.
+const FRAME: Known[] = [
+  { appId: 'org.tizen.art-app', name: 'Art Mode', line: 'Show the artwork now', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#B9A88A', glyph: 'frame' },
+  { appId: 'com.samsung.tv.home.art', name: 'Choose art', line: 'Art Store, favourites and your photos', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#9C8FB0', glyph: 'pictures' },
+  { appId: 'com.samsung.tv.coba.setting', name: 'Settings', line: 'Picture, sound and art options', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#7F8AA3', glyph: 'sliders' },
+];
+
+const DOCK: Known[] = [
+  { appId: 'org.tizen.netflix-app', name: 'Netflix', line: '', from: '#2A0A0D', to: '#0E0C10', ink: '#E50914', glow: '#E50914' },
+  { appId: '9Ur5IzDKqV.TizenYouTube', name: 'YouTube', line: '', from: '#FFFFFF', to: '#E9E6EE', ink: '#17151A', glow: '#FF3B3B' },
+  { appId: 'org.tizen.primevideo', name: 'Prime Video', line: '', from: '#0E3A5C', to: '#0B6FB3', ink: '#FFFFFF', glow: '#1A98FF' },
+  { appId: 'MCmYXNxgcu.DisneyPlus', name: 'Disney+', line: '', from: '#071A4A', to: '#0E3CAF', ink: '#FFFFFF', glow: '#2C5BFF' },
+  { appId: 'com.samsung.tv.aria-video', name: 'Apple TV', line: '', from: '#2B2B30', to: '#111114', ink: '#F3EFE8', glow: '#8E8E99' },
+  { appId: 'rJeHak5zRg.Spotify', name: 'Spotify', line: '', from: '#10231A', to: '#0C0F0D', ink: '#1ED760', glow: '#1ED760' },
+];
+
+const MORE: Known[] = [
+  { appId: 'GHI3a0zMSx.XboxGamePass', name: 'Xbox', line: '', from: '#0E5C0E', to: '#0A3D0A', ink: '#FFFFFF', glow: '#3FBF3F' },
+  { appId: 'com.samsung.tv.gaminghub', name: 'Gaming Hub', line: '', from: '#2B1B5E', to: '#5B3FD1', ink: '#FFFFFF', glow: '#7B5CFF' },
+  { appId: 'kupCeIdDkX.HueSync', name: 'Hue Sync', line: '', from: '#3B1D4F', to: '#C2466A', ink: '#FFFFFF', glow: '#E0567F' },
+  { appId: 'com.samsung.tv.SmartThingsApp', name: 'SmartThings', line: '', from: '#0C56C9', to: '#22A3F2', ink: '#FFFFFF', glow: '#22A3F2' },
+  { appId: 'org.tizen.browser', name: 'Internet', line: '', from: '#2D3142', to: '#1C1F2B', ink: '#F3EFE8', glow: '#7D8BB0' },
+  { appId: 'com.samsung.tv.store', name: 'Apps', line: 'Samsung app store', from: '#34313B', to: '#24212A', ink: '#F3EFE8', glow: '#A9A3B2' },
+];
+
+// Store apps look like "MCmYXNxgcu.DisneyPlus". These ones are not worth a tile.
+const STORE_APP = /^[A-Za-z0-9]{10}\.[\w.-]+$/;
+const NEVER = new Set(['w2VwCK465D.OTApp', '2025ePop01.SmartTV', '25emanual2.emanual']);
+const OURS = /^(FrameHome1|FrmHmPrb01)\./;
+
+export function buildRows(installed: TvApp[]): Row[] {
+  const byId = new Map(installed.map((a) => [a.id, a]));
+  const present = (list: Known[]): Tile[] =>
+    list.filter((k) => byId.has(k.appId)).map((k) => ({ ...k, iconUrl: byId.get(k.appId)?.iconUrl ?? null }));
+
+  const known = new Set([...FRAME, ...DOCK, ...MORE].map((k) => k.appId));
+  // Anything installed from the store later still gets a tile, with the TV's own name and icon.
+  const extra: Tile[] = installed
+    .filter((a) => STORE_APP.test(a.id) && !known.has(a.id) && !NEVER.has(a.id) && !OURS.test(a.id) && a.iconUrl)
+    .map((a) => ({ appId: a.id, name: a.name, line: '', from: '#34313B', to: '#24212A', ink: '#F3EFE8', glow: '#A9A3B2', iconUrl: a.iconUrl }));
+
+  const rows: Row[] = [
+    { kind: 'frame', tiles: present(FRAME).map((t) => ({ ...t, iconUrl: null })) },
+    { kind: 'apps', tiles: present(DOCK) },
+    { kind: 'apps', tiles: [...present(MORE), ...extra] },
+  ];
+  return rows.filter((r) => r.tiles.length > 0);
+}
