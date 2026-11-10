@@ -17,3 +17,5 @@
 - **Not in the first version:** title deep links, cross-app "continue watching", replacing the Home button, rebuilding Art Mode, photo uploads from the launcher.
 - **Look:** Baran sets the creative direction ("closer to Apple TV"). Original assets, no Apple artwork or fonts.
 - **Model note:** Fable 5.2's safeguard stopped one research pass on this topic. The next tier for blocked work is Opus 5.5.
+- **Certificate:** profile `framehome`; the author password is in the keychain as `samsung/tizen-author-cert`. Baran decided against a backup copy of the certificate files. If `~/SamsungCertificate/framehome/` is lost, uninstall the app from the TV and sign again with a new certificate.
+- **Phase 0 result so far:** the launcher's building blocks work on the TV, and mats can be changed while Art Mode is on. See `docs/phase0-findings.md`. Open before the gate closes: surviving a full power cycle.
