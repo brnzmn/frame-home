@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://frame-home.local/app" version="0.1.0" viewmodes="maximized">
     <tizen:application id="FrameHome1.FrameHome" package="FrameHome1" required_version="6.0"/>
+    <tizen:service id="FrameHome1.Keeper" on-boot="true" auto-restart="true">
+        <tizen:content src="service/keeper.js"/>
+        <tizen:name>FrameHomeKeeper</tizen:name>
+        <tizen:description>Opens Frame Home again when the TV comes out of Art Mode</tizen:description>
+    </tizen:service>
     <content src="index.html"/>
+    <!-- Opening the launcher while it is already running brings it forward as it is, without
+         loading the page again (which also restarted its background service). -->
+    <tizen:app-control>
+        <tizen:src name="index.html" reload="disable"/>
+        <tizen:operation name="http://tizen.org/appcontrol/operation/default"/>
+    </tizen:app-control>
+    <tizen:app-control>
+        <tizen:src name="index.html" reload="disable"/>
+        <tizen:operation name="http://tizen.org/appcontrol/operation/main"/>
+    </tizen:app-control>
     <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
     <icon src="icon.png"/>
     <name>Frame Home</name>

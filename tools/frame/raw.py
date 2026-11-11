@@ -24,6 +24,8 @@ REQUESTS = ["api_version", "get_artmode_status", "get_matte_list", "get_current_
 def shorten_ids(value):
     """Keep the shape of a frame but cut long ids down to four characters."""
     if isinstance(value, dict):
+        # The TV echoes each client's pairing token in its connect frame; never print it.
+        value = {k: ("(hidden)" if k == "token" else v) for k, v in value.items()}
         return {k: (str(v)[:4] + "…" if k in ("id", "from", "clientId", "uuid") and isinstance(v, str) and len(v) > 8 else shorten_ids(v)) for k, v in value.items()}
     if isinstance(value, list):
         return [shorten_ids(v) for v in value]

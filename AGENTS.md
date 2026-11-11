@@ -22,7 +22,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - On 2024 and later sets the Developer Mode code 12345 is entered inside Apps > App Settings (bottom of the Apps page), not on the Apps page itself (owner reports; not yet confirmed on this TV).
 - The TV's debug port serves one client at a time.
 - Retail Samsung sets do not auto-start sideloaded apps; "Autorun Last App" ignores them.
-- 2025 Frames report `PowerState: standby` while in Art Mode.
+- The TV's `PowerState` does not tell Art Mode from TV mode: it reads `on` in both for at least minutes. Never decide anything on it alone.
 - The desktop app's preview servers cannot read `/Volumes/disk1` without a macOS removable-volume permission. Run local servers from the shell, or from a copy on the internal disk.
 - Animation frames stop while a page is hidden, so frame-rate numbers only count when the app is on screen.
 - Never take a debug-port screenshot while the app is hidden; it coincided with the app going silent.
@@ -32,7 +32,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - `change_matte` with only `matte_id` also rewrites `portrait_matte_id`. Always send both.
 - `change_matte` error -7 means the TV refuses that mat for that image. It always refuses `none` as a portrait mat, so never add a mat where an image has none: it cannot be undone. No change-and-restore tests on his images.
 - Own uploads have content ids starting with `MY`. Category `MY-C0008` is the recently shown list and also holds Art Store images.
-- With the TV asleep the art channel does not open at all; `PowerState: standby` covers both Art Mode and asleep.
+- With the TV asleep the art channel does not open at all.
 - A hidden app brings itself forward by launching its own id, which reloads the page. Save state first.
 - If `sdb connect` is refused or an install hangs with the TV awake and the addresses right, the Mac's bridge server is stale: `sdb kill-server`, then connect. `tools/deploy.mjs` does this.
 - The TV does not process installs while asleep. Wake it first (`tools/frame/key.py KEY_POWER`).
@@ -40,12 +40,22 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - A hidden page's timers fire once a second. Anything that must react fast has to act in the event itself.
 - The TV's app-status page lags by seconds around app switches; never use it for timing.
 - Samsung's home in front is `com.samsung.tv.csfs`; Art Mode is `org.tizen.art-app`. The jump-back must only ever act on the first.
+- The power key into Art Mode makes the TV stop our launcher and its service within a minute, and it starts neither again. So nothing of ours runs after a real Art Mode stay.
+- A launcher started from the Mac (`tizen run`, a deploy) is treated differently from one in normal use: with an alarm pending it survived Art Mode, and after one Home press it did not. Never judge survival right after a deploy; press Home once first, then stay in Art Mode for minutes.
+- An alarm that fires opens the launcher and ends Art Mode. Do not use alarms to restart anything.
+- Always enter Art Mode with the power key. Opening the Art app as an app hides the problem.
+- The TV drops a request to open an app while it is still leaving Art Mode (up to about 7 seconds). Ask again until it is on screen.
+- A page hidden for minutes cannot rely on its own timers. Only the worker-driven tick keeps time.
+- The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It cannot see which app is in front, and it reaches the art channel at `ws://127.0.0.1:8001` with no token.
+- To see what launcher and service do while hidden: `node tools/probe-server.mjs`, then `deploy.mjs build/app --report`. Their joint record lands in `docs/private/probe-events.log`. A new test run gets a new file name; never empty an old log.
+- An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.
 
 ## Commands
 
 - `node tools/find-tv.mjs`: find the TV on the LAN and write `.tv.json`.
 - `node tools/probe-server.mjs`: receive the probe report the TV posts.
 - `node tools/tv-inspect.mjs`: evaluate, send keys and take screenshots through the TV's debug port.
-- `node tools/deploy.mjs <app folder> [--debug]`: package, sign, install and open an app on the TV.
+- `node tools/deploy.mjs <app folder> [--debug] [--report] [--open-only]`: package, sign, install and open an app on the TV.
+- `node tools/watch-launcher.mjs [seconds]` or `--hours N --log FILE`: what the TV says about itself and the launcher, from the Mac.
 - Launcher: `pnpm exec vite` for the fake-TV preview on `127.0.0.1:5173`, `pnpm exec vitest run` for the navigation tests, `pnpm exec vite build && node tools/deploy.mjs build/app --debug` to put it on the TV.
 - `tools/frame/.venv/bin/python tools/frame/{pair,check,apply_look,snapshot}.py`: the Frame's art controls. See `docs/RUNBOOK.md`.

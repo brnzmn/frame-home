@@ -5,6 +5,7 @@
 //   node tools/deploy.mjs probe                    package, sign, install, open
 //   node tools/deploy.mjs probe --debug            also open the TV's debug port on localhost:9222
 //   node tools/deploy.mjs probe --debug --open-only  open the installed app again without reinstalling
+//   node tools/deploy.mjs build/app --report       its background service reports to tools/probe-server.mjs
 //   node tools/deploy.mjs probe --profile NAME     certificate profile (default: framehome)
 //
 // Needs .tv.json (node tools/find-tv.mjs) and a certificate profile that contains the TV's DUID.
@@ -80,6 +81,16 @@ fs.mkdirSync(stage, { recursive: true });
 for (const entry of fs.readdirSync(appDir)) {
   if (entry.startsWith('.') || entry.endsWith('.wgt')) continue;
   fs.cpSync(path.join(appDir, entry), path.join(stage, entry), { recursive: true });
+}
+
+// --report: the app's background service posts what it does to tools/probe-server.mjs on this
+// Mac. The address goes only into the staged copy, never into the source tree.
+if (args.includes('--report')) {
+  const ip = macLanIp(tv.ip);
+  if (!ip) fail('this Mac has no local network address');
+  if (!fs.existsSync(path.join(stage, 'service'))) fail(`${appDirName} has no service folder to report from`);
+  fs.writeFileSync(path.join(stage, 'service', 'report-to.json'), JSON.stringify({ host: ip, port: 8787 }) + '\n');
+  console.log(`the service will report to ${ip}:8787`);
 }
 
 // A bridge server left running for hours goes stale: connects are refused and installs hang

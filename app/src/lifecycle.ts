@@ -5,6 +5,8 @@
 // - Samsung's home in front reports `com.samsung.tv.csfs`;
 // - Art Mode reports `org.tizen.art-app`, after a moment with no app at all.
 // So the launcher jumps back only when it sees Samsung's home, and never during Art Mode.
+// Its limit: within a minute of the power key putting the TV into Art Mode, the TV stops
+// this page. Nothing here runs after a real Art Mode stay.
 import type { Tv } from './platform/tv';
 
 export const SAMSUNG_HOME = 'com.samsung.tv.csfs';
@@ -15,7 +17,26 @@ const CONFIRMATIONS = 2;
 const TICK_MS = 250;
 /** The running-apps list is asked for less often than the foreground app. */
 const RUNNING_EVERY = 6;
+/** Every ten seconds, hidden or not, the launcher checks that the keeper still answers. */
+const UPKEEP_EVERY_TICKS = 40;
+/** Checks the keeper may miss in a row before the launcher starts it again. */
+const KEEPER_MISSES = 2;
+/** When the launcher was last back on screen after a jump. */
 const LAST_JUMP = 'frame-home.lastJump';
+/** When the launcher last asked to be brought back; settled once it is on screen. */
+const PENDING_JUMP = 'frame-home.pendingJump';
+/** A jump that has not put the launcher on screen within this time did not work. */
+const JUMP_LANDS_WITHIN_MS = 10000;
+/**
+ * How long to wait before asking again to be brought forward. Measured on the TV: a request
+ * made while it is still leaving Art Mode is dropped, and that can last six seconds.
+ */
+export const RETRY_AFTER_MS = 1000;
+/** After this many requests the launcher stops asking until something else comes in front. */
+export const MAX_REQUESTS = 15;
+export const ART_APP = 'org.tizen.art-app';
+/** A sleep notice this recent means Samsung's home is not there for anyone to see. */
+export const SLEEP_NOTICE_MS = 20000;
 
 /**
  * Calls `onTick` every TICK_MS, also while the page is hidden. A hidden page's own timers are
@@ -35,19 +56,34 @@ function startTicker(onTick: () => void): () => void {
 }
 
 const TRACE = 'frame-home.trace';
+/** Enough for an evening of use plus the night after it. */
+const TRACE_LINES = 80;
 
 /**
  * A short on-TV record of what the launcher did and when, read back through the debug port.
- * The debug port drops whenever the launcher is hidden, so this is the only way to see timings.
+ * The debug port drops whenever the launcher is hidden, so timings can only come from here.
  */
 export function trace(event: string): void {
+  // Month, day and time in UTC: the record has to make sense the morning after.
+  const line = `${new Date().toISOString().slice(5, 23).replace('T', ' ')} ${event}`;
   try {
     const list: string[] = JSON.parse(localStorage.getItem(TRACE) ?? '[]');
-    list.push(`${new Date().toISOString().slice(11, 23)} ${event}`);
-    localStorage.setItem(TRACE, JSON.stringify(list.slice(-30)));
+    list.push(line);
+    localStorage.setItem(TRACE, JSON.stringify(list.slice(-TRACE_LINES)));
   } catch {
     // Tracing is a convenience; never let it break the launcher.
   }
+  try {
+    copyTo?.(event);
+  } catch {
+    // Same.
+  }
+}
+
+let copyTo: ((event: string) => void) | undefined;
+/** Also pass every record line on, for instance to the keeper, whose record survives this page. */
+export function copyTraceTo(receiver: (event: string) => void): void {
+  copyTo = receiver;
 }
 
 export interface HomeWatch {
@@ -85,18 +121,69 @@ export function onHidden(openedByUs: boolean, foreground: string | null, msSince
   return msSinceLastJump !== null && msSinceLastJump < DOUBLE_PRESS_MS ? 'stay' : 'jump';
 }
 
+/**
+ * The launcher has asked to be brought forward and is still hidden.
+ * @param front the app in front, or null when the TV does not say
+ * @param ownId the launcher's own id
+ */
+export function onWaiting(
+  front: string | null,
+  ownId: string | null,
+  msSinceAsked: number,
+  requests: number,
+): 'wait' | 'again' | 'drop' | 'give up' {
+  // Another app is in front, or Art Mode: the user has moved on. Do not pull the TV back.
+  if (front !== null && front !== SAMSUNG_HOME && front !== ownId) return 'drop';
+  if (msSinceAsked < RETRY_AFTER_MS) return 'wait';
+  // The TV is not going to show us. Whatever state it is in, stop poking it.
+  return requests >= MAX_REQUESTS ? 'give up' : 'again';
+}
+
+/**
+ * Samsung's home has come in front. Coming back is right, except in one case: the TV was in
+ * Art Mode and has just said it is going to sleep, so nobody pressed anything.
+ */
+export function mayJump(cameFromArt: boolean, sleepNoticeAgeMs: number | null): boolean {
+  return !(cameFromArt && sleepNoticeAgeMs !== null && sleepNoticeAgeMs < SLEEP_NOTICE_MS);
+}
+
 export interface LifecycleOptions {
   /** Come back in front when Samsung's home appears. Pressing Home twice leaves it up. */
   returnOverSamsungHome: boolean;
 }
 
-function msSinceLastJump(): number | null {
+function stored(key: string): number | null {
   try {
-    const at = Number(localStorage.getItem(LAST_JUMP));
-    return at > 0 ? Date.now() - at : null;
+    const at = Number(localStorage.getItem(key));
+    return at > 0 ? at : null;
   } catch {
     return null;
   }
+}
+
+function store(key: string, at: number | null): void {
+  try {
+    if (at === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, String(at));
+  } catch {
+    // Without storage the double press cannot be recognised; coming back still works.
+  }
+}
+
+function msSinceLastJump(): number | null {
+  const at = stored(LAST_JUMP);
+  return at === null ? null : Date.now() - at;
+}
+
+/**
+ * The launcher is on screen. If it had asked to be brought back, that jump has landed: the
+ * double-press window counts from now, the moment the user can see the launcher again.
+ */
+function settleJump(): void {
+  const asked = stored(PENDING_JUMP);
+  if (asked === null) return;
+  store(PENDING_JUMP, null);
+  if (Date.now() - asked < JUMP_LANDS_WITHIN_MS) store(LAST_JUMP, Date.now());
 }
 
 /** True for a few seconds after the launcher jumped back, to show the "press Home again" hint. */
@@ -112,41 +199,88 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
   let stopTicker: (() => void) | undefined;
   let ticks = 0;
   let asking = false;
+  /** Set while the launcher has asked to be brought forward and is not on screen yet. */
+  let asked: { at: number; jumped: boolean; requests: number } | null = null;
+  let lastFront: string | null = null;
+  /** The last app seen in front other than Samsung's home: tells Art Mode ending from a Home press. */
+  let frontBeforeHome: string | null = null;
+  let checkingSleep = false;
 
   const stop = (): void => {
     stopTicker?.();
     stopTicker = undefined;
   };
 
-  const comeBack = (jumped: boolean): void => {
-    stop();
-    trace(jumped ? 'jump back over Samsung home' : `return after ${openedId}`);
-    openedId = null;
-    if (jumped) {
-      try {
-        localStorage.setItem(LAST_JUMP, String(Date.now()));
-      } catch {
-        // Without storage the double press cannot be recognised; the jump still works.
-      }
-    }
+  const ask = (): void => {
+    if (!asked) return;
+    asked.at = Date.now();
+    asked.requests++;
+    if (asked.jumped) store(PENDING_JUMP, asked.at);
     tv.bringToFront().catch(() => {});
   };
 
-  let lastFront: string | null = null;
+  const comeBack = (jumped: boolean): void => {
+    trace(jumped ? 'jump back over Samsung home' : `return after ${openedId}`);
+    openedId = null;
+    watch = idleWatch;
+    asked = { at: 0, jumped, requests: 0 };
+    ask();
+    // Keep ticking until the launcher is on screen: a request can be dropped, and a page
+    // hidden for minutes cannot rely on its own timers to notice (neither fired in 6.7 s).
+    if (!stopTicker) stopTicker = startTicker(() => void tick());
+  };
+
+  let keeperMissed = 0;
+  const upkeep = (): void => {
+    tv.keeperAnswers().then((answers) => {
+      keeperMissed = answers ? 0 : keeperMissed + 1;
+      if (keeperMissed < KEEPER_MISSES) return;
+      keeperMissed = 0;
+      trace('keeper not answering: starting it again');
+      tv.startKeeper().catch(() => {});
+    });
+  };
 
   const tick = async (): Promise<void> => {
     ticks++;
+    if (ticks % UPKEEP_EVERY_TICKS === 0) upkeep();
     const front = tv.foregroundAppId();
     if (front !== lastFront) {
       trace(`in front: ${front ?? 'unknown'}`);
       lastFront = front;
     }
-    if (options.returnOverSamsungHome) {
+    if (front !== null && front !== SAMSUNG_HOME) frontBeforeHome = front;
+    if (asked) {
+      const next = onWaiting(front, tv.appId, Date.now() - asked.at, asked.requests);
+      if (next === 'again') {
+        trace('still hidden: asking again');
+        ask();
+      } else if (next === 'drop' || next === 'give up') {
+        trace(next === 'drop' ? `not coming back: ${front} is in front` : 'not coming back: the TV did not show the launcher');
+        asked = null;
+        store(PENDING_JUMP, null);
+        // Leave Samsung's home alone until something else has been in front.
+        if (next === 'give up') watch = { letHomeStay: true, seen: 0 };
+      }
+      return;
+    }
+    if (options.returnOverSamsungHome && !checkingSleep) {
       const result = onReading(watch, front, msSinceLastJump());
       if (result.watch.letHomeStay && !watch.letHomeStay) trace('second Home press: leaving Samsung home up');
       watch = result.watch;
       if (result.jump) {
-        comeBack(true);
+        const cameFromArt = frontBeforeHome === ART_APP;
+        // Only after Art Mode is there a question to ask; a Home press must not wait for it.
+        checkingSleep = cameFromArt;
+        const sleepNotice = cameFromArt ? await tv.sleepNoticeAge() : null;
+        checkingSleep = false;
+        if (document.visibilityState !== 'hidden') return;
+        if (mayJump(cameFromArt, sleepNotice)) {
+          comeBack(true);
+        } else {
+          trace('not coming back: the TV said it is going to sleep');
+          watch = { letHomeStay: true, seen: 0 };
+        }
         return;
       }
     }
@@ -164,15 +298,12 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
     }
   };
 
-  document.addEventListener('visibilitychange', () => {
-    stop();
-    if (document.visibilityState === 'visible') {
-      openedId = null;
-      watch = idleWatch;
-      return;
-    }
+  const whenHidden = (): void => {
     ticks = 0;
+    asked = null;
+    tv.tellKeeper('hidden');
     lastFront = tv.foregroundAppId();
+    frontBeforeHome = lastFront !== null && lastFront !== SAMSUNG_HOME ? lastFront : null;
     trace(`hidden, in front: ${lastFront ?? 'unknown'}`);
     if (options.returnOverSamsungHome) {
       const decision = onHidden(openedId !== null, lastFront, msSinceLastJump());
@@ -186,7 +317,32 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
       }
     }
     stopTicker = startTicker(() => void tick());
+  };
+
+  const whenShown = (): void => {
+    openedId = null;
+    watch = idleWatch;
+    asked = null;
+    settleJump();
+    tv.tellKeeper('visible');
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    stop();
+    if (document.visibilityState === 'visible') {
+      trace('on screen again');
+      whenShown();
+      return;
+    }
+    whenHidden();
   });
+  // The TV can start the launcher in the background, with no event to say it is hidden.
+  if (document.visibilityState === 'hidden') whenHidden();
+  else whenShown();
+  // While hidden the worker-driven tick does the upkeep; a hidden page's own timers stall.
+  window.setInterval(() => {
+    if (document.visibilityState === 'visible') upkeep();
+  }, UPKEEP_EVERY_TICKS * TICK_MS);
 
   return {
     opened(appId: string): void {

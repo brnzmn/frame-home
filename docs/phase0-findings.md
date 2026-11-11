@@ -88,15 +88,53 @@ Baran chose our own jump-back over changing the TV's "home app" setting. Timings
 - **Single Home press:** hidden, decision 18 ms later, launcher running again 0.44 s after going hidden. Slowest run 1.6 s.
 - **Second Home press within six seconds:** Samsung's home is left up. Confirmed: still up twelve seconds later.
 - **Art Mode:** the launcher stayed hidden for 45 seconds while the Mac confirmed the art service was answering. It never pulled the TV out of art.
-- **Leaving Art Mode** (power key): the TV shows Samsung's home, the launcher sees it and is back 2.7 seconds later.
+- **Leaving Art Mode** (power key): the TV shows Samsung's home, the launcher sees it and is back 2.7 seconds later. This was after only 12 seconds of Art Mode. It does not hold for a normal stay; see the next section.
 - A hidden page's timers run once a second, which made the first version take 3 to 4 seconds. Acting at the moment of going hidden fixed that. The worker-driven tick reads the foreground every 250 ms.
 - Pressing Home within about half a second of the launcher restarting is swallowed by the TV.
 - The public app-status page (`/api/v2/applications/<id>`) lags by several seconds around switches. Do not time anything with it.
-- Unknown: how long the launcher survives in the background over hours of Art Mode or of another app. If the TV stops it, Home shows Samsung's home until the launcher is opened again.
+- Unknown: how long the launcher survives in the background over hours of another app. If the TV stops it, Home shows Samsung's home until the launcher is opened again.
+
+### Art Mode stops our apps (2026-11-11, evening)
+
+Every run below used the power key from the Mac (`tools/frame/key.py KEY_POWER`), which is what the remote's power button does. Evidence: the launcher's own record, the keeper's reports to the Mac (`tools/deploy.mjs --report` with `tools/probe-server.mjs`), and the TV's public app-status page.
+
+**Result: after a real Art Mode stay, power-on shows Samsung's home and the launcher is not running. Nothing we can do inside the app changes that in normal use.**
+
+**The problem**
+- After the power key puts the TV into Art Mode, it stops the hidden launcher, between 5 and 47 seconds in. Leaving Art Mode then shows Samsung's home with the launcher not running. The earlier "45 seconds in Art Mode" check only showed that the launcher did not interfere, not that it was still alive.
+- This is specific to the power key. Behind the Art app opened as an app (2026-11-10) the probe kept running for two minutes, and behind YouTube the launcher survived two minutes and returned by itself.
+- A background service in the same package (`<tizen:service>`, started with the `operation/service` app control) is stopped the same way. `on-boot="true"` and `auto-restart="true"` did not bring it back within a minute of leaving Art Mode, and the `prelaunch.support` metadata had no visible effect either.
+- The TV's status page says `PowerState: on` in TV mode and for at least the first five minutes of Art Mode, so it does not tell the two apart. (`standby` was read on 2026-11-10; when it switches is unknown.)
+
+**What the TV offers a service**
+- The service runs on Node 18.18.2 with `tizen` available. `webapis` exists there but `getForegroundAppId()` returns nothing, so only the launcher's page can tell which app is in front.
+- The service reaches the art channel at `ws://127.0.0.1:8001/api/v2/channels/com.samsung.art-app` with no pairing token. Requests go `to: "host"`. In TV mode `get_artmode_status` was sometimes answered `off` and sometimes not answered.
+- The TV announces Art Mode on that channel: `art_mode_changed` with status `on` about a second after the power key, and status `off` between 1 and 6 seconds after the power key on the way out.
+- The service keeps running when the launcher quits.
+
+**Alarms: tried, and not the answer**
+- `tizen.alarm` (privilege `alarm`) only accepts an alarm for the launcher's id. For the service's id the TV answers "Error while add alarm to server". The service may set one for the launcher's id.
+- **An alarm that fires opens the launcher and ends Art Mode.** Confirmed with a 55-second alarm. So an alarm cannot be used to start anything during Art Mode.
+- A pending alarm that carries a launch request, set seconds earlier, did keep launcher and service alive through Art Mode (52, 210, 120, 120, 150, 300 and 90 seconds), with it renewed every ten seconds in the later runs. Without an alarm, or with one that carries no launch request, they were stopped 10 runs out of 10.
+- **But only for a launcher that had just been started from the Mac.** Same build, same alarm, one Home press before Art Mode: both stopped, twice out of two (and a third time after several Home presses and an app). A launcher started afresh by the service instead of from the Mac: stopped as well. In real use the launcher is always one of those, so the alarm was taken out again. Why a launch from the Mac is treated differently is not known.
+
+**Coming back when Art Mode ends, while something of ours is still alive**
+- The TV reports Samsung's home in front half a second after the power key, but ignores a request to open the launcher while it is still leaving Art Mode. One request took 6.7 seconds to land. The launcher now asks again every second until it is on screen, at most 15 times.
+- A page that has been hidden for minutes cannot count on its own timers (one did not fire in 6.7 seconds). Only the worker-driven tick keeps time, at about one a second.
+- With the launcher's page stopped and the service alive, the service opened the launcher 4 seconds after the TV's announcement; the launcher was on screen 8 seconds after the power key.
+- With both alive after five minutes of Art Mode, the launcher was on screen 3.3 seconds after the power key and the service stood down.
+- Untested, and guarded against rather than known: what the TV reports when it goes to sleep from Art Mode by itself. The launcher does not come back if the service heard a going-to-sleep notice in the last 20 seconds, and the service does nothing after one or while the art channel is closed.
+
+**Other things seen**
+- `reload="disable"` on the launcher's app control: bringing the running launcher forward no longer loads the page again. Home once: back in 0.6 to 0.8 seconds. Home twice: Samsung's home stays. Before this, the reload also restarted the service.
+- YouTube in front reports `com.samsung.tv.cobalt-yt`, not its store id. The first Exit press in YouTube opens YouTube's own exit question; the second closes it, and the launcher was back 0.75 seconds later.
+- OK in Art Mode opens Samsung's art selector with Art Mode still on. Back from the selector ends Art Mode.
 
 ### Not tested yet
 
-- The SmartThings power-on rule, and that it leaves Art Mode alone.
+- The SmartThings power-on rule, and that it leaves Art Mode alone. After this evening it is the remaining way to get the launcher at power-on without changing a TV setting.
+- What the TV announces when it goes to sleep from Art Mode, and that Art Mode still sleeps and wakes by itself with the launcher installed. Nothing of ours runs during a long Art Mode stay, so no effect is expected.
+- A full power-off (long press) and a cold start.
 - An HDMI input shown inside the app, with a live source connected.
-- How long a hidden app keeps running beyond two minutes.
-- Home pressed from inside another app (the running-apps list may reveal it).
+- Hours behind a streaming app with something playing.
+- Home pressed from inside another app.

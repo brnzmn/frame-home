@@ -1,12 +1,18 @@
 import './styles.css';
 import { buildRows } from './data/catalog';
-import { justJumpedBack, startLifecycle, trace } from './lifecycle';
+import { copyTraceTo, justJumpedBack, startLifecycle, trace } from './lifecycle';
 import { connectTv } from './platform/tv';
 import { mountHome } from './ui/home';
 
 async function start(): Promise<void> {
-  trace('launcher started');
   const tv = connectTv();
+  copyTraceTo((event) => tv.noteToKeeper(event));
+  trace(`launcher started ${document.visibilityState}; ${tv.startedBy()}`);
+  // The second line: if this page is stopped, the keeper opens it again after Art Mode.
+  tv.startKeeper().then(
+    () => trace('keeper: start accepted'),
+    (e: Error) => trace(`keeper: ${e.message}`),
+  );
   const installed = await tv.installedApps().catch(() => []);
   const rows = buildRows(installed);
   // Baran's choice, 2026-11-11: jump back over Samsung's home, with no change to the TV's system.
@@ -20,8 +26,15 @@ async function start(): Promise<void> {
     },
   });
 
+  const hint = (): void => {
+    if (justJumpedBack()) home.note('Press Home again for Samsung’s home');
+  };
   if (!rows.length) home.note('The TV did not return its app list');
-  else if (justJumpedBack()) home.note('Press Home again for Samsung’s home');
+  else hint();
+  // Coming back does not restart the page; show the hint each time the launcher reappears.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') hint();
+  });
 }
 
 void start();

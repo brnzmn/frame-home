@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { DOUBLE_PRESS_MS, SAMSUNG_HOME, idleWatch, onHidden, onReading, type HomeWatch } from './lifecycle';
+import {
+  DOUBLE_PRESS_MS,
+  MAX_REQUESTS,
+  RETRY_AFTER_MS,
+  SAMSUNG_HOME,
+  SLEEP_NOTICE_MS,
+  idleWatch,
+  mayJump,
+  onHidden,
+  onReading,
+  onWaiting,
+  type HomeWatch,
+} from './lifecycle';
 
 describe('the moment the launcher goes hidden', () => {
   it('jumps back at once when Home was pressed on the launcher', () => {
@@ -75,5 +87,45 @@ describe('jumping back over Samsung home', () => {
 
   it('holds its state through readings the TV does not answer', () => {
     expect(run([SAMSUNG_HOME, null, SAMSUNG_HOME], null).jumpedAt).toBe(2);
+  });
+});
+
+describe('after asking to be brought forward', () => {
+  const OWN = 'FrameHome1.FrameHome';
+
+  it('waits, then asks again while Samsung home is still in front', () => {
+    expect(onWaiting(SAMSUNG_HOME, OWN, RETRY_AFTER_MS - 1, 1)).toBe('wait');
+    expect(onWaiting(SAMSUNG_HOME, OWN, RETRY_AFTER_MS, 1)).toBe('again');
+  });
+
+  it('keeps asking when the TV does not say what is in front, or already names the launcher', () => {
+    expect(onWaiting(null, OWN, RETRY_AFTER_MS, 3)).toBe('again');
+    expect(onWaiting(OWN, OWN, RETRY_AFTER_MS, 3)).toBe('again');
+  });
+
+  it('drops it at once when another app or Art Mode is in front', () => {
+    expect(onWaiting('org.tizen.netflix-app', OWN, 0, 1)).toBe('drop');
+    expect(onWaiting('org.tizen.art-app', OWN, RETRY_AFTER_MS * 5, 2)).toBe('drop');
+  });
+
+  it('gives up after enough requests instead of asking all night', () => {
+    expect(onWaiting(SAMSUNG_HOME, OWN, RETRY_AFTER_MS, MAX_REQUESTS - 1)).toBe('again');
+    expect(onWaiting(SAMSUNG_HOME, OWN, RETRY_AFTER_MS, MAX_REQUESTS)).toBe('give up');
+  });
+});
+
+describe('Samsung home after Art Mode', () => {
+  it('comes back when the TV was switched on from Art Mode', () => {
+    expect(mayJump(true, null)).toBe(true);
+    expect(mayJump(true, SLEEP_NOTICE_MS + 1)).toBe(true);
+  });
+
+  it('stays away when the TV has just said it is going to sleep', () => {
+    expect(mayJump(true, 1500)).toBe(false);
+  });
+
+  it('never lets a sleep notice hold up a Home press', () => {
+    expect(mayJump(false, 1500)).toBe(true);
+    expect(mayJump(false, null)).toBe(true);
   });
 });

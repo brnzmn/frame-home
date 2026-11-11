@@ -24,12 +24,19 @@ const INSTALLED: TvApp[] = [
 export function createMockTv(): Tv {
   return {
     kind: 'mock',
+    appId: null,
     installedApps: async () => INSTALLED,
     open: async (appId) => {
       console.info(`[fake TV] would open ${appId}`);
     },
     runningAppIds: async () => [],
     foregroundAppId: () => null,
+    startedBy: () => 'browser',
     bringToFront: async () => {},
+    startKeeper: async () => {},
+    keeperAnswers: async () => true,
+    sleepNoticeAge: async () => null,
+    tellKeeper: () => {},
+    noteToKeeper: () => {},
   };
 }

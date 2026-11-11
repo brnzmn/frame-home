@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-// Receives what the probe app on the TV posts.
+// Receives what our apps on the TV post: the probe's report, and the lines the launcher's
+// background service reports when installed with `tools/deploy.mjs --report`.
 //   POST /report  full report  -> docs/probe-report.json
 //   POST /event   one event    -> printed, and appended to docs/private/probe-events.log
 //   GET  /health  reachability check used by the probe itself
+//
+//   node tools/probe-server.mjs [--log FILE]    FILE instead of probe-events.log, so each test
+//                                               run can keep its own log. Logs are only appended to.
 // Bodies are sent as text/plain so the TV's browser skips the CORS preflight.
 import http from 'node:http';
 import fs from 'node:fs';
@@ -12,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 const PORT = Number(process.env.PROBE_PORT ?? 8787);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const reportFile = path.join(root, 'docs', 'probe-report.json');
-const eventsFile = path.join(root, 'docs', 'private', 'probe-events.log');
+const logFlag = process.argv.indexOf('--log');
+const eventsFile = logFlag >= 0 ? path.resolve(process.argv[logFlag + 1]) : path.join(root, 'docs', 'private', 'probe-events.log');
 fs.mkdirSync(path.dirname(eventsFile), { recursive: true });
 
 const cors = {
