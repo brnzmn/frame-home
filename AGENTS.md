@@ -48,6 +48,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - A page hidden for minutes cannot rely on its own timers. Only the worker-driven tick keeps time.
 - The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It reaches the art channel at `ws://127.0.0.1:8001` with no token. It cannot see which app is in front, so it must never open the launcher or anything else.
 - To see what launcher and service do while hidden: `node tools/probe-server.mjs`, then `deploy.mjs build/app --report`. Their joint record lands in `docs/private/probe-events.log`. A new test run gets a new file name; never empty an old log.
+- SmartThings tokens last 24 hours and Samsung has said all of them end on 2026-12-15. Never build anything that needs a token at run time; a rule on the account is the only thing that may stay.
 - An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.
 
 ## Commands
@@ -56,6 +57,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - `node tools/probe-server.mjs`: receive the probe report the TV posts.
 - `node tools/tv-inspect.mjs`: evaluate, send keys and take screenshots through the TV's debug port.
 - `node tools/deploy.mjs <app folder> [--debug] [--report] [--open-only]`: package, sign, install and open an app on the TV.
+- `node tools/smartthings.mjs devices | status | watch | launch | rule`: the TV on SmartThings and the power-on rule. Needs Baran's token in the keychain as `smartthings/frame-home`.
 - `node tools/watch-launcher.mjs [seconds]` or `--hours N --log FILE`: what the TV says about itself and the launcher, from the Mac.
 - Launcher: `pnpm exec vite` for the fake-TV preview on `127.0.0.1:5173`, `pnpm exec vitest run` for the navigation tests, `pnpm exec vite build && node tools/deploy.mjs build/app --debug` to put it on the TV.
 - `tools/frame/.venv/bin/python tools/frame/{pair,check,apply_look,snapshot}.py`: the Frame's art controls. See `docs/RUNBOOK.md`.
