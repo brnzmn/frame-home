@@ -36,9 +36,12 @@ Known install errors: `[118,-12] Invalid certificate chain` means a non-Samsung 
 Run with `tools/frame/.venv/bin/python`:
 
 - `tools/frame/pair.py`: pair once; press Allow on the TV.
-- `tools/frame/check.py`: what the TV reports about art, mats and filters. `--write-test` changes one mat and restores it. `--artmode-test` switches Art Mode over and back.
-- `tools/frame/apply_look.py`: dry run of the global frame look from `frame-look.json`. `--apply` saves the current mats to `docs/private/` and changes them. `--restore FILE` puts a backup back.
+All of them need the TV in Art Mode; asleep or on the home screen its art service does not answer.
+
+- `tools/frame/check.py`: read-only. What the TV reports about art, mats, filters, settings, the slideshow and its images.
+- `tools/frame/apply_look.py`: dry run of the global frame look from `frame-look.json`. `--apply` saves the current mats to `docs/private/` and replaces each mat an image already has. It never adds a mat where an image has none, because the TV will not take it back off. `--restore FILE` puts a backup back. The reworked version has only been dry-run against the TV.
 - `tools/frame/snapshot.py`: saves the Art Mode settings to `docs/art-settings-snapshot.json`.
+- `tools/frame/key.py`: presses remote keys from the Mac. `tools/frame/raw.py`: prints the art channel's raw traffic.
 
 ## After a firmware update
 

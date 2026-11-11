@@ -44,7 +44,7 @@ class ArtChannel:
             await asyncio.wait_for(self._ready.wait(), timeout=10)
         except asyncio.TimeoutError as exc:
             await self.__aexit__(None, None, None)
-            raise ArtError("the TV did not open the art channel (not paired, or the TV is off)") from exc
+            raise ArtError("The TV did not open its art channel. It is off or asleep, or this Mac is not paired (tools/frame/pair.py).") from exc
         return self
 
     async def __aexit__(self, *exc) -> None:
@@ -111,10 +111,47 @@ class ArtChannel:
         colours = [c.get("color") for c in json.loads(reply.get("matte_color_list", "[]"))]
         return types, colours
 
-    async def change_mat(self, content_id: str, matte_id: str | None = None, portrait_matte_id: str | None = None) -> dict:
-        fields = {"content_id": content_id}
-        if matte_id:
-            fields["matte_id"] = matte_id
-        if portrait_matte_id:
-            fields["portrait_matte_id"] = portrait_matte_id
-        return await self.request("change_matte", **fields)
+    async def change_mat(self, content_id: str, matte_id: str, portrait_matte_id: str) -> dict:
+        """Set both mats. Sending only one makes the TV rewrite the other, so both are required."""
+        return await self.request("change_matte", content_id=content_id, matte_id=matte_id.lower(), portrait_matte_id=portrait_matte_id.lower())
+
+    async def slideshow(self) -> dict:
+        """The slideshow: its interval, its category and every image in it with its mats.
+        When no slideshow is running the TV answers "off" with an empty list."""
+        reply = await self.request("get_slideshow_status", timeout=20)
+        items = reply.get("content_list") or []
+        return {
+            "minutes": reply.get("value"),
+            "running": reply.get("value") not in (None, "", "off"),
+            "category_id": reply.get("category_id"),
+            "type": reply.get("type"),
+            "current": reply.get("current_content_id"),
+            "items": json.loads(items) if isinstance(items, str) else items,
+        }
+
+    async def known_images(self) -> list[dict]:
+        """Every image the TV will list right now: the slideshow's images when one is running,
+        plus whatever its content list returns (recently shown images, own photos)."""
+        found: dict[str, dict] = {}
+        for item in (await self.slideshow())["items"]:
+            found[item["content_id"]] = item
+        try:
+            for item in await self.images():
+                found.setdefault(item["content_id"], item)
+        except ArtError:
+            pass
+        return list(found.values())
+
+    async def filters(self) -> list[str]:
+        reply = await self.request("get_photo_filter_list")
+        return [f.get("filter_id") for f in json.loads(reply.get("filter_list", "[]"))]
+
+    async def settings(self) -> list[dict]:
+        reply = await self.request("get_artmode_settings")
+        data = reply.get("data", [])
+        return json.loads(data) if isinstance(data, str) else data
+
+
+def mats_of(item: dict) -> tuple[str, str]:
+    """An image's two mats in lower case. The TV reports them in either case."""
+    return str(item.get("matte_id") or "none").lower(), str(item.get("portrait_matte_id") or "none").lower()

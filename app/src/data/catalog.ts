@@ -3,7 +3,7 @@
 // (docs/phase0-findings.md), so the launcher decides what to show and how each tile looks.
 import type { TvApp } from '../platform/tv';
 
-export type Glyph = 'frame' | 'sliders' | 'toggles';
+export type Glyph = 'frame' | 'pictures' | 'sliders' | 'toggles';
 
 export interface Tile {
   appId: string;
@@ -31,8 +31,11 @@ type Known = Omit<Tile, 'iconUrl'>;
 // The Frame's own features. Tested on the TV: the Art app opens; `org.tizen.menu` and the quick
 // panel open as overlays that take the focus. Samsung's art picker (`com.samsung.tv.home.art`)
 // refuses to be opened by an app, and `com.samsung.tv.coba.setting` opens nothing.
+// "Choose art" opens Art Mode as well: Baran confirmed that pressing OK there brings up Samsung's
+// art selector, which is the only way in.
 const FRAME: Known[] = [
   { appId: 'org.tizen.art-app', name: 'Art Mode', line: 'Show the artwork now', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#B9A88A', glyph: 'frame' },
+  { appId: 'org.tizen.art-app', name: 'Choose art', line: 'Opens Art Mode, then press OK', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#A8937A', glyph: 'pictures' },
   { appId: 'org.tizen.menu', name: 'Settings', line: 'All of the TV’s settings', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#7F8AA3', glyph: 'sliders' },
   { appId: 'com.samsung.tv.quickpanel', name: 'Quick settings', line: 'Samsung’s quick panel', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#9C8FB0', glyph: 'toggles' },
 ];

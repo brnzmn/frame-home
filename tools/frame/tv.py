@@ -12,8 +12,8 @@ TV_FILE = ROOT / ".tv.json"
 LOOK_FILE = ROOT / "frame-look.json"
 PRIVATE_DIR = ROOT / "docs" / "private"
 
-# Categories the TV uses for the owner's own images.
-OWN_CATEGORIES = {"MY-C0002", "MY-C0004", "MY-C0008"}
+# Own uploads have content ids starting with "MY". The category is no guide: Art Store images
+# also turn up under MY-C0008, the recently shown list.
 
 
 def tv_ip() -> str:
@@ -31,7 +31,7 @@ def connect(timeout: float = 10):
 
 
 def is_own(item: dict) -> bool:
-    return str(item.get("content_id", "")).startswith("MY") or item.get("category_id") in OWN_CATEGORIES
+    return str(item.get("content_id", "")).startswith("MY")
 
 
 def write_json(path: Path, data) -> None:

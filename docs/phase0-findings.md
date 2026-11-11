@@ -50,6 +50,11 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
   - `get_current_artwork` keeps returning the old mat after a change. Verify against `get_slideshow_status` or `get_content_list`.
   - Sending only `matte_id` also rewrites `portrait_matte_id` (to the same mat, or to `shadowbox_black` when the mat is `none`). Always send both.
 - Baran's art is an Art Store stream: a slideshow of 30 images changing every 5 minutes. All 30 have landscape mat `none`; their portrait mats differ (shadowbox polar 7, shadowbox antique 11, none 8, flexible neutral 3, flexible polar 1). `get_content_list` with no category returned one item, so the slideshow list is the inventory to work from.
+- **A mat change cannot always be undone.** `change_matte` answers error -7 when the TV refuses a mat for an image. It refused `modernthin_black` on one image, and it refused every attempt to set a portrait mat to `none` (upper or lower case, with or without the landscape mat). A change-and-restore test on `SAM-S1111996` therefore left that image's portrait mat at `shadowbox_black` where it had been `none`. Its landscape mat is unchanged. Whether that shows on the landscape-mounted TV is unknown. The write test has been removed, and `apply_look.py` only replaces a mat an image already has.
+- Later the same evening the slideshow reported `off`, with one fixed artwork (`SAM-S1111996`, category `ARTSTREAM`) and only two images listed. Between the two readings Baran power-cycled the TV and opened the art selector; the cause is not established.
+- Guess, not verified: the two mat fields describe the artwork's shape, not how the TV hangs. In the stream every landscape mat was `none` while the portrait mats varied, which would match bands that differ from image to image.
+- Art settings recorded in `docs/art-settings-snapshot.json`: brightness 0 of 10, colour tone 0, motion sensitivity 2, motion timer off, brightness sensor on.
+- With the TV asleep (`PowerState: standby`, screen off) the art channel does not open at all.
 - From inside the TV app the channel opens on port 8001, but requests there got no reply even with the Art app in front. Whether passing the pairing token on 8001 fixes that is untested, so for now the frame look runs from the Mac.
 - Not yet known: which of the two mat fields draws the band Baran sees on his landscape TV. A live preview with him watching settles it.
 
@@ -70,7 +75,8 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
   - `com.samsung.tv.home.art`, Samsung's art picker, fails with `UnknownError`. Baran saw "Could not open Choose art".
   - `com.samsung.tv.coba.setting`, `org.tizen.homesetting`, `com.samsung.tv.wizard.art`, `com.samsung.tv.coba.art`, `com.samsung.tv.floating-menu`, `com.samsung.tv.ambient-support` and `org.tizen.SMSourceAPP` launch without error and show nothing.
   - No way was found for an app to open Samsung's art picker. A "Choose art" screen would have to be our own, built on the art controls.
-- Still to confirm: what exactly the Settings and Quick settings overlays show; that the launcher build returns after an app closes, as the probe did; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
+- Confirmed by Baran on the TV: Settings opens the normal settings menu; Quick settings opens a violet panel he had not seen before and likes; Art Mode opens Art Mode, and pressing OK there opens Samsung's art selector.
+- Still to confirm: that the launcher build returns after an app closes, as the probe did; how to get back to the launcher from Art Mode; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
 
 ### Not tested yet
 

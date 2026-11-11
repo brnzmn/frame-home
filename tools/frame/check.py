@@ -1,127 +1,67 @@
-"""Phase 0 art-controls test. Read-only unless a test flag is given.
+"""Art-controls check. Read-only. The TV must be in Art Mode.
 
-  check.py                  what the TV reports: art mode, images, mats, filters, art settings
-  check.py --write-test     also change one image's mat and change it back
-  check.py --artmode-test   also switch Art Mode over and back (changes what the screen shows)
+  check.py    what the TV reports: API version, mats, filters, settings, the slideshow, the images
 
-Writes docs/private/art-check.json (not committed: error text can quote raw frames from the TV).
+Writes docs/private/art-check.json (not committed).
+
+There is deliberately no write test here. A mat change cannot always be undone: the TV refuses
+to set a portrait mat back to "none" (error -7), so a test that changes and restores can leave
+an image altered. See docs/phase0-findings.md.
 """
 from __future__ import annotations
 
-import argparse
+import asyncio
+import sys
 import time
 from collections import Counter
 
-from tv import PRIVATE_DIR, ROOT, connect, is_own, write_json
+from artws import ArtChannel, ArtError, mats_of
+from tv import PRIVATE_DIR, ROOT, write_json
 
 
-def step(report: dict, name: str, fn):
-    """Run one check, record ok/fail, never stop the whole run."""
-    try:
-        value = fn()
-        report[name] = {"status": "ok", "value": value}
-        return value
-    except Exception as exc:  # the TV answers differently per model year; record and move on
-        report[name] = {"status": "fail", "error": f"{type(exc).__name__}: {exc}"}
-        return None
-
-
-def find_item(art, content_id: str) -> dict | None:
-    return next((i for i in art.available() if i.get("content_id") == content_id), None)
-
-
-def write_test(art, items: list[dict], types: list, colours: list) -> dict:
-    """Change one own image's mat, confirm the TV reports it, then restore the original."""
-    own = [i for i in items if is_own(i) and i.get("matte_id")]
-    if not own:
-        return {"status": "skipped", "reason": "no own image with a mat setting"}
-    target = own[0]
-    cid, original = target["content_id"], target["matte_id"]
-    type_names = [t.get("matte_type") for t in types if t.get("matte_type")]
-    colour_names = [c.get("color") for c in colours if c.get("color")]
-    candidates = [f"{t}_{c}" for t in type_names[:3] for c in colour_names[:2]] + ["none"]
-    candidates = [m for m in candidates if m != original]
-    tried = []
-    for matte in candidates[:5]:
-        try:
-            art.change_matte(cid, matte)
-            time.sleep(1.5)
-            now = (find_item(art, cid) or {}).get("matte_id")
-        except Exception as exc:
-            tried.append({"matte": matte, "error": f"{type(exc).__name__}: {exc}"})
-            continue
-        tried.append({"matte": matte, "tv_reports": now})
-        if now == matte:
-            art.change_matte(cid, original)
-            time.sleep(1.5)
-            restored = (find_item(art, cid) or {}).get("matte_id")
-            return {
-                "status": "ok" if restored == original else "changed-but-not-restored",
-                "content_id": cid,
-                "original": original,
-                "changed_to": matte,
-                "restored_to": restored,
-                "tried": tried,
-            }
-    return {"status": "fail", "content_id": cid, "original": original, "tried": tried}
-
-
-def artmode_test(art) -> dict:
-    before = art.get_artmode()
-    flipped = "off" if before == "on" else "on"
-    art.set_artmode(flipped == "on")
-    time.sleep(4)
-    during = art.get_artmode()
-    art.set_artmode(before == "on")
-    time.sleep(4)
-    after = art.get_artmode()
-    return {"status": "ok" if during == flipped and after == before else "fail", "before": before, "during": during, "after": after}
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--write-test", action="store_true")
-    parser.add_argument("--artmode-test", action="store_true")
-    args = parser.parse_args()
-
+async def run() -> int:
     report: dict = {"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
-    art = connect().art()
+    async with ArtChannel() as art:
+        if not await art.art_mode_on():
+            print("The art service is not answering. Switch the TV to Art Mode (short press on power) and run this again.")
+            return 1
 
-    step(report, "supported", art.supported)
-    step(report, "api_version", art.get_api_version)
-    step(report, "power_state", art.get_power_state)
-    step(report, "artmode", art.get_artmode)
-    step(report, "current", lambda: {k: v for k, v in (art.get_current() or {}).items() if k in ("content_id", "matte_id", "portrait_matte_id", "category_id")})
+        async def step(name: str, call):
+            try:
+                report[name] = await call
+            except ArtError as exc:
+                report[name] = {"error": str(exc)}
+            return report[name]
 
-    items = step(report, "images_raw", art.available) or []
-    report.pop("images_raw", None)
-    report["images"] = {
-        "status": "ok" if items else "fail",
-        "total": len(items),
-        "own": sum(1 for i in items if is_own(i)),
-        "by_category": dict(Counter(str(i.get("category_id")) for i in items)),
-        "by_matte": dict(Counter(str(i.get("matte_id")) for i in items)),
-        "keys_seen": sorted({k for i in items[:20] for k in i}),
-    }
-
-    mats = step(report, "mats", lambda: art.get_matte_list(include_colour=True))
-    types, colours = (mats or ([], []))[0], (mats or ([], []))[1]
-    step(report, "photo_filters", art.get_photo_filter_list)
-    step(report, "art_settings", art.get_artmode_settings)
-
-    if args.write_test:
-        step(report, "write_test", lambda: write_test(art, items, types, colours))
-    if args.artmode_test:
-        step(report, "artmode_test", lambda: artmode_test(art))
+        await step("api_version", art.request("api_version"))
+        styles, colours = await art.mats()
+        report["mat_styles"], report["mat_colours"] = styles, colours
+        await step("photo_filters", art.filters())
+        await step("art_settings", art.settings())
+        current = await art.request("get_current_artwork")
+        report["current"] = {k: current.get(k) for k in ("content_id", "category_id", "content_type")}
+        show = await art.slideshow()
+        items = await art.known_images()
+        report["slideshow"] = {"running": show["running"], "minutes": show["minutes"], "category_id": show["category_id"], "images": len(show["items"])}
+        report["images"] = {
+            "listed": len(items),
+            "landscape_mats": dict(Counter(mats_of(i)[0] for i in items)),
+            "portrait_mats": dict(Counter(mats_of(i)[1] for i in items)),
+        }
 
     out = PRIVATE_DIR / "art-check.json"
     write_json(out, report)
-    for name, value in report.items():
-        if isinstance(value, dict) and "status" in value:
-            detail = value.get("value", {k: v for k, v in value.items() if k != "status"})
-            print(f"{name}: {value['status']}  {str(detail)[:160]}")
+    version = report["api_version"].get("version") if isinstance(report["api_version"], dict) else report["api_version"]
+    print(f"art API {version}; {len(styles)} mat styles, {len(colours)} colours")
+    print(f"current artwork: {report['current']}")
+    print(f"slideshow: {report['slideshow']}")
+    print(f"images the TV lists now: {report['images']}")
     print(f"saved {out.relative_to(ROOT)}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        sys.exit(asyncio.run(run()))
+    except ArtError as exc:
+        sys.exit(str(exc))

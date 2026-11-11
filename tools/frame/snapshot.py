@@ -1,32 +1,44 @@
-"""Record the TV's Art Mode settings (brightness, colour tone, sleep and motion options)
-so they can be compared or re-applied after a reset or firmware update.
+"""Record the TV's Art Mode settings (brightness, colour tone, sleep and motion options) and
+which mats are in use, so they can be compared or re-applied after a reset or firmware update.
+The TV must be in Art Mode.
 
   snapshot.py    writes docs/art-settings-snapshot.json
 """
 from __future__ import annotations
 
+import asyncio
+import sys
 import time
 from collections import Counter
 
-from tv import ROOT, connect, write_json
+from artws import ArtChannel, ArtError, mats_of
+from tv import ROOT, write_json
 
 
-def main() -> None:
-    art = connect().art()
-    snapshot = {"taken_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
-    for name, fn in (("art_settings", art.get_artmode_settings), ("slideshow", art.get_slideshow_status), ("auto_rotation", art.get_auto_rotation_status)):
+async def run() -> int:
+    snapshot: dict = {"taken_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
+    async with ArtChannel() as art:
+        if not await art.art_mode_on():
+            print("The art service is not answering. Switch the TV to Art Mode (short press on power) and run this again.")
+            return 1
         try:
-            snapshot[name] = fn()
-        except Exception as exc:
-            snapshot[name] = {"error": f"{type(exc).__name__}: {exc}"}
-    try:
-        snapshot["mats_in_use"] = dict(Counter(str(i.get("matte_id")) for i in art.available()))
-    except Exception as exc:
-        snapshot["mats_in_use"] = {"error": f"{type(exc).__name__}: {exc}"}
+            snapshot["art_settings"] = {s.get("item"): s.get("value") for s in await art.settings()}
+        except ArtError as exc:
+            snapshot["art_settings"] = {"error": str(exc)}
+        show = await art.slideshow()
+        images = await art.known_images()
+        snapshot["slideshow"] = {"running": show["running"], "minutes": show["minutes"], "category_id": show["category_id"], "type": show["type"], "images": len(show["items"])}
+        snapshot["images_listed"] = len(images)
+        snapshot["landscape_mats"] = dict(Counter(mats_of(i)[0] for i in images))
+        snapshot["portrait_mats"] = dict(Counter(mats_of(i)[1] for i in images))
     out = ROOT / "docs" / "art-settings-snapshot.json"
     write_json(out, snapshot)
-    print(f"saved {out.relative_to(ROOT)}")
+    print(f"saved {out.relative_to(ROOT)}: {snapshot['art_settings']}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        sys.exit(asyncio.run(run()))
+    except ArtError as exc:
+        sys.exit(str(exc))

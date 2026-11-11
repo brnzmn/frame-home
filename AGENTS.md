@@ -30,6 +30,9 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - The art service answers only while Art Mode is on. Use `tools/frame/artws.py`; the `samsungframetv` classes fail on this TV's connect order.
 - After `change_matte`, `get_current_artwork` still shows the old mat. Verify with `get_slideshow_status` or `get_content_list`.
 - `change_matte` with only `matte_id` also rewrites `portrait_matte_id`. Always send both.
+- `change_matte` error -7 means the TV refuses that mat for that image. It always refuses `none` as a portrait mat, so never add a mat where an image has none: it cannot be undone. No change-and-restore tests on his images.
+- Own uploads have content ids starting with `MY`. Category `MY-C0008` is the recently shown list and also holds Art Store images.
+- With the TV asleep the art channel does not open at all; `PowerState: standby` covers both Art Mode and asleep.
 - A hidden app brings itself forward by launching its own id, which reloads the page. Save state first.
 
 ## Commands

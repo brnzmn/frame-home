@@ -19,4 +19,6 @@
 - **Model note:** Fable 5.2's safeguard stopped one research pass on this topic. The next tier for blocked work is Opus 5.5.
 - **Certificate:** profile `framehome`; the author password is in the keychain as `samsung/tizen-author-cert`. Baran decided against a backup copy of the certificate files. If `~/SamsungCertificate/framehome/` is lost, uninstall the app from the TV and sign again with a new certificate.
 - **Gate passed (2026-11-10):** the test app survives a full power cycle, lists and opens apps, and returns by itself after an app closes. The launcher goes ahead. Mats can be changed while Art Mode is on. See `docs/phase0-findings.md`.
+- **Existing projects (checked 2026-11-10):** none is better as a whole; keep our launcher and art client and borrow techniques. Routes that need a root exploit stay out. See `docs/research-existing-projects.md`.
+- **Mat tools are read-only by default.** No change-and-restore tests on Baran's images: a portrait mat cannot be set back to `none`.
 - **Design rules from the TV's measurements:** no live backdrop blur (31 fps); transforms and shadows are fine (55 to 59 fps); the launcher keeps its own curated app list and its own fallback artwork, because the TV's list is mostly system parts and many icons do not load.

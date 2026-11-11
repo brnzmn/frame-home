@@ -13,7 +13,6 @@
   --gap: 28.8px;
   --tile-w: 264px;
   --tile-h: 148px;
-  --card-w: 556.8px;
   --card-h: 120px;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -103,7 +102,8 @@ html, body {
   gap: 52px;
 }
 .row { display: flex; gap: var(--gap); }
-.row-frame { margin-bottom: -8px; }
+/* The Frame row spans the full width however many cards it holds. */
+.row-frame { width: 1728px; margin-bottom: -8px; }
 
 /* App tiles */
 .tile {
@@ -156,20 +156,20 @@ html, body {
 /* Frame row: mat board. Quiet until focused, then lit like a mat under a picture light. */
 .card {
   position: relative;
-  width: var(--card-w);
   height: var(--card-h);
-  flex: none;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 26px;
-  padding: 0 34px;
+  gap: 22px;
+  padding: 0 28px;
   border-radius: 30px;
   color: var(--paper);
   background: linear-gradient(180deg, color-mix(in srgb, var(--mat) 11%, transparent), color-mix(in srgb, var(--mat) 5%, transparent));
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mat) 18%, transparent);
   transition: transform 190ms var(--ease), background-color 190ms ease, color 190ms ease, box-shadow 190ms var(--ease);
 }
-.card-glyph { width: 52px; height: 52px; flex: none; opacity: 0.9; }
+.card-glyph { width: 46px; height: 46px; flex: none; opacity: 0.9; }
 .card-glyph svg { display: block; width: 100%; height: 100%; }
 .card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .card-name { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
