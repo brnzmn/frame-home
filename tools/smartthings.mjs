@@ -5,6 +5,7 @@
 //   node tools/smartthings.mjs devices          every device on the account; remembers the TV
 //   node tools/smartthings.mjs status           what the TV reports right now
 //   node tools/smartthings.mjs watch [seconds]  print every change in what it reports (default 120)
+//   node tools/smartthings.mjs watch --hours 10 [--every 30] [--log FILE]   the same over a night
 //   node tools/smartthings.mjs launch           ask the TV once to open Frame Home
 //   node tools/smartthings.mjs rule             show the rule that would be created
 //   node tools/smartthings.mjs rule --create    create it (replaces an earlier one of ours)
@@ -48,12 +49,17 @@ function token() {
 let bearer;
 async function api(method, route, body) {
   bearer ??= token();
-  const response = await fetch(`${API}${route}`, {
-    method,
-    headers: { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    signal: AbortSignal.timeout(15000),
-  });
+  let response;
+  try {
+    response = await fetch(`${API}${route}`, {
+      method,
+      headers: { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch (error) {
+    throw new Error(`SmartThings could not be reached (${error.cause?.code ?? error.name}: ${error.message})`);
+  }
   const text = await response.text();
   let data = null;
   try {
@@ -91,14 +97,15 @@ async function devices() {
     if (looksLikeTv) tvs.push(device);
     console.log(`${looksLikeTv ? 'TV ' : '   '} ${device.label ?? device.name}  [${device.deviceTypeName ?? device.type ?? '?'}]  id ${short(device.deviceId)}  ${caps.length} capabilities`);
   }
-  if (tvs.length !== 1) {
-    console.log(tvs.length ? `\n${tvs.length} TVs found; not remembering any. Pass the one to use: devices --use <start of its id>` : '\nNo TV among them.');
-    const wanted = args[args.indexOf('--use') + 1];
-    const chosen = args.includes('--use') ? list.find((d) => d.deviceId.startsWith(wanted)) : null;
-    if (!chosen) return;
-    tvs.splice(0, tvs.length, chosen);
+  // --use always wins, in case the TV is listed under a type this does not recognise.
+  const wanted = args.includes('--use') ? args[args.indexOf('--use') + 1] : null;
+  const tv = wanted ? list.find((d) => d.deviceId.startsWith(wanted)) : tvs.length === 1 ? tvs[0] : null;
+  if (!tv) {
+    if (wanted) console.log(`\nNo device id starts with "${wanted}".`);
+    else if (tvs.length) console.log(`\n${tvs.length} TVs found; not remembering any. Pass the one to use: devices --use <start of its id>`);
+    else console.log('\nNo TV among them. If it is listed under another type: devices --use <start of its id>');
+    return;
   }
-  const tv = tvs[0];
   const saved = readTv();
   saved.smartthings = { deviceId: tv.deviceId, locationId: tv.locationId };
   fs.writeFileSync(tvFile, `${JSON.stringify(saved, null, 2)}\n`);
@@ -136,31 +143,47 @@ async function status() {
 
 async function watch() {
   const { deviceId } = remembered();
-  const seconds = Number(args[1] ?? 120);
+  const hours = numberFlag('--hours', 0);
+  const long = hours > 0;
+  // Each look is two requests and new tokens have low request limits, so a long watch looks rarely.
+  const everyMs = numberFlag('--every', long ? 30 : 2) * 1000;
+  const lengthMs = long ? hours * 3600_000 : Number(/^\d+$/.test(args[1] ?? '') ? args[1] : 120) * 1000;
+  const logFile = args.includes('--log') ? args[args.indexOf('--log') + 1] : null;
+  const stamp = () => (long ? new Date().toLocaleString('sv-SE') : new Date().toTimeString().slice(0, 8));
+  const say = (text) => {
+    const line = `${stamp()} ${text}`;
+    console.log(line);
+    if (logFile) fs.appendFileSync(logFile, `${line}\n`);
+  };
   const start = Date.now();
   let last = null;
   let lastHealth = null;
-  const clock = () => new Date().toTimeString().slice(0, 8);
-  while (Date.now() - start < seconds * 1000) {
+  let lastError = null;
+  while (Date.now() - start < lengthMs) {
     try {
       const [flat, health] = await Promise.all([flatStatus(deviceId), api('GET', `/devices/${deviceId}/health`).catch(() => null)]);
+      if (lastError) say('SmartThings answers again');
+      lastError = null;
       if (health?.state !== lastHealth) {
-        console.log(`${clock()} reachable: ${health?.state ?? 'unknown'}`);
+        say(`reachable: ${health?.state ?? 'unknown'}`);
         lastHealth = health?.state;
       }
       if (last) {
-        for (const [key, value] of flat) if (last.get(key) !== value) console.log(`${clock()} ${key}: ${shown(key, last.get(key) ?? '(none)')} -> ${shown(key, value)}`);
+        for (const [key, value] of flat) if (last.get(key) !== value) say(`${key}: ${shown(key, last.get(key) ?? '(none)')} -> ${shown(key, value)}`);
       } else {
-        console.log(`${clock()} watching ${flat.size} values; switch = ${flat.get('switch.switch')}`);
+        say(`watching ${flat.size} values every ${everyMs / 1000} s; switch = ${flat.get('switch.switch')}`);
       }
       last = flat;
     } catch (error) {
-      console.log(`${clock()} ${error.message}`);
+      // The same failure is said once, not at every look.
+      if (error.message !== lastError) say(error.message);
+      lastError = error.message;
       if (error.status === 401) process.exit(1);
-      if (error.status === 429) await new Promise((r) => setTimeout(r, 10000));
+      if (error.status === 429) await new Promise((r) => setTimeout(r, 60000));
     }
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, everyMs));
   }
+  if (long) say(`watch over after ${hours} h; switch = ${last?.get('switch.switch') ?? 'unknown'}`);
 }
 
 async function launch() {
@@ -235,7 +258,7 @@ async function rule() {
 }
 
 const commands = { devices, status, watch, launch, rule };
-if (!commands[command]) fail('usage: node tools/smartthings.mjs devices | status | watch [seconds] | launch | rule [--create | --list | --delete] [--first-delay S] [--attempts N] [--gap S]');
+if (!commands[command]) fail('usage: node tools/smartthings.mjs devices | status | watch [seconds | --hours N [--every S] [--log FILE]] | launch | rule [--create | --list | --delete] [--first-delay S] [--attempts N] [--gap S]');
 try {
   await commands[command]();
 } catch (error) {
