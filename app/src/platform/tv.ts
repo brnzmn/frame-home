@@ -18,6 +18,8 @@ export interface Tv {
   open(appId: string): Promise<void>;
   /** Ids of the apps running right now, or null when the TV will not say. */
   runningAppIds(): Promise<string[] | null>;
+  /** Id of the app on screen right now, or null when the TV does not say (as between apps). */
+  foregroundAppId(): string | null;
   /** Bring this app back in front. On the TV this reloads the page, so save state first. */
   bringToFront(): Promise<void>;
 }

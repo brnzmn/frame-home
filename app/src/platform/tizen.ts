@@ -8,7 +8,18 @@ function message(error: unknown, fallback: string): Error {
   return new Error(text || fallback);
 }
 
+declare const webapis: any;
+
+/** Samsung's own API script lives on the TV. It is loaded at run time, never bundled. */
+function loadSamsungApis(): void {
+  if ('webapis' in window) return;
+  const script = document.createElement('script');
+  script.src = '$WEBAPIS/webapis/webapis.js';
+  document.head.appendChild(script);
+}
+
 export function createTizenTv(): Tv {
+  loadSamsungApis();
   let ownId: string | null = null;
   try {
     ownId = tizen.application.getCurrentApplication().appInfo.id;
@@ -51,6 +62,15 @@ export function createTizenTv(): Tv {
           resolve(null);
         }
       }),
+
+    foregroundAppId: () => {
+      try {
+        // Throws "AppID is null" while the TV is between apps, for instance on the way into Art Mode.
+        return webapis.appcommon.getForegroundAppId() || null;
+      } catch {
+        return null;
+      }
+    },
 
     bringToFront: () =>
       new Promise<void>((resolve, reject) => {

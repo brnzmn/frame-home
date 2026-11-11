@@ -95,6 +95,8 @@ function placeIcon(img: HTMLImageElement, face: HTMLElement): void {
   img.style.width = `${fit.size}px`;
   img.style.height = `${fit.size}px`;
   img.classList.add('is-loaded');
+  // The icon carries the app's own logo, so the name underneath must not show through it.
+  face.classList.add('has-icon');
 }
 
 function readSavedFocus(): FocusPos | null {

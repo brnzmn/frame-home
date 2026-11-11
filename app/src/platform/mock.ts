@@ -29,6 +29,7 @@ export function createMockTv(): Tv {
       console.info(`[fake TV] would open ${appId}`);
     },
     runningAppIds: async () => [],
+    foregroundAppId: () => null,
     bringToFront: async () => {},
   };
 }

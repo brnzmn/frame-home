@@ -21,4 +21,5 @@
 - **Gate passed (2026-11-10):** the test app survives a full power cycle, lists and opens apps, and returns by itself after an app closes. The launcher goes ahead. Mats can be changed while Art Mode is on. See `docs/phase0-findings.md`.
 - **Existing projects (checked 2026-11-10):** none is better as a whole; keep our launcher and art client and borrow techniques. Routes that need a root exploit stay out. See `docs/research-existing-projects.md`.
 - **Mat tools are read-only by default.** No change-and-restore tests on Baran's images: a portrait mat cannot be set back to `none`.
+- **Home button (Baran, 2026-11-11):** our own jump-back, with no change to the TV's system settings. The launcher returns when Samsung's home appears; pressing Home a second time within six seconds leaves Samsung's home up. It never acts while the Art app is in front.
 - **Design rules from the TV's measurements:** no live backdrop blur (31 fps); transforms and shadows are fine (55 to 59 fps); the launcher keeps its own curated app list and its own fallback artwork, because the TV's list is mostly system parts and many icons do not load.

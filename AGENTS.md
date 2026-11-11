@@ -34,6 +34,12 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - Own uploads have content ids starting with `MY`. Category `MY-C0008` is the recently shown list and also holds Art Store images.
 - With the TV asleep the art channel does not open at all; `PowerState: standby` covers both Art Mode and asleep.
 - A hidden app brings itself forward by launching its own id, which reloads the page. Save state first.
+- If `sdb connect` is refused or an install hangs with the TV awake and the addresses right, the Mac's bridge server is stale: `sdb kill-server`, then connect. `tools/deploy.mjs` does this.
+- The TV does not process installs while asleep. Wake it first (`tools/frame/key.py KEY_POWER`).
+- The debug port drops whenever the launcher is hidden, and the TV will not open a running app in debug mode. To inspect after a test, run the full `deploy.mjs build/app --debug`; the launcher's storage survives it. Its own record is `localStorage['frame-home.trace']`.
+- A hidden page's timers fire once a second. Anything that must react fast has to act in the event itself.
+- The TV's app-status page lags by seconds around app switches; never use it for timing.
+- Samsung's home in front is `com.samsung.tv.csfs`; Art Mode is `org.tizen.art-app`. The jump-back must only ever act on the first.
 
 ## Commands
 

@@ -4,6 +4,7 @@
 //
 //   node tools/deploy.mjs probe                    package, sign, install, open
 //   node tools/deploy.mjs probe --debug            also open the TV's debug port on localhost:9222
+//   node tools/deploy.mjs probe --debug --open-only  open the installed app again without reinstalling
 //   node tools/deploy.mjs probe --profile NAME     certificate profile (default: framehome)
 //
 // Needs .tv.json (node tools/find-tv.mjs) and a certificate profile that contains the TV's DUID.
@@ -20,6 +21,8 @@ const SDB = path.join(os.homedir(), 'tizen-studio/tools/sdb');
 const args = process.argv.slice(2);
 const appDirName = args.find((a) => !a.startsWith('--'));
 const debug = args.includes('--debug');
+// Skip packaging and installing; just open the installed app.
+const openOnly = args.includes('--open-only');
 const profileFlag = args.indexOf('--profile');
 const profile = profileFlag >= 0 ? args[profileFlag + 1] : 'framehome';
 
@@ -79,22 +82,31 @@ for (const entry of fs.readdirSync(appDir)) {
   fs.cpSync(path.join(appDir, entry), path.join(stage, entry), { recursive: true });
 }
 
+// A bridge server left running for hours goes stale: connects are refused and installs hang
+// with the TV awake and every address right. Start from a fresh one each time.
+try {
+  run(SDB, ['kill-server'], { quiet: true });
+} catch {
+  // No server was running.
+}
 console.log(`connecting to ${target}`);
 run(SDB, ['connect', target]);
 const devices = run(SDB, ['devices'], { quiet: true });
 if (!devices.includes(target)) fail(`the TV did not accept the developer connection:\n${devices}`);
 
-console.log(`packaging ${appName} with certificate profile "${profile}"`);
-run(TIZEN, ['package', '-t', 'wgt', '-s', profile, '--', stage]);
-const packaged = fs.readdirSync(stage).find((f) => f.endsWith('.wgt'));
-if (!packaged) fail('packaging produced no .wgt file');
-// The TV's installer fails on a file name with a space ("Failed to install Tizen application",
-// empty log), and the packager names the file after the app, so rename it first.
-const wgt = `${appId.split('.').pop()}.wgt`;
-if (packaged !== wgt) fs.renameSync(path.join(stage, packaged), path.join(stage, wgt));
+if (!openOnly) {
+  console.log(`packaging ${appName} with certificate profile "${profile}"`);
+  run(TIZEN, ['package', '-t', 'wgt', '-s', profile, '--', stage]);
+  const packaged = fs.readdirSync(stage).find((f) => f.endsWith('.wgt'));
+  if (!packaged) fail('packaging produced no .wgt file');
+  // The TV's installer fails on a file name with a space ("Failed to install Tizen application",
+  // empty log), and the packager names the file after the app, so rename it first.
+  const wgt = `${appId.split('.').pop()}.wgt`;
+  if (packaged !== wgt) fs.renameSync(path.join(stage, packaged), path.join(stage, wgt));
 
-console.log(`installing ${wgt}`);
-run(TIZEN, ['install', '-n', wgt, '-s', target, '--', stage]);
+  console.log(`installing ${wgt}`);
+  run(TIZEN, ['install', '-n', wgt, '-s', target, '--', stage]);
+}
 
 if (debug) {
   const out = run(SDB, ['-s', target, 'shell', '0', 'debug', appId], { quiet: true });

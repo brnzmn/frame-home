@@ -35,7 +35,7 @@ type Known = Omit<Tile, 'iconUrl'>;
 // art selector, which is the only way in.
 const FRAME: Known[] = [
   { appId: 'org.tizen.art-app', name: 'Art Mode', line: 'Show the artwork now', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#B9A88A', glyph: 'frame' },
-  { appId: 'org.tizen.art-app', name: 'Choose art', line: 'Opens Art Mode, then press OK', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#A8937A', glyph: 'pictures' },
+  { appId: 'org.tizen.art-app', name: 'Choose art', line: 'Press OK once art shows', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#A8937A', glyph: 'pictures' },
   { appId: 'org.tizen.menu', name: 'Settings', line: 'All of the TV’s settings', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#7F8AA3', glyph: 'sliders' },
   { appId: 'com.samsung.tv.quickpanel', name: 'Quick settings', line: 'Samsung’s quick panel', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#9C8FB0', glyph: 'toggles' },
 ];

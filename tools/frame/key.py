@@ -1,7 +1,7 @@
 """Press remote keys on the TV from the Mac, for tests that need a real key press.
 
-  key.py KEY_HOME            one key
-  key.py KEY_HOME KEY_RETURN several, one second apart
+  key.py KEY_HOME                      one key
+  key.py KEY_HOME wait:4 KEY_HOME      keys with a pause in seconds between them
 
 Key names are Samsung's: KEY_HOME, KEY_RETURN, KEY_EXIT, KEY_ENTER, KEY_UP, KEY_DOWN, KEY_LEFT,
 KEY_RIGHT, KEY_POWER (on a Frame a short press switches between TV and Art Mode).
@@ -13,15 +13,16 @@ from tv import connect
 
 
 def main() -> None:
-    keys = sys.argv[1:]
-    if not keys:
+    steps = sys.argv[1:]
+    if not steps:
         sys.exit(__doc__)
     tv = connect()
-    for i, key in enumerate(keys):
-        if i:
-            time.sleep(1)
-        tv.send_key(key)
-        print(f"sent {key}")
+    for step in steps:
+        if step.startswith("wait:"):
+            time.sleep(float(step[5:]))
+            continue
+        tv.send_key(step, key_press_delay=0)
+        print(f"{time.strftime('%H:%M:%S')} sent {step}", flush=True)
     tv.close()
 
 

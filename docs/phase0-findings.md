@@ -78,6 +78,22 @@ Raw evidence: `docs/probe-report.json` (the probe's own report) and `docs/privat
 - Confirmed by Baran on the TV: Settings opens the normal settings menu; Quick settings opens a violet panel he had not seen before and likes; Art Mode opens Art Mode, and pressing OK there opens Samsung's art selector.
 - Still to confirm: that the launcher build returns after an app closes, as the probe did; how to get back to the launcher from Art Mode; and how the colours look on the panel. In Baran's photos the probe's near-black page looked bright blue.
 
+### Home button: jump back, measured 2026-11-11
+
+Baran chose our own jump-back over changing the TV's "home app" setting. Timings below are the launcher's own record on the TV (`frame-home.trace` in its storage), not the Mac's clock.
+
+- `webapis.appcommon.getForegroundAppId()` works with our certificate and says which app is on screen. `webapis.js` is loaded at run time from `$WEBAPIS/webapis/webapis.js`.
+- Samsung's home in front reports `com.samsung.tv.csfs`, already at the moment the launcher goes hidden.
+- Art Mode reports `org.tizen.art-app`. On the way in there is a moment where the call throws "AppID is null" and the page still says visible.
+- **Single Home press:** hidden, decision 18 ms later, launcher running again 0.44 s after going hidden. Slowest run 1.6 s.
+- **Second Home press within six seconds:** Samsung's home is left up. Confirmed: still up twelve seconds later.
+- **Art Mode:** the launcher stayed hidden for 45 seconds while the Mac confirmed the art service was answering. It never pulled the TV out of art.
+- **Leaving Art Mode** (power key): the TV shows Samsung's home, the launcher sees it and is back 2.7 seconds later.
+- A hidden page's timers run once a second, which made the first version take 3 to 4 seconds. Acting at the moment of going hidden fixed that. The worker-driven tick reads the foreground every 250 ms.
+- Pressing Home within about half a second of the launcher restarting is swallowed by the TV.
+- The public app-status page (`/api/v2/applications/<id>`) lags by several seconds around switches. Do not time anything with it.
+- Unknown: how long the launcher survives in the background over hours of Art Mode or of another app. If the TV stops it, Home shows Samsung's home until the launcher is opened again.
+
 ### Not tested yet
 
 - The SmartThings power-on rule, and that it leaves Art Mode alone.
