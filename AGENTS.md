@@ -46,7 +46,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - Always enter Art Mode with the power key. Opening the Art app as an app hides the problem.
 - The TV drops a request to open an app while it is still leaving Art Mode (up to about 7 seconds). Ask again until it is on screen.
 - A page hidden for minutes cannot rely on its own timers. Only the worker-driven tick keeps time.
-- The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It cannot see which app is in front, and it reaches the art channel at `ws://127.0.0.1:8001` with no token.
+- The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It reaches the art channel at `ws://127.0.0.1:8001` with no token. It cannot see which app is in front, so it must never open the launcher or anything else.
 - To see what launcher and service do while hidden: `node tools/probe-server.mjs`, then `deploy.mjs build/app --report`. Their joint record lands in `docs/private/probe-events.log`. A new test run gets a new file name; never empty an old log.
 - An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.
 

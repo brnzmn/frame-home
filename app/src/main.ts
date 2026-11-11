@@ -8,7 +8,7 @@ async function start(): Promise<void> {
   const tv = connectTv();
   copyTraceTo((event) => tv.noteToKeeper(event));
   trace(`launcher started ${document.visibilityState}; ${tv.startedBy()}`);
-  // The second line: if this page is stopped, the keeper opens it again after Art Mode.
+  // The keeper listens to the TV's art channel and keeps the record; see its own file.
   tv.startKeeper().then(
     () => trace('keeper: start accepted'),
     (e: Error) => trace(`keeper: ${e.message}`),

@@ -1,18 +1,19 @@
 // Frame Home keeper: a background service in the launcher's own package.
 //
-// What it is for (all measured on the TV, docs/phase0-findings.md):
-// - It is the launcher's second line. The launcher brings itself back when it sees Samsung's
-//   home in front. If the launcher's page has been stopped, nobody is watching; this service
-//   then opens the launcher when the TV announces on its own art channel that Art Mode has
-//   ended (`art_mode_changed`, status `off`).
-// - It reaches the art channel from inside the TV, with no pairing token. That is the road
-//   for art controls in the launcher later.
-// It cannot see which app is in front (Samsung's call returns nothing here), so the launcher
-// gets a few seconds to come back by itself first.
+// What it does (all measured on the TV, docs/phase0-findings.md):
+// - It listens to the TV's own art channel, which it reaches from inside the TV with no pairing
+//   token. So it knows when Art Mode goes on and off and when the TV says it is going to
+//   sleep. The launcher asks it about that sleep notice before it comes back after Art Mode.
+// - It keeps one record of what it and the launcher saw, and can report it to the Mac.
+// - It is the road for art controls in the launcher later.
+//
+// What it must not do: open the launcher, or anything else. It cannot see which app is in
+// front (Samsung's call returns nothing here), so it cannot tell Samsung's home from a console
+// or a cast that has taken over the screen. An earlier version opened the launcher when Art
+// Mode ended; that was taken out after review for exactly this reason.
 //
 // Its limit: after the power key puts the TV into Art Mode, the TV stops this service and the
-// launcher within a minute, and starts neither again. So after a real Art Mode stay nothing
-// of ours is running, and this service only helps after short ones.
+// launcher within a minute, and starts neither again.
 //
 // It runs in the TV's service runtime (Node 18 on this TV) with no packages, and it is shipped
 // as it is, not built. So it keeps to plain JavaScript and Node's built-in modules.
@@ -26,13 +27,6 @@ var LAUNCHER = 'FrameHome1.FrameHome';
 var TV_API_PORT = process.env.FRAME_HOME_TV_PORT ? Number(process.env.FRAME_HOME_TV_PORT) : 8001;
 var STATUS_PORT = process.env.FRAME_HOME_STATUS_PORT ? Number(process.env.FRAME_HOME_STATUS_PORT) : 47811;
 var ART_PATH = '/api/v2/channels/com.samsung.art-app?name=' + Buffer.from('Frame Home keeper', 'utf8').toString('base64');
-// After Art Mode ends: a first look once the TV has had a moment to say it is going to sleep.
-// If the launcher is not running at all, open it then. If it is running but hidden, it gets
-// until the second look to come back by itself; it can see which app is in front and this
-// service cannot.
-var FIRST_LOOK_MS = process.env.FRAME_HOME_FIRST_LOOK_MS ? Number(process.env.FRAME_HOME_FIRST_LOOK_MS) : 1200;
-var SECOND_LOOK_MS = process.env.FRAME_HOME_SECOND_LOOK_MS ? Number(process.env.FRAME_HOME_SECOND_LOOK_MS) : 4000;
-var MIN_BETWEEN_LAUNCHES_MS = 5000;
 var ART_ASK_EVERY_MS = process.env.FRAME_HOME_ART_ASK_MS ? Number(process.env.FRAME_HOME_ART_ASK_MS) : 5000;
 var ART_RECONNECT_MS = 4000;
 var BEAT_MS = 5000;
@@ -59,10 +53,6 @@ var state = {
   power: 'unknown',
   launcher: 'unknown',
   lastStandbyAt: 0,
-  lastLaunchAt: 0,
-  launches: 0,
-  launcherShownAt: 0,
-  launcherSaid: 'nothing yet',
 };
 
 /** How the TV says it started this service. */
@@ -365,18 +355,10 @@ function onArtMessage(text) {
   note('art event: ' + name + (value ? ' ' + value : ''));
 }
 
-/** True once Art Mode has been seen on; its end is what opens the launcher. */
-var artWasOn = false;
-
 function setArt(value, how) {
   if (state.art === value) return;
   state.art = value;
   note('art mode ' + value + ' (' + how + ')');
-  if (value === 'on') artWasOn = true;
-  else if (artWasOn && (value === 'off' || value === 'silent')) {
-    artWasOn = false;
-    planLaunch('Art Mode ended');
-  }
 }
 
 function connectArt() {
@@ -398,73 +380,6 @@ function connectArt() {
   });
 }
 
-// ---- Opening the launcher ----
-
-var launchTimer = null;
-
-/** Why the launcher must not be opened right now, or null when nothing speaks against it. */
-function objection(plannedAt) {
-  if (state.lastStandbyAt >= plannedAt - 3000) return 'the TV is going to sleep';
-  // Asleep, the TV closes the art channel. In TV mode it stays open.
-  if (!state.artConnected) return 'the art channel is closed, as when the TV sleeps';
-  if (state.launcherShownAt >= plannedAt) return 'the launcher came back by itself';
-  if (Date.now() - state.lastLaunchAt < MIN_BETWEEN_LAUNCHES_MS) return 'opened it a moment ago';
-  if (state.art === 'on') return 'Art Mode is on again';
-  return null;
-}
-
-function planLaunch(why) {
-  if (launchTimer) clearTimeout(launchTimer);
-  var plannedAt = Date.now();
-
-  function look(last) {
-    launchTimer = null;
-    if (stopped) return;
-    var against = objection(plannedAt);
-    if (against) {
-      note('not opening the launcher: ' + against);
-      return;
-    }
-    readTv(function () {
-      against = objection(plannedAt);
-      if (!against && state.power !== 'on') against = 'TV power is ' + state.power;
-      if (!against && state.launcher === 'on screen') against = 'it is on screen';
-      if (against) {
-        note('not opening the launcher: ' + against);
-        return;
-      }
-      if (state.launcher === 'not running' || last) {
-        openLauncher(why + ', launcher ' + state.launcher);
-        return;
-      }
-      launchTimer = setTimeout(function () {
-        look(true);
-      }, Math.max(0, SECOND_LOOK_MS - FIRST_LOOK_MS));
-    });
-  }
-
-  launchTimer = setTimeout(function () {
-    look(false);
-  }, FIRST_LOOK_MS);
-}
-
-function openLauncher(why) {
-  state.lastLaunchAt = Date.now();
-  state.launches++;
-  note('opening the launcher: ' + why);
-  function opened() {
-    note('launcher opened');
-  }
-  function failed(e) {
-    note('launcher did not open: ' + (e && e.message));
-  }
-  try {
-    tizen.application.launch(LAUNCHER, opened, failed);
-  } catch (e) {
-    note('launcher did not open: ' + (e && e.message));
-  }
-}
-
 // ---- Status for the launcher and for debugging ----
 
 function status() {
@@ -484,14 +399,6 @@ function startStatusServer() {
   try {
     server = http.createServer(function (request, response) {
       var headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
-      // The launcher says when it goes on and off screen: /launcher?state=visible or hidden.
-      if (request.url && request.url.indexOf('/launcher') === 0) {
-        state.launcherSaid = request.url.indexOf('state=visible') > 0 ? 'visible' : 'hidden';
-        if (state.launcherSaid === 'visible') state.launcherShownAt = Date.now();
-        response.writeHead(200, headers);
-        response.end('{"ok":true}');
-        return;
-      }
       // The launcher asks before it comes back after Art Mode: has the TV just said it is
       // going to sleep? Only that notice counts; nothing here is inferred.
       if (request.url && request.url.indexOf('/sleep') === 0) {
@@ -575,7 +482,6 @@ module.exports.onStop = function () {
   note('keeper told to stop');
   stopped = true;
   if (beatTimer) clearInterval(beatTimer);
-  if (launchTimer) clearTimeout(launchTimer);
   if (art) art.close();
   if (server) server.close();
 };

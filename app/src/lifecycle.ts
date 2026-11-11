@@ -143,7 +143,9 @@ export function onWaiting(
  * Samsung's home has come in front. Coming back is right, except in one case: the TV was in
  * Art Mode and has just said it is going to sleep, so nobody pressed anything.
  */
-export function mayJump(cameFromArt: boolean, sleepNoticeAgeMs: number | null): boolean {
+export function mayJump(cameFromArt: boolean, sleepNoticeAgeMs: number | null, frontNow: string | null): boolean {
+  // Asking about the sleep notice takes a moment; Samsung's home must still be in front after it.
+  if (frontNow !== SAMSUNG_HOME) return false;
   return !(cameFromArt && sleepNoticeAgeMs !== null && sleepNoticeAgeMs < SLEEP_NOTICE_MS);
 }
 
@@ -275,12 +277,14 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
         const sleepNotice = cameFromArt ? await tv.sleepNoticeAge() : null;
         checkingSleep = false;
         if (document.visibilityState !== 'hidden') return;
-        if (mayJump(cameFromArt, sleepNotice)) {
+        const frontNow = cameFromArt ? tv.foregroundAppId() : front;
+        if (mayJump(cameFromArt, sleepNotice, frontNow)) {
           comeBack(true);
-        } else {
+        } else if (frontNow === SAMSUNG_HOME) {
           trace('not coming back: the TV said it is going to sleep');
           watch = { letHomeStay: true, seen: 0 };
         }
+        // Otherwise something else came in front while asking; the next readings deal with it.
         return;
       }
     }
@@ -301,7 +305,6 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
   const whenHidden = (): void => {
     ticks = 0;
     asked = null;
-    tv.tellKeeper('hidden');
     lastFront = tv.foregroundAppId();
     frontBeforeHome = lastFront !== null && lastFront !== SAMSUNG_HOME ? lastFront : null;
     trace(`hidden, in front: ${lastFront ?? 'unknown'}`);
@@ -324,7 +327,6 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
     watch = idleWatch;
     asked = null;
     settleJump();
-    tv.tellKeeper('visible');
   };
 
   document.addEventListener('visibilitychange', () => {

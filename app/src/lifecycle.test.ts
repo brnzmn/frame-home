@@ -116,16 +116,22 @@ describe('after asking to be brought forward', () => {
 
 describe('Samsung home after Art Mode', () => {
   it('comes back when the TV was switched on from Art Mode', () => {
-    expect(mayJump(true, null)).toBe(true);
-    expect(mayJump(true, SLEEP_NOTICE_MS + 1)).toBe(true);
+    expect(mayJump(true, null, SAMSUNG_HOME)).toBe(true);
+    expect(mayJump(true, SLEEP_NOTICE_MS + 1, SAMSUNG_HOME)).toBe(true);
   });
 
   it('stays away when the TV has just said it is going to sleep', () => {
-    expect(mayJump(true, 1500)).toBe(false);
+    expect(mayJump(true, 1500, SAMSUNG_HOME)).toBe(false);
   });
 
   it('never lets a sleep notice hold up a Home press', () => {
-    expect(mayJump(false, 1500)).toBe(true);
-    expect(mayJump(false, null)).toBe(true);
+    expect(mayJump(false, 1500, SAMSUNG_HOME)).toBe(true);
+    expect(mayJump(false, null, SAMSUNG_HOME)).toBe(true);
+  });
+
+  it('stays away when something else came in front while it was asking', () => {
+    expect(mayJump(true, null, 'org.tizen.netflix-app')).toBe(false);
+    expect(mayJump(true, null, 'org.tizen.art-app')).toBe(false);
+    expect(mayJump(true, null, null)).toBe(false);
   });
 });

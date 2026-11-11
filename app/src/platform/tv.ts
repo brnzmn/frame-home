@@ -27,7 +27,7 @@ export interface Tv {
   /** Bring this app back in front. On the TV this reloads the page, so save state first. */
   bringToFront(): Promise<void>;
   /**
-   * Start the keeper, the background service that reopens the launcher after Art Mode
+   * Start the keeper, the background service that listens to the TV's art channel
    * (app/public/service/keeper.js). Safe to call when it is already running.
    */
   startKeeper(): Promise<void>;
@@ -38,8 +38,6 @@ export interface Tv {
    * the art channel; null when it never did, or when the keeper does not answer.
    */
   sleepNoticeAge(): Promise<number | null>;
-  /** Tell the keeper whether the launcher is on screen, so it does not open it a second time. */
-  tellKeeper(state: 'visible' | 'hidden'): void;
   /** Add a line to the keeper's record, which outlives this page. */
   noteToKeeper(text: string): void;
 }

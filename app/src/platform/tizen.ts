@@ -134,11 +134,6 @@ export function createTizenTv(): Tv {
       }
     },
 
-    tellKeeper: (state) => {
-      // Fire and forget; the keeper may not be up yet, and nothing here depends on the answer.
-      fetch(`${KEEPER_URL}/launcher?state=${state}`).catch(() => {});
-    },
-
     noteToKeeper: (text) => {
       fetch(`${KEEPER_URL}/note?text=${encodeURIComponent(text.slice(0, 200))}`).catch(() => {});
     },

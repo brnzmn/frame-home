@@ -121,9 +121,10 @@ Every run below used the power key from the Mac (`tools/frame/key.py KEY_POWER`)
 **Coming back when Art Mode ends, while something of ours is still alive**
 - The TV reports Samsung's home in front half a second after the power key, but ignores a request to open the launcher while it is still leaving Art Mode. One request took 6.7 seconds to land. The launcher now asks again every second until it is on screen, at most 15 times.
 - A page that has been hidden for minutes cannot count on its own timers (one did not fire in 6.7 seconds). Only the worker-driven tick keeps time, at about one a second.
-- With the launcher's page stopped and the service alive, the service opened the launcher 4 seconds after the TV's announcement; the launcher was on screen 8 seconds after the power key.
-- With both alive after five minutes of Art Mode, the launcher was on screen 3.3 seconds after the power key and the service stood down.
-- Untested, and guarded against rather than known: what the TV reports when it goes to sleep from Art Mode by itself. The launcher does not come back if the service heard a going-to-sleep notice in the last 20 seconds, and the service does nothing after one or while the art channel is closed.
+- With the launcher's page stopped and the service alive, the service opened the launcher 4 seconds after the TV's announcement; the launcher was on screen 8 seconds after the power key. **That fallback was taken out the same evening** after a second review: the service cannot see which app is in front, so it would also have opened the launcher over a console, a cast or anything else that takes the TV out of Art Mode. The service now opens nothing.
+- With both alive after five minutes of Art Mode (alarm trick, launcher started from the Mac), the launcher was on screen 3.3 seconds after the power key.
+- Untested, and guarded against rather than known: what the TV reports when it goes to sleep from Art Mode by itself. The launcher does not come back if the service heard a going-to-sleep notice in the last 20 seconds, and it checks again that Samsung's home is still in front after asking.
+- From the Mac, the art channel stopped opening about two minutes after Art Mode was entered at 19:00 and again within 20 seconds at 19:07, while the status page still said `PowerState: on`. That matches the TV sleeping in a dark room, but nobody was looking at the screen, so it is not confirmed.
 
 **Other things seen**
 - `reload="disable"` on the launcher's app control: bringing the running launcher forward no longer loads the page again. Home once: back in 0.6 to 0.8 seconds. Home twice: Samsung's home stays. Before this, the reload also restarted the service.

@@ -95,11 +95,8 @@ async function startFakeTv(): Promise<FakeTv> {
 }
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-/** The service's two looks after Art Mode ends, shortened for the tests. */
-const FIRST = 150;
-const DELAY = 500;
-/** Long enough for the service to have acted if it was going to. */
-const SETTLED = DELAY + 500;
+/** Long enough for the service to have acted on what it was told. */
+const SETTLED = 600;
 async function until(check: () => boolean, ms = 3000): Promise<void> {
   const end = Date.now() + ms;
   while (!check() && Date.now() < end) await wait(20);
@@ -119,9 +116,6 @@ async function startKeeper(art: FakeTv['artAnswers'] = 'on'): Promise<void> {
   process.env.FRAME_HOME_STATUS_PORT = String(statusPort);
   // The real service asks every five seconds; the tests would crawl.
   process.env.FRAME_HOME_ART_ASK_MS = '150';
-  // And its two looks come 1.2 and 4 seconds after Art Mode ends.
-  process.env.FRAME_HOME_FIRST_LOOK_MS = String(FIRST);
-  process.env.FRAME_HOME_SECOND_LOOK_MS = String(DELAY);
   (globalThis as any).tizen = {
     application: {
       launch: (id: string, ok: () => void) => {
@@ -144,119 +138,37 @@ async function afterEachCleanup(): Promise<void> {
 }
 afterEach(afterEachCleanup);
 
+async function status(): Promise<any> {
+  return (await fetch(`http://127.0.0.1:${statusPort}/`)).json();
+}
+
 describe('the keeper service', () => {
-  it('opens the launcher when the TV announces that Art Mode has ended', async () => {
+  it('follows Art Mode from what the TV answers and announces', async () => {
     await startKeeper();
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await until(() => opened.length > 0);
-    expect(opened).toEqual([LAUNCHER]);
-  });
-
-  it('opens it once, however often the TV repeats itself', async () => {
-    await startKeeper();
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await until(() => opened.length > 0);
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(SETTLED);
-    expect(opened).toEqual([LAUNCHER]);
-  });
-
-  it('leaves the TV alone when it is going to sleep', async () => {
-    await startKeeper();
-    tv!.say({ event: 'go_to_standby' });
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('leaves the TV alone when it does not report itself as on', async () => {
-    await startKeeper();
-    tv!.power = 'standby';
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('does nothing when the launcher is already on screen', async () => {
-    await startKeeper();
-    tv!.launcher = { running: true, visible: true };
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('does nothing when Art Mode comes on, or stays on', async () => {
-    await startKeeper();
-    tv!.say({ event: 'art_mode_changed', status: 'on' });
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('does not open the launcher if Art Mode is back on by the time it would', async () => {
-    await startKeeper();
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(FIRST / 2);
-    tv!.say({ event: 'art_mode_changed', status: 'on' });
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('opens the launcher when the art service just goes quiet after Art Mode', async () => {
-    await startKeeper();
-    tv!.artAnswers = null;
-    await until(() => opened.length > 0, 4000);
-    expect(opened).toEqual([LAUNCHER]);
-  });
-
-  it('never opens the launcher by itself when it starts outside Art Mode', async () => {
-    await startKeeper(null);
-    await wait(SETTLED);
+    expect((await status()).state.art).toBe('on');
     tv!.artAnswers = 'off';
+    tv!.say({ event: 'art_mode_changed', status: 'off' });
+    await wait(100);
+    expect((await status()).state.art).toBe('off');
+  });
+
+  it('calls the art service silent, not off, when it stops answering', async () => {
+    await startKeeper();
+    tv!.artAnswers = null;
+    await wait(SETTLED);
+    expect((await status()).state.art).toBe('silent');
+  });
+
+  it('never opens the launcher, whatever happens to Art Mode', async () => {
+    await startKeeper();
+    tv!.say({ event: 'art_mode_changed', status: 'off' });
+    await wait(SETTLED);
+    tv!.say({ event: 'art_mode_changed', status: 'on' });
+    tv!.artAnswers = null;
+    await wait(SETTLED);
+    tv!.say({ event: 'go_to_standby' });
     await wait(SETTLED);
     expect(opened).toEqual([]);
-  });
-
-  it('opens a stopped launcher at its first look, a hidden one only at its second', async () => {
-    await startKeeper();
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(FIRST + 150);
-    expect(opened).toEqual([LAUNCHER]);
-
-    await afterEachCleanup();
-    await startKeeper();
-    tv!.launcher = { running: true, visible: false };
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(FIRST + 150);
-    expect(opened).toEqual([]);
-    await until(() => opened.length > 0);
-    expect(opened).toEqual([LAUNCHER]);
-  });
-
-  it('does nothing when the launcher has come back by itself in the meantime', async () => {
-    await startKeeper();
-    tv!.launcher = { running: true, visible: false };
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await wait(FIRST + 100);
-    await fetch(`http://127.0.0.1:${statusPort}/launcher?state=visible`);
-    await wait(SETTLED);
-    expect(opened).toEqual([]);
-  });
-
-  it('still opens the launcher if it was last on screen before Art Mode ended', async () => {
-    await startKeeper();
-    await fetch(`http://127.0.0.1:${statusPort}/launcher?state=visible`);
-    await fetch(`http://127.0.0.1:${statusPort}/launcher?state=hidden`);
-    await wait(50);
-    tv!.artAnswers = null;
-    tv!.say({ event: 'art_mode_changed', status: 'off' });
-    await until(() => opened.length > 0);
-    expect(opened).toEqual([LAUNCHER]);
   });
 
   it('tells the launcher how long ago the TV said it was going to sleep', async () => {
@@ -269,11 +181,18 @@ describe('the keeper service', () => {
     expect(after.sleepNoticeAgeMs).toBeLessThan(1000);
   });
 
+  it('keeps the launcher\'s record lines with its own', async () => {
+    await startKeeper();
+    await fetch(`http://127.0.0.1:${statusPort}/note?text=${encodeURIComponent('hidden, in front: org.tizen.art-app')}`);
+    const { log } = await status();
+    expect(log[log.length - 1]).toContain('launcher: hidden, in front: org.tizen.art-app');
+  });
+
   it('says what it is doing on its own status page', async () => {
     await startKeeper();
-    const status = await (await fetch(`http://127.0.0.1:${statusPort}/`)).json();
-    expect(status.service).toBe('frame-home-keeper');
-    expect(status.state.art).toBe('on');
-    expect(status.log[0]).toContain('keeper started');
+    const page = await status();
+    expect(page.service).toBe('frame-home-keeper');
+    expect(page.state.artConnected).toBe(true);
+    expect(page.log[0]).toContain('keeper started');
   });
 });
