@@ -141,6 +141,21 @@ Every run below used the power key from the Mac (`tools/frame/key.py KEY_POWER`)
 - `tizen.application.launch('org.tizen.tv-viewer')` from the launcher shows the current source full screen; `tizen.tvwindow.getSource('MAIN')` reads it.
 - Fix, seen working on the TV: a PlayStation 5 tile opens HDMI 3 that way, and when an input switches on while the launcher is on screen, the launcher opens it. It reached the PS5 within a second of it waking (16:38:17); the TV's own black-flash attempt still comes first, so the round trip takes about 2 seconds.
 
+### Lag between clicks (2026-11-16)
+
+Measured on the TV with `tools/lag-test.mjs` (arrow keys over the debug port, the launcher's own record of keydown until the change can be on screen, and the frame rate in the 500 ms after each press):
+
+| Build | Key to screen, median / p95 | Frames per second after a press | Worst frame gap |
+|---|---|---|---|
+| As built (0.1.0) | 27 / 215 ms | 5 | 433 ms |
+| Colour washes hidden | 10 / 33 ms | 58 | 33 ms |
+| Shadows off, washes on | 22 / 244 ms | 12 | 417 ms |
+| Both off | 11 / 18 ms | 60 | 17 ms |
+
+- The cause is the two full-screen `.wash` layers: radial gradients mixed from a colour that changes on every move, cross-faded over 480 ms. Every press repainted a full screen of gradient, and the TV stalled for about 430 ms each time. Shadows add a little on top.
+- Our own code is not the cost: the key handler takes 0 to 1 ms.
+- Start: the script runs at 345 ms after page start; the TV's app list arrives at 761 ms; tiles are drawn at 1040 ms.
+
 ### Not tested yet
 
 - The SmartThings power-on rule, and that it leaves Art Mode alone. After this evening it is the remaining way to get the launcher at power-on without changing a TV setting.
