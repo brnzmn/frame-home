@@ -40,6 +40,10 @@ export interface Tv {
   sleepNoticeAge(): Promise<number | null>;
   /** Add a line to the keeper's record, which outlives this page. */
   noteToKeeper(text: string): void;
+  /** The inputs the TV calls connected right now (such as "HDMI3"), or null when it will not say. */
+  connectedInputs(): Promise<string[] | null>;
+  /** Leave the screen to whatever is underneath (Samsung's home), without closing. */
+  stepAside(): void;
 }
 
 export function connectTv(): Tv {

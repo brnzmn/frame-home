@@ -7,6 +7,7 @@ import {
   SLEEP_NOTICE_MS,
   idleWatch,
   mayJump,
+  newlyConnected,
   onHidden,
   onReading,
   onWaiting,
@@ -133,5 +134,21 @@ describe('Samsung home after Art Mode', () => {
     expect(mayJump(true, null, 'org.tizen.netflix-app')).toBe(false);
     expect(mayJump(true, null, 'org.tizen.art-app')).toBe(false);
     expect(mayJump(true, null, null)).toBe(false);
+  });
+});
+
+describe('a console switching on while the launcher is on screen', () => {
+  it('notices an HDMI input that was not connected a moment ago', () => {
+    expect(newlyConnected(['TV1'], ['TV1', 'HDMI3'])).toEqual(['HDMI3']);
+  });
+  it('does nothing while the same inputs stay connected', () => {
+    expect(newlyConnected(['TV1', 'HDMI3'], ['TV1', 'HDMI3'])).toEqual([]);
+  });
+  it('does nothing when an input goes away', () => {
+    expect(newlyConnected(['TV1', 'HDMI3'], ['TV1'])).toEqual([]);
+  });
+  it('does nothing on the first reading, or when the TV will not say', () => {
+    expect(newlyConnected(null, ['TV1', 'HDMI3'])).toEqual([]);
+    expect(newlyConnected(['TV1'], null)).toEqual([]);
   });
 });

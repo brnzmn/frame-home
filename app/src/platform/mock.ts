@@ -37,5 +37,7 @@ export function createMockTv(): Tv {
     keeperAnswers: async () => true,
     sleepNoticeAge: async () => null,
     noteToKeeper: () => {},
+    connectedInputs: async () => null,
+    stepAside: () => {},
   };
 }

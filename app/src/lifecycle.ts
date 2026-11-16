@@ -37,6 +37,8 @@ export const MAX_REQUESTS = 15;
 export const ART_APP = 'org.tizen.art-app';
 /** A sleep notice this recent means Samsung's home is not there for anyone to see. */
 export const SLEEP_NOTICE_MS = 20000;
+/** How often the launcher, while on screen, looks for an input switching on. */
+const INPUTS_EVERY_MS = 1000;
 
 /**
  * Calls `onTick` every TICK_MS, also while the page is hidden. A hidden page's own timers are
@@ -147,6 +149,16 @@ export function mayJump(cameFromArt: boolean, sleepNoticeAgeMs: number | null, f
   // Asking about the sleep notice takes a moment; Samsung's home must still be in front after it.
   if (frontNow !== SAMSUNG_HOME) return false;
   return !(cameFromArt && sleepNoticeAgeMs !== null && sleepNoticeAgeMs < SLEEP_NOTICE_MS);
+}
+
+/**
+ * The inputs that have just switched on (a console waking up), given the previous and the
+ * current list of connected inputs. Measured 2026-11-16: with the launcher on screen, the TV
+ * cannot bring a waking PS5 forward, and the PS5 drops off its list. So the launcher steps aside.
+ */
+export function newlyConnected(before: string[] | null, now: string[] | null): string[] {
+  if (!before || !now) return [];
+  return now.filter((input) => input.startsWith('HDMI') && !before.includes(input));
 }
 
 export interface LifecycleOptions {
@@ -302,12 +314,37 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
     }
   };
 
+  // A console switching on while the launcher is on screen: step aside, and leave Samsung's
+  // home up so it can show the console, as it does without the launcher.
+  let steppedAside = false;
+  let inputs: string[] | null = null;
+  window.setInterval(() => {
+    if (document.visibilityState !== 'visible') {
+      inputs = null;
+      return;
+    }
+    void tv.connectedInputs().then((now) => {
+      const woke = newlyConnected(inputs, now);
+      inputs = now;
+      if (!woke.length || document.visibilityState !== 'visible') return;
+      trace(`${woke.join(', ')} switched on: stepping aside`);
+      steppedAside = true;
+      tv.stepAside();
+    });
+  }, INPUTS_EVERY_MS);
+
   const whenHidden = (): void => {
     ticks = 0;
     asked = null;
     lastFront = tv.foregroundAppId();
     frontBeforeHome = lastFront !== null && lastFront !== SAMSUNG_HOME ? lastFront : null;
     trace(`hidden, in front: ${lastFront ?? 'unknown'}`);
+    if (steppedAside) {
+      steppedAside = false;
+      watch = { letHomeStay: true, seen: 0 };
+      stopTicker = startTicker(() => void tick());
+      return;
+    }
     if (options.returnOverSamsungHome) {
       const decision = onHidden(openedId !== null, lastFront, msSinceLastJump());
       if (decision === 'jump') {

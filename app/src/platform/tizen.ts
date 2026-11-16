@@ -137,5 +137,26 @@ export function createTizenTv(): Tv {
     noteToKeeper: (text) => {
       fetch(`${KEEPER_URL}/note?text=${encodeURIComponent(text.slice(0, 200))}`).catch(() => {});
     },
+
+    connectedInputs: () =>
+      new Promise<string[] | null>((resolve) => {
+        try {
+          tizen.systeminfo.getPropertyValue(
+            'VIDEOSOURCE',
+            (vs: any) => resolve((vs.connected ?? []).map((s: any) => `${s.type}${s.number}`)),
+            () => resolve(null),
+          );
+        } catch {
+          resolve(null);
+        }
+      }),
+
+    stepAside: () => {
+      try {
+        tizen.application.getCurrentApplication().hide();
+      } catch {
+        // Nothing more to try: the launcher stays on screen.
+      }
+    },
   };
 }
