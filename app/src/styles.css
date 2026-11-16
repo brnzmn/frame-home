@@ -1,6 +1,9 @@
 /* Frame Home. A gallery wall at night: a deep plum-charcoal wall, warm paper-white ink, and
-   the Frame's own mat colour for the Frame row. Measured on the TV: transforms and shadows
-   run at 55-59 fps, live backdrop blur at 31, so there is no blur anywhere. */
+   the Frame's own mat colour for the Frame row.
+
+   Speed rule, measured on the TV: a focus move may only change `transform` and `opacity`.
+   Everything else (shadows, the lit card colour, the ambient wash) is painted once on its own
+   layer and only faded. Animated gradients with variables cost 5 fps; live backdrop blur 31. */
 :root {
   --wall: #17151a;
   --wall-lift: #24212a;
@@ -41,15 +44,18 @@ html, body {
   background: var(--wall);
 }
 
-/* Ambient colour that follows the focused tile. Two layers cross-fade. */
+/* Ambient colour that follows the focused tile. home.ts makes one of these per glow colour,
+   sets --wash-a and --wash-b once, and a focus move only fades two of them. */
+.washes { position: absolute; inset: 0; }
 .wash {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 480ms ease;
+  will-change: opacity;
+  transition: opacity 200ms linear;
   background:
-    radial-gradient(1300px 760px at 80% 8%, color-mix(in srgb, var(--glow, #a9a3b2) 46%, transparent), transparent 68%),
-    radial-gradient(900px 620px at 6% 0%, color-mix(in srgb, var(--glow, #a9a3b2) 20%, transparent), transparent 70%),
+    radial-gradient(1300px 760px at 80% 8%, var(--wash-a), transparent 68%),
+    radial-gradient(900px 620px at 6% 0%, var(--wash-b), transparent 70%),
     linear-gradient(180deg, transparent 38%, var(--wall) 78%);
 }
 .wash.is-on { opacity: 1; }
@@ -69,7 +75,7 @@ html, body {
 .content {
   position: absolute;
   inset: 0;
-  transition: transform 340ms var(--ease);
+  transition: transform 260ms var(--ease);
 }
 
 .hero {
@@ -111,7 +117,8 @@ html, body {
   width: var(--tile-w);
   height: var(--tile-h);
   flex: none;
-  transition: transform 190ms var(--ease);
+  will-change: transform;
+  transition: transform 120ms var(--ease);
 }
 .tile-face {
   position: absolute;
@@ -120,8 +127,20 @@ html, body {
   overflow: hidden;
   background: linear-gradient(135deg, var(--from), var(--to));
   box-shadow: 0 10px 24px rgba(8, 6, 12, 0.38);
-  transition: box-shadow 190ms var(--ease);
 }
+/* The focus shadow and ring, drawn once; focus only fades it in. */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  pointer-events: none;
+  box-shadow: 0 36px 70px rgba(8, 6, 12, 0.62), 0 0 0 3px rgba(243, 239, 232, 0.92);
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 120ms linear;
+}
+.tile.is-focused::after { opacity: 1; }
 .tile-word {
   position: absolute;
   inset: 0;
@@ -149,14 +168,13 @@ html, body {
 .tile-icon.is-loaded { opacity: 1; }
 .tile-face.has-icon .tile-word { opacity: 0; }
 .tile.is-focused { transform: scale(1.12) translateY(-6px); z-index: 2; }
-.tile.is-focused .tile-face {
-  box-shadow: 0 36px 70px rgba(8, 6, 12, 0.62), 0 0 0 3px color-mix(in srgb, var(--paper) 92%, transparent);
-}
 .tile.is-pressed { transform: scale(1.06) translateY(-2px); }
 
-/* Frame row: mat board. Quiet until focused, then lit like a mat under a picture light. */
+/* Frame row: mat board. Quiet until focused, then lit like a mat under a picture light.
+   The lit colour is the ::before layer, the shadow the ::after layer; focus only fades them. */
 .card {
   position: relative;
+  isolation: isolate;
   height: var(--card-h);
   flex: 1 1 0;
   min-width: 0;
@@ -168,21 +186,35 @@ html, body {
   color: var(--paper);
   background: linear-gradient(180deg, color-mix(in srgb, var(--mat) 11%, transparent), color-mix(in srgb, var(--mat) 5%, transparent));
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mat) 18%, transparent);
-  transition: transform 190ms var(--ease), background-color 190ms ease, color 190ms ease, box-shadow 190ms var(--ease);
+  will-change: transform;
+  transition: transform 120ms var(--ease);
 }
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 120ms linear;
+}
+.card::before {
+  z-index: -1;
+  background: linear-gradient(135deg, var(--from), var(--to));
+}
+.card::after { box-shadow: 0 30px 60px rgba(8, 6, 12, 0.55); }
+.card.is-focused::before,
+.card.is-focused::after { opacity: 1; }
 .card-glyph { width: 46px; height: 46px; flex: none; opacity: 0.9; }
 .card-glyph svg { display: block; width: 100%; height: 100%; }
 .card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .card-name { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
-.card-line { font-size: 21px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 190ms ease; }
-.card.is-focused {
-  transform: scale(1.06) translateY(-4px);
-  z-index: 2;
-  color: var(--mat-ink);
-  background: linear-gradient(135deg, var(--from), var(--to));
-  box-shadow: 0 30px 60px rgba(8, 6, 12, 0.55);
-}
-.card.is-focused .card-line { color: color-mix(in srgb, var(--mat-ink) 68%, transparent); }
+.card-line { font-size: 21px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The text colour flips at once (a few words, no repaint of anything large); the mat fades. */
+.card.is-focused { transform: scale(1.06) translateY(-4px); z-index: 2; color: var(--mat-ink); }
+.card.is-focused .card-line { color: rgba(27, 24, 32, 0.68); }
 .card.is-pressed { transform: scale(1.02); }
 
 .note {
@@ -200,5 +232,5 @@ html, body {
 .note.is-on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wash, .content, .tile, .tile-face, .card, .note { transition: none; }
+  .wash, .content, .tile, .tile::after, .card, .card::before, .card::after, .note { transition: none; }
 }

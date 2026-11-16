@@ -21,6 +21,10 @@ interface FakeTv {
   /** Something the TV says by itself on the art channel. */
   say(event: Record<string, unknown>): void;
   asked: number;
+  /** Every art request name the TV was sent, in order. */
+  requests: string[];
+  /** What the TV answers, by request name, on top of get_artmode_status; unlisted requests get no answer. */
+  replies: Record<string, Record<string, unknown>>;
   close(): Promise<void>;
 }
 
@@ -38,6 +42,8 @@ async function startFakeTv(): Promise<FakeTv> {
     launcher: { running: false, visible: false },
     artAnswers: 'on',
     asked: 0,
+    requests: [],
+    replies: {},
     say(event) {
       for (const s of sockets) s.write(frame(JSON.stringify({ event: 'd2d_service_message', data: JSON.stringify(event) })));
     },
@@ -81,6 +87,8 @@ async function startFakeTv(): Promise<FakeTv> {
         pending = pending.subarray(offset + 4 + length);
         const message = JSON.parse(payload.toString('utf8'));
         const request = JSON.parse(message.params.data);
+        tv.requests.push(request.request);
+        if (tv.replies[request.request]) tv.say({ event: request.request, request_id: request.request_id, ...tv.replies[request.request] });
         if (request.request === 'get_artmode_status') {
           tv.asked++;
           if (tv.artAnswers) tv.say({ event: 'get_artmode_status', request_id: request.request_id, value: tv.artAnswers });
@@ -107,7 +115,7 @@ let keeper: { onStart(): void; onStop(): void } | undefined;
 let opened: string[] = [];
 let statusPort = 0;
 
-async function startKeeper(art: FakeTv['artAnswers'] = 'on'): Promise<void> {
+async function startKeeper(art: FakeTv['artAnswers'] = 'on', use?: 'off' | 'listen'): Promise<void> {
   tv = await startFakeTv();
   tv.artAnswers = art;
   opened = [];
@@ -116,6 +124,9 @@ async function startKeeper(art: FakeTv['artAnswers'] = 'on'): Promise<void> {
   process.env.FRAME_HOME_STATUS_PORT = String(statusPort);
   // The real service asks every five seconds; the tests would crawl.
   process.env.FRAME_HOME_ART_ASK_MS = '150';
+  process.env.FRAME_HOME_ART_PROBE_MS = '150';
+  if (use) process.env.FRAME_HOME_ART_USE = use;
+  else delete process.env.FRAME_HOME_ART_USE;
   (globalThis as any).tizen = {
     application: {
       launch: (id: string, ok: () => void) => {
@@ -127,7 +138,7 @@ async function startKeeper(art: FakeTv['artAnswers'] = 'on'): Promise<void> {
   delete require.cache[KEEPER];
   keeper = require(KEEPER);
   keeper!.onStart();
-  await until(() => tv!.asked > 1);
+  if (use !== 'off') await until(() => tv!.asked > 1);
 }
 
 async function afterEachCleanup(): Promise<void> {
@@ -194,5 +205,97 @@ describe('the keeper service', () => {
     expect(page.service).toBe('frame-home-keeper');
     expect(page.state.artConnected).toBe(true);
     expect(page.log[0]).toContain('keeper started');
+  });
+
+  describe('GET /art-probe', () => {
+    const probe = async (): Promise<any> => (await fetch(`http://127.0.0.1:${statusPort}/art-probe`)).json();
+    const byName = (page: any, name: string) => page.results.find((r: any) => r.request === name);
+
+    it('reports which reads got an answer and which did not', async () => {
+      await startKeeper();
+      tv!.replies = {
+        get_brightness: { value: '5' },
+        get_matte_list: { matte_type_list: '[{"matte_type":"shadowbox"}]' },
+      };
+      const page = await probe();
+      expect(page.artConnected).toBe(true);
+      expect(typeof page.at).toBe('string');
+      expect(byName(page, 'get_brightness')).toMatchObject({ answered: true });
+      expect(byName(page, 'get_brightness').keys).toEqual(expect.arrayContaining(['event', 'value']));
+      expect(byName(page, 'get_brightness').sample).toContain('"value":"5"');
+      expect(byName(page, 'get_matte_list').answered).toBe(true);
+      expect(byName(page, 'get_matte_list').sample).toContain('shadowbox');
+      // The fake answers get_artmode_status too, through its own switch.
+      expect(byName(page, 'get_artmode_status').answered).toBe(true);
+      for (const name of ['get_device_info', 'get_current_artwork', 'get_slideshow_status', 'get_auto_rotation_status', 'get_color_temperature', 'get_artmode_settings', 'get_photo_filter_list']) {
+        expect(byName(page, name)).toMatchObject({ answered: false, keys: [], sample: '' });
+      }
+      expect(page.results.filter((r: any) => r.request === 'get_content_list').length).toBe(2);
+      for (const r of page.results) expect(r.sample.length).toBeLessThanOrEqual(200);
+    });
+
+    it('answers nothing in TV mode, and still reports', async () => {
+      await startKeeper(null);
+      const page = await probe();
+      expect(page.results.length).toBeGreaterThan(8);
+      expect(page.results.every((r: any) => r.answered === false)).toBe(true);
+    });
+
+    it('sends reads only, never anything that changes state', async () => {
+      await startKeeper();
+      await probe();
+      const sent = tv!.requests;
+      expect(sent).toContain('get_brightness');
+      expect(sent.filter((name) => !name.startsWith('get_'))).toEqual([]);
+      expect(sent.filter((name) => /^get_.*(thumbnail|upload|delete|change|select)/.test(name))).toEqual([]);
+    });
+
+    it('lists only get_ names in its request constant', async () => {
+      const { readFileSync } = await import('node:fs');
+      const source = readFileSync(KEEPER, 'utf8');
+      const block = source.slice(source.indexOf('var ART_PROBE_REQUESTS'), source.indexOf('];', source.indexOf('var ART_PROBE_REQUESTS')));
+      const names = [...block.matchAll(/request: '([^']+)'/g)].map((m) => m[1]);
+      expect(names.length).toBeGreaterThan(8);
+      expect(names.filter((n) => !n.startsWith('get_'))).toEqual([]);
+    });
+
+    it('strips anything that could identify the TV or the account', async () => {
+      await startKeeper();
+      tv!.replies = {
+        get_current_artwork: {
+          content_id: 'MY_F0042',
+          category_id: 'MY-C0002',
+          device_uuid: '123e4567-e89b-12d3-a456-426614174000',
+          serial: 'SN123',
+          token: 'secret-token',
+          wifi_mac: 'aa:bb:cc:dd:ee:ff',
+          note: 'on 192.168.86.20 or aa:bb:cc:dd:ee:ff',
+          nested: { duid: 'DUID9', owner_id: 'u1', title: 'Sunrise' },
+        },
+        get_content_list: { content_list: JSON.stringify([{ content_id: 'SAM-S1111996', matte_id: 'none', other_id: 'MY_not_a_content_key', name: 'Art' }, { content_id: 'user-private-7' }]) },
+      };
+      const page = await probe();
+      const artwork = byName(page, 'get_current_artwork');
+      for (const leaked of ['123e4567', 'SN123', 'secret-token', 'aa:bb', 'DUID9', 'u1', '192.168', 'MY-C0002']) expect(artwork.sample).not.toContain(leaked);
+      expect(artwork.sample).toContain('MY_F0042');
+      expect(artwork.sample).toContain('Sunrise');
+      const list = page.results.find((r: any) => r.request === 'get_content_list');
+      expect(list.sample).toContain('SAM-S1111996');
+      expect(list.sample).toContain('"name":"Art"');
+      expect(list.sample).not.toContain('user-private-7');
+      expect(list.sample).not.toContain('not_a_content_key');
+      expect(list.sample).not.toContain('matte_id');
+    });
+
+    it('connects just for the probe when the art channel is switched off, and closes afterwards', async () => {
+      await startKeeper('on', 'off');
+      expect(tv!.requests).toEqual([]);
+      tv!.replies = { get_brightness: { value: '3' } };
+      const page = await probe();
+      expect(page.artConnected).toBe(true);
+      expect(byName(page, 'get_brightness').answered).toBe(true);
+      expect(tv!.requests.every((name) => name.startsWith('get_'))).toBe(true);
+      expect((await status()).state.artConnected).toBe(false);
+    });
   });
 });
