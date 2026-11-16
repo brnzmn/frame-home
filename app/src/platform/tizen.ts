@@ -11,6 +11,10 @@ function message(error: unknown, fallback: string): Error {
 declare const webapis: any;
 
 /** The keeper's own page on the TV (app/public/service/keeper.js). */
+/** Tiles for TV inputs carry this in place of an app id, e.g. "input:HDMI3". */
+export const INPUT_PREFIX = 'input:';
+/** Samsung's full-screen view of the current input. */
+const TV_VIEWER = 'org.tizen.tv-viewer';
 const KEEPER_URL = 'http://127.0.0.1:47811';
 
 /** Samsung's own API script lives on the TV. It is loaded at run time, never bundled. */
@@ -52,7 +56,36 @@ export function createTizenTv(): Tv {
 
     open: (appId) =>
       new Promise<void>((resolve, reject) => {
-        tizen.application.launch(appId, () => resolve(), (e: unknown) => reject(message(e, `Could not open ${appId}`)));
+        const launch = (id: string): void =>
+          tizen.application.launch(id, () => resolve(), (e: unknown) => reject(message(e, `Could not open ${appId}`)));
+        if (!appId.startsWith(INPUT_PREFIX)) {
+          launch(appId);
+          return;
+        }
+        // An input such as "input:HDMI3": point the TV's main picture at it, then open Samsung's
+        // own full-screen input view (seen on the TV 2026-11-16: it shows the current source).
+        const wanted = appId.slice(INPUT_PREFIX.length);
+        const show = (): void => launch(TV_VIEWER);
+        try {
+          if (`${tizen.tvwindow.getSource('MAIN')?.type}${tizen.tvwindow.getSource('MAIN')?.number}` === wanted) {
+            show();
+            return;
+          }
+          tizen.systeminfo.getPropertyValue(
+            'VIDEOSOURCE',
+            (vs: any) => {
+              const source = [...(vs.connected ?? []), ...(vs.disconnected ?? [])].find((s: any) => `${s.type}${s.number}` === wanted);
+              if (!source) {
+                reject(new Error(`The TV has no input ${wanted}`));
+                return;
+              }
+              tizen.tvwindow.setSource(source, show, show, 'MAIN');
+            },
+            show,
+          );
+        } catch {
+          show();
+        }
       }),
 
     runningAppIds: () =>

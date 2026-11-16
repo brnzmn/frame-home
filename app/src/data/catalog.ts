@@ -49,6 +49,12 @@ const DOCK: Known[] = [
   { appId: 'rJeHak5zRg.Spotify', name: 'Spotify', line: '', from: '#10231A', to: '#0C0F0D', ink: '#1ED760', glow: '#1ED760' },
 ];
 
+// TV inputs, opened through Samsung's own full-screen input view (app/src/platform/tizen.ts).
+// Always shown: a console in rest mode is off the TV's input list, yet opening its input wakes it.
+const INPUTS: Known[] = [
+  { appId: 'input:HDMI3', name: 'PlayStation 5', line: 'HDMI 3', from: '#00296B', to: '#0070D1', ink: '#FFFFFF', glow: '#2C7BFF' },
+];
+
 const MORE: Known[] = [
   { appId: 'GHI3a0zMSx.XboxGamePass', name: 'Xbox', line: '', from: '#0E5C0E', to: '#0A3D0A', ink: '#FFFFFF', glow: '#3FBF3F' },
   { appId: 'com.samsung.tv.gaminghub', name: 'Gaming Hub', line: '', from: '#2B1B5E', to: '#5B3FD1', ink: '#FFFFFF', glow: '#7B5CFF' },
@@ -78,10 +84,12 @@ export function buildRows(installed: TvApp[]): Row[] {
     .filter((a) => a.shown && STORE_APP.test(a.id) && !known.has(a.id) && !NEVER.has(a.id) && !OURS.test(a.id))
     .map((a) => ({ appId: a.id, name: a.name, line: '', from: '#34313B', to: '#24212A', ink: '#F3EFE8', glow: '#A9A3B2', iconUrl: a.iconUrl }));
 
-  const more = [...present(MORE), ...extra];
+  // The console first in the main row; what no longer fits moves to the next rows.
+  const main = [...INPUTS.map((k) => ({ ...k, iconUrl: null })), ...present(DOCK)];
+  const more = [...main.slice(PER_ROW), ...present(MORE), ...extra];
   const rows: Row[] = [
     { kind: 'frame', tiles: present(FRAME).map((t) => ({ ...t, iconUrl: null })) },
-    { kind: 'apps', tiles: present(DOCK) },
+    { kind: 'apps', tiles: main.slice(0, PER_ROW) },
   ];
   for (let i = 0; i < more.length; i += PER_ROW) rows.push({ kind: 'apps', tiles: more.slice(i, i + PER_ROW) });
   return rows.filter((r) => r.tiles.length > 0);

@@ -154,7 +154,7 @@ export function mayJump(cameFromArt: boolean, sleepNoticeAgeMs: number | null, f
 /**
  * The inputs that have just switched on (a console waking up), given the previous and the
  * current list of connected inputs. Measured 2026-11-16: with the launcher on screen, the TV
- * cannot bring a waking PS5 forward, and the PS5 drops off its list. So the launcher steps aside.
+ * cannot bring a waking PS5 forward, and the PS5 drops off its list. So the launcher opens it.
  */
 export function newlyConnected(before: string[] | null, now: string[] | null): string[] {
   if (!before || !now) return [];
@@ -314,8 +314,8 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
     }
   };
 
-  // A console switching on while the launcher is on screen: step aside, and leave Samsung's
-  // home up so it can show the console, as it does without the launcher.
+  // A console switching on while the launcher is on screen: open its input. Only if that fails,
+  // step aside and leave Samsung's home up, which at least lets the console stay connected.
   let steppedAside = false;
   let inputs: string[] | null = null;
   window.setInterval(() => {
@@ -327,9 +327,14 @@ export function startLifecycle(tv: Tv, options: LifecycleOptions): { opened(appI
       const woke = newlyConnected(inputs, now);
       inputs = now;
       if (!woke.length || document.visibilityState !== 'visible') return;
-      trace(`${woke.join(', ')} switched on: stepping aside`);
-      steppedAside = true;
-      tv.stepAside();
+      // Go straight to the console, as Baran asked; Samsung's home does not put it in front.
+      trace(`${woke.join(', ')} switched on: opening it`);
+      openedId = null;
+      tv.open(`input:${woke[0]}`).catch((e: Error) => {
+        trace(`could not open ${woke[0]} (${e.message}): stepping aside`);
+        steppedAside = true;
+        tv.stepAside();
+      });
     });
   }, INPUTS_EVERY_MS);
 
