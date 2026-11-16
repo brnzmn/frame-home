@@ -32,7 +32,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - `change_matte` with only `matte_id` also rewrites `portrait_matte_id`. Always send both.
 - `change_matte` error -7 means the TV refuses that mat for that image. It always refuses `none` as a portrait mat, so never add a mat where an image has none: it cannot be undone. No change-and-restore tests on his images.
 - Own uploads have content ids starting with `MY`. Category `MY-C0008` is the recently shown list and also holds Art Store images.
-- With the TV asleep the art channel does not open at all.
+- With the TV asleep the art channel does not open at all. But some connects in Art Mode never get `ms.channel.ready` and still answer when addressed by the host's own id (`artws.py` falls back to it), so a missing ready is not proof of sleep.
 - A hidden app brings itself forward by launching its own id, which reloads the page. Save state first.
 - If `sdb connect` is refused or an install hangs with the TV awake and the addresses right, the Mac's bridge server is stale: `sdb kill-server`, then connect. `tools/deploy.mjs` does this.
 - The TV does not process installs while asleep. Wake it first (`tools/frame/key.py KEY_POWER`).
@@ -50,6 +50,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It reaches the art channel at `ws://127.0.0.1:8001` with no token. It cannot see which app is in front, so it must never open the launcher or anything else.
 - To see what launcher and service do while hidden: `node tools/probe-server.mjs`, then `deploy.mjs build/app --report`. Their joint record lands in `docs/private/probe-events.log`. A new test run gets a new file name; never empty an old log.
 - SmartThings tokens last 24 hours and Samsung has said all of them end on 2026-12-15. Never build anything that needs a token at run time; a rule on the account is the only thing that may stay.
+- On SmartThings the TV's `switch` reads `on` in Art Mode, asleep and in TV mode, and the TV reports the app in front (`tvChannel.tvChannelName`) only when refreshed. Power-on is two rules (`tools/smartthings.mjs rule`): a refresh every minute, and open Frame Home when Samsung's home or TV Plus comes to the front. Its power readings are always 0.
 - While the launcher is on screen, a waking console cannot take the screen (black flash, back to us) and then drops off the input list. The launcher must open the input itself; see `newlyConnected` in `app/src/lifecycle.ts`.
 - An HDMI input on screen is `org.tizen.tv-viewer`; launching that id shows the current source (`tizen.tvwindow.setSource` picks it).
 - An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.

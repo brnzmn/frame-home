@@ -31,6 +31,13 @@ class ArtChannel:
         self.events: list[dict] = []
         self._pending: dict[str, asyncio.Future] = {}
         self._ready = asyncio.Event()
+        self._connected = asyncio.Event()
+        # Requests go to "host" once the TV says the channel is ready. Some connects never get
+        # that "ready" although the Art app is there as host and answers when addressed by its
+        # own id (seen 2026-11-16 in Art Mode); then requests go to that id instead.
+        self.to = "host"
+        self.ready_seen = False
+        self._host_id = None
         self._ws = None
         self._reader = None
 
@@ -42,7 +49,11 @@ class ArtChannel:
         self._reader = asyncio.create_task(self._read())
         try:
             await asyncio.wait_for(self._ready.wait(), timeout=10)
+            self.ready_seen = True
         except asyncio.TimeoutError as exc:
+            if self._connected.is_set() and self._host_id:
+                self.to = self._host_id
+                return self
             await self.__aexit__(None, None, None)
             raise ArtError("The TV did not open its art channel. It is off or asleep, or this Mac is not paired (tools/frame/pair.py).") from exc
         return self
@@ -61,6 +72,13 @@ class ArtChannel:
             event = msg.get("event")
             if event == "ms.channel.ready":
                 self._ready.set()
+                continue
+            if event == "ms.channel.connect":
+                connect = msg.get("data")
+                for client in connect.get("clients", []) if isinstance(connect, dict) else []:
+                    if client.get("isHost"):
+                        self._host_id = client.get("id")
+                self._connected.set()
                 continue
             if event != "d2d_service_message":
                 continue
@@ -84,7 +102,7 @@ class ArtChannel:
         data = {"request": name, "id": rid, "request_id": rid, **fields}
         future = asyncio.get_running_loop().create_future()
         self._pending[rid] = future
-        await self._ws.send(json.dumps({"method": "ms.channel.emit", "params": {"event": "art_app_request", "to": "host", "data": json.dumps(data)}}))
+        await self._ws.send(json.dumps({"method": "ms.channel.emit", "params": {"event": "art_app_request", "to": self.to, "data": json.dumps(data)}}))
         try:
             reply = await asyncio.wait_for(future, timeout=timeout)
         except asyncio.TimeoutError as exc:

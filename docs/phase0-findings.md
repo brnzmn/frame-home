@@ -187,9 +187,24 @@ In Baran's run through every tile, Home brought the launcher back after every ap
 
 The keeper's `/art-probe` (read-only `get_*` requests only) ran on the TV in TV mode: the art channel connected, and none of 12 requests answered within 4 s each (status, device info, current artwork, content lists, slideshow, rotation, brightness, colour temperature, art settings, mat list, photo filters). Art controls inside the launcher cannot be live outside Art Mode; changes would have to be queued and applied when Art Mode comes on.
 
+### SmartThings power-on (2026-11-16, evening)
+
+Read with a 24-hour token, through `tools/smartthings.mjs`; logs in `docs/private/smartthings-watch-2026-11-16b.log` and `artmode-sleep-2026-11-16b.log`.
+
+- The TV's `switch` read `on` the whole evening: in Art Mode, through a long Art Mode stay and in TV mode. Its timestamp stayed at 21:42:28. A rule on `switch` would never see power-on, so it was not created.
+- The TV tells SmartThings what is in front (`tvChannel.tvChannelName`: `art`, `com.samsung.tv.csfs`, `HEPsqFNie0.tvplusstandalone`, `FrameHome1.FrameHome`) only when SmartThings asks for a refresh. The power key at 22:17:16 (Art Mode to TV Plus) showed up only after a refresh at 22:19:42; the switch back to Art Mode at 22:21:12 only after a refresh at 22:23:54.
+- So power-on is two rules: "Frame Home: ask the TV every minute" (a refresh every minute) and "Frame Home at power-on" (open Frame Home each time Samsung's home or TV Plus becomes the app in front).
+- Test, same evening: power key in Art Mode at 22:26:48, Samsung's home came up, the poll saw it at 22:27:03, the launcher was on screen at 22:27:07. About 19 s; up to about a minute by design.
+- Home twice (3 s apart) left Samsung's home up at 22:30:04; the next poll saw it at 22:31:03 and Frame Home came back at 22:31:05. The escape to Samsung's home lasts until the next poll.
+- Power key back to Art Mode at 22:32:00: the app in front read `art` at 22:32:06, the rule stayed quiet, and the TV stopped the launcher within a minute as before.
+- Hue Sync switches to its video mode whenever the TV comes into TV mode.
+- The token's rate limit is about 10 requests in a short window; a watch every 12 s stays under it.
+- The art channel from the Mac sometimes connects without `ms.channel.ready` while Art Mode is on; the Art app then answers when addressed by its own id. The earlier reading "channel does not open, so asleep" (20:45 to 22:20) is therefore not proof that the TV slept. SmartThings' power reading is always 0 W, and `PowerState` stayed `on`, so nothing seen from the Mac tells a sleeping Art Mode from an awake one.
+- Not verified: that Art Mode still sleeps and wakes by itself with the minute poll running; power-on from a full power-off; that the rules keep running after the token ends (the next day) and after 2026-12-15.
+
 ### Not tested yet
 
-- The SmartThings power-on rule, and that it leaves Art Mode alone. After this evening it is the remaining way to get the launcher at power-on without changing a TV setting.
+- That Art Mode still sleeps and wakes by itself with the SmartThings minute poll running, and that the rules outlive their token.
 - What the TV announces when it goes to sleep from Art Mode, and that Art Mode still sleeps and wakes by itself with the launcher installed. Nothing of ours runs during a long Art Mode stay, so no effect is expected.
 - A full power-off (long press) and a cold start.
 - Hours behind a streaming app with something playing.

@@ -7,8 +7,8 @@
 //   node tools/smartthings.mjs watch [seconds]  print every change in what it reports (default 120)
 //   node tools/smartthings.mjs watch --hours 10 [--every 30] [--log FILE]   the same over a night
 //   node tools/smartthings.mjs launch           ask the TV once to open Frame Home
-//   node tools/smartthings.mjs rule             show the rule that would be created
-//   node tools/smartthings.mjs rule --create    create it (replaces an earlier one of ours)
+//   node tools/smartthings.mjs rule             show the two rules that would be created
+//   node tools/smartthings.mjs rule --create    create them (replaces earlier ones of ours)
 //   node tools/smartthings.mjs rule --list      our rules as SmartThings has them
 //   node tools/smartthings.mjs rule --delete    remove ours
 //
@@ -25,6 +25,7 @@ const tvFile = path.join(root, '.tv.json');
 const API = 'https://api.smartthings.com/v1';
 const APP_ID = 'FrameHome1.FrameHome';
 const RULE_NAME = 'Frame Home at power-on';
+const POLL_NAME = 'Frame Home: ask the TV every minute';
 const args = process.argv.slice(2);
 const command = args[0];
 
@@ -69,13 +70,15 @@ async function api(method, route, body) {
   }
   if (!response.ok) {
     const hint = response.status === 401 ? ' (the token is wrong or has expired; they last 24 hours)' : response.status === 403 ? ' (the token lacks a permission)' : '';
-    const error = new Error(`SmartThings answered ${response.status}${hint} for ${method} ${route.split('?')[0]}: ${typeof data === 'string' ? data.slice(0, 300) : JSON.stringify(data).slice(0, 300)}`);
+    const error = new Error(`SmartThings answered ${response.status}${hint} for ${method} ${hideIds(route.split('?')[0])}: ${hideIds(typeof data === 'string' ? data : JSON.stringify(data)).slice(0, 300)}`);
     error.status = response.status;
     throw error;
   }
   return data;
 }
 
+// Device, location and request ids in error text are shortened, so logs and chat never carry them whole.
+const hideIds = (text) => text.replace(/\b([0-9a-f]{8})(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b/gi, '$1…').replace(/("requestId":")[0-9a-f]+/g, '$1…');
 const short = (id) => (typeof id === 'string' && id.length > 8 ? `${id.slice(0, 8)}…` : id);
 const readTv = () => (fs.existsSync(tvFile) ? JSON.parse(fs.readFileSync(tvFile, 'utf8')) : {});
 
@@ -195,12 +198,23 @@ async function launch() {
   console.log(`asked the TV to open ${APP_ID}: ${JSON.stringify(result?.results ?? result)} (${Date.now() - started} ms)`);
 }
 
+// Measured 2026-11-16: the TV's switch reads "on" in Art Mode, asleep and in TV mode alike, and
+// the TV tells SmartThings what is in front (tvChannel.tvChannelName) only when asked to refresh.
+// So power-on is seen with two rules: one asks the TV every minute, the other opens Frame Home
+// when Samsung's start screen comes to the front. Up to about a minute late, by design.
+const START_SCREENS = ['com.samsung.tv.csfs', 'HEPsqFNie0.tvplusstandalone']; // Samsung's home, Samsung TV Plus
+
+function pollBody(deviceId, minutes) {
+  const refresh = { command: { devices: [deviceId], commands: [{ component: 'main', capability: 'refresh', command: 'refresh' }] } };
+  return { name: POLL_NAME, actions: [{ every: { interval: { value: { integer: minutes }, unit: 'Minute' }, actions: [refresh] } }] };
+}
+
 /**
- * The rule. It acts once each time the TV's switch goes to "on", and asks for the launcher
- * `attempts` times, `gap` seconds apart, because the TV drops requests while it is still
- * coming out of Art Mode. Values come from the tests in docs/phase0-findings.md.
+ * Opens the launcher each time one of Samsung's start screens becomes the app in front. It asks
+ * `attempts` times, `gap` seconds apart, because the TV drops requests while it is still coming
+ * out of Art Mode.
  */
-function ruleBody(deviceId, { firstDelay, attempts, gap }) {
+function openBody(deviceId, { startScreens, firstDelay, attempts, gap }) {
   const open = { command: { devices: [deviceId], commands: [{ component: 'main', capability: 'custom.launchapp', command: 'launchApp', arguments: [{ string: APP_ID }] }] } };
   const wait = (value) => ({ sleep: { duration: { value: { integer: value }, unit: 'Second' } } });
   const then = [];
@@ -209,56 +223,50 @@ function ruleBody(deviceId, { firstDelay, attempts, gap }) {
     if (i > 0) then.push(wait(gap));
     then.push(open);
   }
-  return {
-    name: RULE_NAME,
-    actions: [
-      {
-        if: {
-          changes: {
-            equals: {
-              left: { device: { devices: [deviceId], component: 'main', capability: 'switch', attribute: 'switch' } },
-              right: { string: 'on' },
-            },
-          },
-          then,
-        },
-      },
-    ],
-  };
+  const front = { device: { devices: [deviceId], component: 'main', capability: 'tvChannel', attribute: 'tvChannelName' } };
+  return { name: RULE_NAME, actions: startScreens.map((screen) => ({ if: { changes: { equals: { left: front, right: { string: screen } } }, then } })) };
 }
 
 const numberFlag = (name, fallback) => (args.includes(name) ? Number(args[args.indexOf(name) + 1]) : fallback);
+const OUR_RULES = () => [RULE_NAME, POLL_NAME];
 
 async function rule() {
   const { deviceId, locationId } = remembered();
   const query = `?locationId=${locationId}`;
-  const ours = async () => ((await api('GET', `/rules${query}`)).items ?? []).filter((r) => r.name === RULE_NAME);
+  const ours = async () => ((await api('GET', `/rules${query}`)).items ?? []).filter((r) => OUR_RULES().includes(r.name));
 
   if (args.includes('--list')) {
     const all = (await api('GET', `/rules${query}`)).items ?? [];
-    console.log(`${all.length} rule(s) at this location; ${all.filter((r) => r.name === RULE_NAME).length} of them ours`);
-    for (const r of all.filter((x) => x.name === RULE_NAME)) console.log(`"${r.name}" id ${short(r.id)} status ${r.status ?? '?'}\n${JSON.stringify(r.actions).replaceAll(deviceId, '<the TV>')}`);
+    const mine = all.filter((r) => OUR_RULES().includes(r.name));
+    console.log(`${all.length} rule(s) at this location; ${mine.length} of them ours`);
+    for (const r of mine) console.log(`"${r.name}" id ${short(r.id)} status ${r.status ?? '?'}\n${JSON.stringify(r.actions).replaceAll(deviceId, '<the TV>')}`);
     return;
   }
   if (args.includes('--delete') || args.includes('--create')) {
     for (const r of await ours()) {
       await api('DELETE', `/rules/${r.id}${query}`);
-      console.log(`removed our rule ${short(r.id)}`);
+      console.log(`removed our rule "${r.name}" ${short(r.id)}`);
     }
     if (args.includes('--delete')) return;
   }
-  const body = ruleBody(deviceId, { firstDelay: numberFlag('--first-delay', 0), attempts: numberFlag('--attempts', 1), gap: numberFlag('--gap', 4) });
+  const screens = args.includes('--start-screens') ? args[args.indexOf('--start-screens') + 1].split(',') : START_SCREENS;
+  const bodies = [
+    pollBody(deviceId, numberFlag('--every', 1)),
+    openBody(deviceId, { startScreens: screens, firstDelay: numberFlag('--first-delay', 0), attempts: numberFlag('--attempts', 1), gap: numberFlag('--gap', 4) }),
+  ];
   if (!args.includes('--create')) {
-    console.log(JSON.stringify(body, null, 2).replaceAll(deviceId, '<the TV>'));
-    console.log('\ndry run; add --create to create it');
+    for (const body of bodies) console.log(JSON.stringify(body, null, 2).replaceAll(deviceId, '<the TV>'));
+    console.log('\ndry run; add --create to create them');
     return;
   }
-  const created = await api('POST', `/rules${query}`, body);
-  console.log(`created "${created.name}" id ${short(created.id)} status ${created.status ?? '?'}`);
+  for (const body of bodies) {
+    const created = await api('POST', `/rules${query}`, body);
+    console.log(`created "${created.name}" id ${short(created.id)} status ${created.status ?? '?'}`);
+  }
 }
 
 const commands = { devices, status, watch, launch, rule };
-if (!commands[command]) fail('usage: node tools/smartthings.mjs devices | status | watch [seconds | --hours N [--every S] [--log FILE]] | launch | rule [--create | --list | --delete] [--first-delay S] [--attempts N] [--gap S]');
+if (!commands[command]) fail('usage: node tools/smartthings.mjs devices | status | watch [seconds | --hours N [--every S] [--log FILE]] | launch | rule [--create | --list | --delete] [--every MIN] [--start-screens a,b] [--first-delay S] [--attempts N] [--gap S]');
 try {
   await commands[command]();
 } catch (error) {
