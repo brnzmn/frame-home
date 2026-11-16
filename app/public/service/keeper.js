@@ -1233,7 +1233,7 @@ function flushChoice() {
   var record = { id: sending.id, sentAt: new Date().toISOString(), answer: 'sent' };
   lastChoice = record;
   note('art: select_image ' + sending.id);
-  artCall('select_image', { content_id: sending.id, category_id: sending.category || null, show: true }, ART_CALL_MS, function (error, reply) {
+  artCall('select_image', { content_id: sending.id, category_id: null, show: true }, ART_CALL_MS, function (error, reply) {
     if (error && /could not send|not open/.test(error.message)) {
       // It never left: keep it for the next answer.
       if (!choice) choice = sending;

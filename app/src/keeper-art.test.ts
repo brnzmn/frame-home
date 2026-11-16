@@ -406,7 +406,7 @@ describe('choosing a picture', () => {
     await wait(500);
     const selects = tv!.requests.filter((r) => r.request === 'select_image');
     expect(selects).toHaveLength(1);
-    expect(selects[0]).toMatchObject({ content_id: 'SAM-S0002', category_id: 'ARTSTREAM', show: true });
+    expect(selects[0]).toMatchObject({ content_id: 'SAM-S0002', category_id: null, show: true });
     const page = await list();
     expect(page.choice).toBeNull();
     expect(page.lastChoice).toMatchObject({ id: 'SAM-S0002', answer: 'select_image' });
@@ -419,7 +419,7 @@ describe('choosing a picture', () => {
     await until(async () => (await list()).thumbnails === ALL_IDS.length);
     await get('/art/choose?id=MY_F0003');
     expect(await until(() => sentNames().includes('select_image'), 1000)).toBe(true);
-    expect(tv!.requests.find((r) => r.request === 'select_image')).toMatchObject({ content_id: 'MY_F0003', category_id: 'MY-C0008', show: true });
+    expect(tv!.requests.find((r) => r.request === 'select_image')).toMatchObject({ content_id: 'MY_F0003', category_id: null, show: true });
   });
 
   it('drops a choice that waited too long', async () => {
