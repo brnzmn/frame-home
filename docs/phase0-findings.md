@@ -151,10 +151,18 @@ Measured on the TV with `tools/lag-test.mjs` (arrow keys over the debug port, th
 | Colour washes hidden | 10 / 33 ms | 58 | 33 ms |
 | Shadows off, washes on | 22 / 244 ms | 12 | 417 ms |
 | Both off | 11 / 18 ms | 60 | 17 ms |
+| Glow as pre-painted layers, only their opacity cross-faded | — / 233 ms stall | 22 | — |
+| **Fixed (commit "Fast home"), glow off** | 12 / 19 ms | 60 | 17 ms |
+| Trial look Gallery / Clean / Paper | 11 / 18, 14 / 18, 12 / 18 ms | 60 | 17 ms |
 
 - The cause is the two full-screen `.wash` layers: radial gradients mixed from a colour that changes on every move, cross-faded over 480 ms. Every press repainted a full screen of gradient, and the TV stalled for about 430 ms each time. Shadows add a little on top.
+- Even with one pre-painted layer per colour, changing which full-screen layer shows on a key press costs the same kind of stall. The glow is off; focus shadows are pre-painted and only fade.
 - Our own code is not the cost: the key handler takes 0 to 1 ms.
-- Start: the script runs at 345 ms after page start; the TV's app list arrives at 761 ms; tiles are drawn at 1040 ms.
+- Start, before: the script runs at 345 ms after page start; the TV's app list arrives at 761 ms; tiles are drawn at 1040 ms. After (tiles from the cached app list): script 95, tiles drawn 336, app list 594 ms.
+
+### Art service in TV mode (2026-11-16)
+
+The keeper's `/art-probe` (read-only `get_*` requests only) ran on the TV in TV mode: the art channel connected, and none of 12 requests answered within 4 s each (status, device info, current artwork, content lists, slideshow, rotation, brightness, colour temperature, art settings, mat list, photo filters). Art controls inside the launcher cannot be live outside Art Mode; changes would have to be queued and applied when Art Mode comes on.
 
 ### Not tested yet
 

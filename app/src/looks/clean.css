@@ -1,0 +1,188 @@
+/* Look "clean": near-black, one crisp sans (Inter), no colour glows. The focused tile lifts,
+   gains a soft shadow and a thin light edge with a faint top sheen.
+   Speed: the background is one static layer; focus changes only transform and opacity. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('@fontsource/inter/files/inter-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url('@fontsource/inter/files/inter-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url('@fontsource/inter/files/inter-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('@fontsource/inter/files/inter-latin-700-normal.woff2') format('woff2');
+}
+
+:root[data-look="clean"] {
+  --wall: #0a0a0c;
+  --wall-lift: #1f1f23;
+  --paper: #f5f5f7;
+  --muted: #8e8e96;
+  --c-ease: cubic-bezier(0.25, 0.9, 0.3, 1);
+}
+
+:root[data-look="clean"] body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--paper);
+}
+
+:root[data-look="clean"] .stage { background: var(--wall); }
+
+/* A barely-there lift at the top, so the black has depth. Painted once. */
+:root[data-look="clean"] .stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  will-change: transform;
+  pointer-events: none;
+  background:
+    radial-gradient(1500px 620px at 50% -12%, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(180deg, #111114 0%, #0a0a0c 55%, #08080a 100%);
+}
+
+:root[data-look="clean"] .wash { display: none; }
+:root[data-look="clean"] .content { z-index: 1; }
+
+:root[data-look="clean"] .clock {
+  z-index: 1;
+  top: 58px;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgba(245, 245, 247, 0.6);
+}
+
+:root[data-look="clean"] .hero { top: 200px; }
+:root[data-look="clean"] .hero-name {
+  font-size: 84px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--paper);
+}
+:root[data-look="clean"] .hero-line {
+  margin-top: 16px;
+  min-height: 34px;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 34px;
+  letter-spacing: -0.005em;
+  color: var(--muted);
+}
+
+/* App tiles */
+:root[data-look="clean"] .tile {
+  isolation: isolate;
+  transition: transform 120ms var(--c-ease);
+}
+:root[data-look="clean"] .tile-face,
+:root[data-look="clean"] .tile.is-focused .tile-face {
+  border-radius: 20px;
+  box-shadow: none;
+  transition: none;
+}
+:root[data-look="clean"] .tile-word {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+:root[data-look="clean"] .tile::before,
+:root[data-look="clean"] .tile::after,
+:root[data-look="clean"] .card::before,
+:root[data-look="clean"] .card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  border: 0;
+  transition: opacity 120ms ease;
+  filter: none;
+}
+/* Edge and sheen, over the face. */
+:root[data-look="clean"] .tile::before {
+  z-index: 1;
+  border-radius: 20px;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 34%, rgba(255, 255, 255, 0) 52%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.42);
+}
+/* Shadow, under the face. */
+:root[data-look="clean"] .tile::after {
+  z-index: -1;
+  border-radius: 20px;
+  background: none;
+  box-shadow: 0 34px 46px -12px rgba(0, 0, 0, 0.9), 0 14px 22px rgba(0, 0, 0, 0.45);
+}
+:root[data-look="clean"] .tile.is-focused { transform: scale(1.15) translateY(-10px); z-index: 2; }
+:root[data-look="clean"] .tile.is-pressed { transform: scale(1.07) translateY(-3px); }
+:root[data-look="clean"] .tile.is-focused::before,
+:root[data-look="clean"] .tile.is-focused::after { opacity: 1; }
+
+/* The Frame row: quiet graphite plates. */
+:root[data-look="clean"] .card,
+:root[data-look="clean"] .card.is-focused {
+  isolation: isolate;
+  border-radius: 20px;
+  color: var(--paper);
+  background: #1a1a1d;
+  box-shadow: none;
+  transition: transform 120ms var(--c-ease);
+}
+:root[data-look="clean"] .card::before {
+  z-index: -1;
+  border-radius: 20px;
+  background: linear-gradient(170deg, #3a3a40 0%, #2b2b30 60%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.36);
+}
+:root[data-look="clean"] .card::after {
+  z-index: -2;
+  border-radius: 20px;
+  background: none;
+  box-shadow: 0 30px 44px -12px rgba(0, 0, 0, 0.9), 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+:root[data-look="clean"] .card.is-focused { transform: scale(1.05) translateY(-5px); z-index: 2; }
+:root[data-look="clean"] .card.is-pressed { transform: scale(1.02); }
+:root[data-look="clean"] .card.is-focused::before,
+:root[data-look="clean"] .card.is-focused::after { opacity: 1; }
+:root[data-look="clean"] .card-glyph { opacity: 0.9; }
+:root[data-look="clean"] .card-name {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+:root[data-look="clean"] .card-line,
+:root[data-look="clean"] .card.is-focused .card-line {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--muted);
+  transition: none;
+}
+
+:root[data-look="clean"] .note {
+  z-index: 3;
+  border-radius: 14px;
+  background: var(--wall-lift);
+  color: var(--paper);
+  font-size: 22px;
+  font-weight: 500;
+}

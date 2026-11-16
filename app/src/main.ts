@@ -1,8 +1,23 @@
 import './styles.css';
 import { ALL_APPS_ID, buildCatalog, relevantApps } from './data/catalog';
 import { copyTraceTo, justJumpedBack, startLifecycle, trace } from './lifecycle';
+import { applyLook } from './looks';
 import { connectTv, type TvApp } from './platform/tv';
 import { mountHome } from './ui/home';
+
+// Which of the three trial looks to show (Step 3 of docs/plan.md): `?look=` in the browser preview,
+// or `localStorage['frame-home.look']` on the TV. Nothing set keeps the current look.
+const LOOK_KEY = 'frame-home.look';
+function chosenLook(): string | null {
+  const fromUrl = new URLSearchParams(location.search).get('look');
+  if (fromUrl) return fromUrl;
+  try {
+    return localStorage.getItem(LOOK_KEY);
+  } catch {
+    return null;
+  }
+}
+applyLook(chosenLook());
 
 /** Milliseconds from page start; with the timings below, read over the debug port as `__frameHomeStart`. */
 const scriptStart = performance.now();
