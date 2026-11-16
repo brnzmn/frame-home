@@ -1,6 +1,6 @@
 import './styles.css';
-import { ALL_APPS_ID, buildCatalog, relevantApps } from './data/catalog';
-import { copyTraceTo, justJumpedBack, startLifecycle, trace } from './lifecycle';
+import { ALL_APPS_ID, buildCatalog, CHOOSE_ART_ID, relevantApps } from './data/catalog';
+import { ART_APP, copyTraceTo, justJumpedBack, startLifecycle, trace } from './lifecycle';
 import { applyLook } from './looks';
 import { connectTv, type TvApp } from './platform/tv';
 import { mountHome } from './ui/home';
@@ -67,12 +67,24 @@ async function start(): Promise<void> {
   const home = mountHome(document.getElementById('app')!, buildCatalog(cached), {
     fitToWindow: tv.kind === 'mock',
     onOpen: (tile) => {
-      // The All apps tile is the launcher's own screen, not an app on the TV.
-      if (tile.appId === ALL_APPS_ID) return;
+      // All apps and Choose art are the launcher's own screens, not apps on the TV.
+      if (tile.appId === ALL_APPS_ID || tile.appId === CHOOSE_ART_ID) return;
       lifecycle.opened(tile.appId);
       tv.open(tile.appId).catch(() => home.note(`Could not open ${tile.name}`));
     },
+    loadArt: () => tv.artList(),
+    // The art service answers only in Art Mode: the keeper holds the choice, and Art Mode opens
+    // from here (which, unlike the power key, leaves the keeper running to send it).
+    onChooseArt: async (id) => {
+      if (!(await tv.chooseArt(id))) return false;
+      trace(`art chosen: ${id}`);
+      lifecycle.opened(ART_APP);
+      tv.open(ART_APP).catch(() => home.note('Could not open Art Mode'));
+      return true;
+    },
   });
+  // The fake-TV preview opens Choose art straight away with #choose-art, for screenshots.
+  if (tv.kind === 'mock' && location.hash === '#choose-art') home.openArt();
 
   timing.mounted = Math.round(performance.now());
   requestAnimationFrame(() => requestAnimationFrame(() => (timing.drawn = Math.round(performance.now()))));

@@ -12,6 +12,15 @@ export interface TvApp {
   iconUrl: string | null;
 }
 
+/** One picture the Frame can show, as the keeper cached it for the Choose art screen. */
+export interface ArtItem {
+  /** The TV's content id, such as "MY_F0042" (own upload) or "SAM-S1111996" (Art Store). */
+  id: string;
+  kind: 'mine' | 'store';
+  /** Where the page loads its thumbnail from; null until the keeper has one. */
+  thumbUrl: string | null;
+}
+
 export interface Tv {
   readonly kind: 'tizen' | 'mock';
   /** This app's own id on the TV, or null when it is not known. */
@@ -38,6 +47,16 @@ export interface Tv {
    * the art channel; null when it never did, or when the keeper does not answer.
    */
   sleepNoticeAge(): Promise<number | null>;
+  /**
+   * The pictures the keeper cached the last time Art Mode answered, own uploads first; an empty
+   * list before the first time; null when the keeper does not answer.
+   */
+  artList(): Promise<ArtItem[] | null>;
+  /**
+   * Hand the keeper a picture to show. It sends it (select_image) once Art Mode is on and the art
+   * service answers, or drops it after about two minutes. True when the keeper took it.
+   */
+  chooseArt(id: string): Promise<boolean>;
   /** Add a line to the keeper's record, which outlives this page. */
   noteToKeeper(text: string): void;
   /** The inputs the TV calls connected right now (such as "HDMI3"), or null when it will not say. */

@@ -1,12 +1,15 @@
 // The home screen: a Frame row of three wide cards, then rows of app tiles. The All apps tile
-// swaps the rows for a grid of every other app, inside the same page.
+// swaps the rows for a grid of every other app, and the Choose art card for a grid of the Frame's
+// pictures (picker.ts), inside the same page.
 // Focus is drawn by us (a class), not by the browser: the remote only sends key presses.
 //
 // Speed rule (measured on the TV, see docs/decisions.md): a focus move may only change
 // `transform` and `opacity`. Shadows, colours and the ambient wash are painted once and faded.
 import { clampPos, move, type Direction, type FocusPos, type FocusRow } from '../focus/engine';
-import { ALL_APPS_ID, type Catalog, type Glyph, type Row, type Tile } from '../data/catalog';
+import { ALL_APPS_ID, CHOOSE_ART_ID, type Catalog, type Glyph, type Row, type Tile } from '../data/catalog';
+import type { ArtItem } from '../platform/tv';
 import { fitIcon, type IconFit } from './iconfit';
+import { artIdOf, artRows, artTileNode, emptyArtRows, FIRST_USE_LINE, loadThumbs, NO_KEEPER_LINE, pickerLine, PICKER_TITLE, rowsToLoad } from './picker';
 
 /**
  * The ambient colour behind the screen. One static full-screen layer per glow colour, painted
@@ -40,6 +43,10 @@ const GLYPHS: Record<Glyph, string> = {
 
 export interface HomeOptions {
   onOpen(tile: Tile): void;
+  /** The pictures for the Choose art screen; null when the keeper does not answer. */
+  loadArt(): Promise<ArtItem[] | null>;
+  /** Show this picture: queue it with the keeper and open Art Mode. False when it could not be queued. */
+  onChooseArt(id: string): Promise<boolean>;
   /** In a desktop browser, scale the 1920x1080 stage to fit the window. */
   fitToWindow: boolean;
 }
@@ -49,6 +56,8 @@ export interface Home {
   note(text: string): void;
   /** Swap in a new catalog. Does nothing when the tiles are the same; otherwise rebuilds in place, keeping the focus. */
   update(catalog: Catalog): void;
+  /** Open the Choose art screen, as its card does. */
+  openArt(): void;
 }
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string): HTMLElementTagNameMap[K] {
@@ -202,11 +211,11 @@ interface View {
   model: FocusRow[] | null;
 }
 
-function buildView(rows: Row[]): View {
+function buildView(rows: Row[], makeNode: (tile: Tile, kind: Row['kind']) => HTMLElement = tileNode): View {
   const container = el('div', 'rows');
   const nodes = rows.map((row) => {
     const rowNode = el('div', `row row-${row.kind}`);
-    const tiles = row.tiles.map((tile) => tileNode(tile, row.kind));
+    const tiles = row.tiles.map((tile) => makeNode(tile, row.kind));
     rowNode.append(...tiles);
     container.append(rowNode);
     return tiles;
@@ -257,9 +266,12 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
   let seen = signature(catalog);
   let home = buildView(catalog.rows);
   let all: View | null = null;
-  let mode: 'home' | 'all' = 'home';
+  let art: View | null = null;
+  /** The Choose art screen's line when it has no pictures to show. */
+  let artEmptyLine = '';
+  let mode: 'home' | 'all' | 'art' = 'home';
   content.append(hero, home.container);
-  const current = (): View => (mode === 'home' ? home : all!);
+  const current = (): View => (mode === 'home' ? home : mode === 'all' ? all! : art!);
 
   // The ambient wash: one layer per glow colour, made when the colour first appears and never
   // changed after. Only which layer is on changes.
@@ -287,7 +299,7 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
   }
 
   let focus: FocusPos | null = null;
-  /** The focus on the home rows; while All apps is open, it is the All apps tile. */
+  /** The focus on the home rows; while All apps or Choose art is open, it is the tile that opened it. */
   let homeFocus: FocusPos | null = null;
   let shift = 0;
 
@@ -306,9 +318,12 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
     if (mode === 'home') {
       setText(heroName, tile.name);
       setText(heroLine, tile.line);
-    } else {
+    } else if (mode === 'all') {
       setText(heroName, 'All apps');
       setText(heroLine, tile.name);
+    } else {
+      setText(heroName, PICKER_TITLE);
+      setText(heroLine, artEmptyLine || pickerLine(view.rows, pos.row, pos.col));
     }
 
     // Rows past the third sit below the screen; slide the page up to bring the focused one in.
@@ -317,6 +332,8 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
       shift = hiddenRows;
       content.style.transform = `translateY(${-hiddenRows * ROW_STEP}px)`;
     }
+    // Thumbnails load only for the rows on screen and the next one.
+    if (mode === 'art') loadThumbs(view.nodes, rowsToLoad(shift, ROWS_ON_SCREEN, view.nodes.length));
 
     setWash(tile.glow);
   }
@@ -346,6 +363,42 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
     mode = 'home';
     all = null;
     swapTo(home, previous, homeFocus);
+  }
+
+  // Asking the keeper takes a moment; a later request, or leaving the home rows, cancels it.
+  let artTicket = 0;
+  function enterArt(): void {
+    const ticket = ++artTicket;
+    const shown = (items: ArtItem[] | null): void => {
+      if (ticket !== artTicket || mode !== 'home') return;
+      const rows = items && items.length ? artRows(items) : emptyArtRows();
+      artEmptyLine = items === null ? NO_KEEPER_LINE : items.length ? '' : FIRST_USE_LINE;
+      art = buildView(rows, (tile, kind) => (kind === 'frame' ? tileNode(tile, kind) : artTileNode(tile)));
+      if (!items || !items.length) art.container.classList.add('rows-art-empty');
+      mode = 'art';
+      swapTo(art, home, { row: 0, col: 0 });
+    };
+    options.loadArt().then(shown, () => shown(null));
+  }
+
+  function exitArt(): void {
+    artTicket++;
+    if (mode !== 'art' || !art) return;
+    const previous = art;
+    mode = 'home';
+    art = null;
+    artEmptyLine = '';
+    swapTo(home, previous, homeFocus);
+  }
+
+  function chooseArt(id: string): void {
+    options.onChooseArt(id).then(
+      (queued) => {
+        if (queued) exitArt();
+        else note('Could not pick that picture. Try again in a moment.');
+      },
+      () => note('Could not pick that picture. Try again in a moment.'),
+    );
   }
 
   syncWashes();
@@ -381,6 +434,7 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
       // On the home rows Back does nothing: it must never close the launcher.
       event.preventDefault();
       if (mode === 'all') exitAll();
+      else if (mode === 'art') exitArt();
       return;
     }
     if (!focus) return;
@@ -400,8 +454,15 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
       node.classList.add('is-pressed');
       window.setTimeout(() => node.classList.remove('is-pressed'), 140);
       const tile = view.rows[focus.row].tiles[focus.col];
+      const artId = artIdOf(tile);
       if (tile.appId === ALL_APPS_ID) enterAll();
-      else options.onOpen(tile);
+      else if (tile.appId === CHOOSE_ART_ID) enterArt();
+      else if (artId) chooseArt(artId);
+      else {
+        // The first-use screen's Open Art Mode: back on the home rows when the owner returns.
+        if (mode === 'art') exitArt();
+        options.onOpen(tile);
+      }
     }
   });
 
@@ -431,6 +492,10 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
 
   return {
     note,
+    openArt(): void {
+      if (mode === 'all') exitAll();
+      if (mode === 'home') enterArt();
+    },
     update(next: Catalog): void {
       const sig = signature(next);
       if (sig === seen) return;
@@ -450,6 +515,8 @@ export function mountHome(root: HTMLElement, initial: Catalog, options: HomeOpti
         return;
       }
       homeFocus = homePos;
+      // Choose art stays as it is; the home rows behind it are already rebuilt.
+      if (mode === 'art') return;
       // All apps is open: rebuild it where it stands, or close it when nothing is left.
       const oldAll = all!;
       const pos = (focused && findTile(catalog.all, focused)) || focus;

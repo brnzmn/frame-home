@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { TvApp } from '../platform/tv';
-import { ALL_APPS_ID, buildCatalog, PER_ROW, relevantApps } from './catalog';
+import { ALL_APPS_ID, buildCatalog, CHOOSE_ART_ID, PER_ROW, relevantApps } from './catalog';
 
 const app = (id: string, name = id, shown = true): TvApp => ({ id, name, shown, iconUrl: null });
 
@@ -29,12 +29,20 @@ describe('buildCatalog', () => {
     const { rows } = buildCatalog(installed);
     expect(rows.map((r) => r.kind)).toEqual(['frame', 'apps', 'apps']);
     expect(names(rows)).toEqual([
-      ['Art Mode', 'Art settings', 'Settings'],
+      ['Art Mode', 'Choose art', 'Settings'],
       ['PlayStation 5', 'Netflix', 'Prime Video', 'Apple TV', 'Disney+', 'YouTube'],
       ['Spotify', 'SmartThings', 'Hue Sync', 'All apps'],
     ]);
-    expect(rows[0].tiles.map((t) => t.appId)).toEqual(['org.tizen.art-app', 'org.tizen.art-app', 'org.tizen.menu']);
-    expect(rows[0].tiles[1].line).toBe('Opens Art Mode for now');
+    expect(rows[0].tiles.map((t) => t.appId)).toEqual(['org.tizen.art-app', CHOOSE_ART_ID, 'org.tizen.menu']);
+  });
+
+  it('has a Choose art card that opens the launcher\'s own picture screen, next to an unchanged Art Mode', () => {
+    const [artMode, choose] = buildCatalog(installed).rows[0].tiles;
+    expect(artMode).toMatchObject({ appId: 'org.tizen.art-app', name: 'Art Mode', line: 'Show the artwork now', glyph: 'frame' });
+    expect(choose).toMatchObject({ appId: CHOOSE_ART_ID, name: 'Choose art', line: 'Pick what the Frame shows', glyph: 'pictures' });
+    expect('requires' in choose).toBe(false);
+    // It needs the Art app on the TV, like the Art Mode card.
+    expect(buildCatalog([app('org.tizen.menu')]).rows[0].tiles.map((t) => t.name)).toEqual(['Settings']);
   });
 
   it('puts everything else on the All apps screen, in rows of six', () => {
@@ -64,7 +72,7 @@ describe('buildCatalog', () => {
 
   it('hides apps that are not installed', () => {
     const { rows, all } = buildCatalog([app('org.tizen.art-app'), app('org.tizen.netflix-app'), app('rJeHak5zRg.Spotify')]);
-    expect(names(rows)).toEqual([['Art Mode', 'Art settings'], ['PlayStation 5', 'Netflix'], ['Spotify', 'All apps']]);
+    expect(names(rows)).toEqual([['Art Mode', 'Choose art'], ['PlayStation 5', 'Netflix'], ['Spotify', 'All apps']]);
     expect(names(all)).toEqual([]);
   });
 
@@ -85,10 +93,10 @@ describe('buildCatalog', () => {
     expect(names(all)).toEqual([['Xbox', 'Gaming Hub', 'Internet', 'Apps']]);
   });
 
-  it('no longer has Quick settings or Choose art', () => {
+  it('no longer has Quick settings or Art settings', () => {
     const everything = [...buildCatalog(null).rows, ...buildCatalog(null).all].flatMap((r) => r.tiles.map((t) => t.name));
     expect(everything).not.toContain('Quick settings');
-    expect(everything).not.toContain('Choose art');
+    expect(everything).not.toContain('Art settings');
   });
 });
 

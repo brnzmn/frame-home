@@ -26,16 +26,20 @@ export interface Row {
   tiles: Tile[];
 }
 
-type Known = Omit<Tile, 'iconUrl'>;
+/** A tile as the launcher defines it; `requires` names the TV app it needs when its own id is not one. */
+type Known = Omit<Tile, 'iconUrl'> & { requires?: string };
+
+/** The tile that opens the Choose art screen (app/src/ui/picker.ts). The launcher handles it itself. */
+export const CHOOSE_ART_ID = 'frame-home:choose-art';
 
 // The Frame's own features. Tested on the TV: the Art app opens; `org.tizen.menu` opens as an
 // overlay that takes the focus. Samsung's art picker (`com.samsung.tv.home.art`) refuses to be
 // opened by an app, and `com.samsung.tv.coba.setting` opens nothing.
-// "Art settings" opens Art Mode for now: Baran confirmed that pressing OK there brings up
-// Samsung's art selector, which is the only way in. Our own art settings screen comes later.
+// "Choose art" is the launcher's own picture grid: the keeper caches the pictures whenever Art Mode
+// answers, and shows the chosen one when Art Mode next comes on.
 const FRAME: Known[] = [
   { appId: 'org.tizen.art-app', name: 'Art Mode', line: 'Show the artwork now', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#B9A88A', glyph: 'frame' },
-  { appId: 'org.tizen.art-app', name: 'Art settings', line: 'Opens Art Mode for now', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#A8937A', glyph: 'pictures' },
+  { appId: CHOOSE_ART_ID, requires: 'org.tizen.art-app', name: 'Choose art', line: 'Pick what the Frame shows', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#A8937A', glyph: 'pictures' },
   { appId: 'org.tizen.menu', name: 'Settings', line: 'All of the TV’s settings', from: '#E8E1D3', to: '#D6CCB9', ink: '#1B1820', glow: '#7F8AA3', glyph: 'sliders' },
 ];
 
@@ -80,7 +84,7 @@ const STORE_APP = /^[A-Za-z0-9]{10}\.[\w.-]+$/;
 const NEVER = new Set(['w2VwCK465D.OTApp', '2025ePop01.SmartTV', '25emanual2.emanual', 'adplatform.ADPlayer', 'tv6pbVMQFF.PrivacyChoices', 'ByJlgt0XeD.CastSettingsApp']);
 const OURS = /^(FrameHome1|FrmHmPrb01)\./;
 
-const CURATED = new Set([...FRAME, ...INPUTS, ...DOCK, ...NEXT, ...REST].map((k) => k.appId));
+const CURATED = new Set([...FRAME, ...INPUTS, ...DOCK, ...NEXT, ...REST].map((k) => k.requires ?? k.appId));
 
 /** True for apps that get a tile, curated or from the store; the rest of the TV's list is never looked at. */
 function wanted(a: TvApp): boolean {
@@ -107,8 +111,8 @@ export function buildCatalog(installed: TvApp[] | null): Catalog {
   const byId = new Map((installed ?? []).map((a) => [a.id, a]));
   const present = (list: Known[]): Tile[] =>
     list
-      .filter((k) => installed === null || byId.has(k.appId))
-      .map((k) => ({ ...k, iconUrl: byId.get(k.appId)?.iconUrl ?? null }));
+      .filter((k) => installed === null || byId.has(k.requires ?? k.appId))
+      .map(({ requires: _requires, ...k }) => ({ ...k, iconUrl: byId.get(k.appId)?.iconUrl ?? null }));
   const plain = (list: Known[]): Tile[] => present(list).map((t) => ({ ...t, iconUrl: null }));
 
   // Anything installed from the store later still gets a tile, with the TV's own name and icon.
