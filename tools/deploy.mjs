@@ -91,6 +91,14 @@ if (args.includes('--report')) {
   if (!fs.existsSync(path.join(stage, 'service'))) fail(`${appDirName} has no service folder to report from`);
   fs.writeFileSync(path.join(stage, 'service', 'report-to.json'), JSON.stringify({ host: ip, port: 8787 }) + '\n');
   console.log(`the service will report to ${ip}:8787`);
+  // --keeper-art off|listen|ask: how much of the art channel the service uses (HDMI test).
+  const artFlag = args.indexOf('--keeper-art');
+  if (artFlag >= 0) {
+    const mode = args[artFlag + 1];
+    if (!['off', 'listen', 'ask'].includes(mode)) fail('--keeper-art takes off, listen or ask');
+    fs.writeFileSync(path.join(stage, 'service', 'test-options.json'), JSON.stringify({ art: mode }) + '\n');
+    console.log(`the service will use the art channel: ${mode}`);
+  }
 }
 
 // A bridge server left running for hours goes stale: connects are refused and installs hang

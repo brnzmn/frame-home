@@ -40,6 +40,17 @@ try {
 } catch (e) {
   reportTo = null;
 }
+// Optional, also only in a reporting build (`deploy.mjs --report --keeper-art MODE`): how much of
+// the art channel to use, for the HDMI test. 'ask' is the normal behaviour, 'listen' connects but
+// never asks, 'off' never connects.
+var testOptions = {};
+try {
+  testOptions = reportTo ? require('./test-options.json') : {};
+} catch (e) {
+  testOptions = {};
+}
+var ART_USE = testOptions.art === 'off' || testOptions.art === 'listen' ? testOptions.art : 'ask';
+var artConnects = 0;
 
 var startedAt = Date.now();
 var started = false;
@@ -286,7 +297,7 @@ var artAsked = null; // { id, at }
 var artUnanswered = 0;
 
 function askArtStatus() {
-  if (!art || stopped) return;
+  if (!art || stopped || ART_USE !== 'ask') return;
   if (artAsked) {
     // The last question got no reply. In TV mode the art service does not answer at all.
     artUnanswered++;
@@ -362,7 +373,9 @@ function setArt(value, how) {
 }
 
 function connectArt() {
-  if (stopped) return;
+  if (stopped || ART_USE === 'off') return;
+  artConnects++;
+  if (reportTo) report({ type: 'art-connect', at: new Date().toISOString(), n: artConnects });
   art = openSocket(ART_PATH, {
     onOpen: function () {},
     onText: onArtMessage,
@@ -441,6 +454,41 @@ function foreground() {
   }
 }
 
+// Reporting builds only: note every change in which inputs the TV calls connected, to catch a
+// console dropping in and out.
+var inputsTimer = null;
+var lastInputs = null;
+function watchInputs() {
+  try {
+    tizen.systeminfo.getPropertyValue(
+      'VIDEOSOURCE',
+      function (vs) {
+        var name = function (s) {
+          return s.type + s.number + (s.signal === null || s.signal === undefined ? '' : s.signal ? '+signal' : '-signal');
+        };
+        var now = 'connected ' + (vs.connected || []).map(name).join(',') + ' | disconnected ' + (vs.disconnected || []).map(name).join(',');
+        if (now !== lastInputs) {
+          lastInputs = now;
+          note('inputs: ' + now);
+        }
+      },
+      function (e) {
+        var text = 'inputs unreadable: ' + (e && e.message);
+        if (text !== lastInputs) {
+          lastInputs = text;
+          note(text);
+        }
+      }
+    );
+  } catch (e) {
+    var text = 'inputs unreadable: ' + (e && e.message);
+    if (text !== lastInputs) {
+      lastInputs = text;
+      note(text);
+    }
+  }
+}
+
 var beatTimer = null;
 function beat() {
   beats++;
@@ -469,8 +517,11 @@ module.exports.onStart = function () {
   connectArt();
   // Heartbeats exist only to be reported, so a normal build sends none.
   if (reportTo) {
+    note('test: art channel use ' + ART_USE);
     beat();
     beatTimer = setInterval(beat, BEAT_MS);
+    watchInputs();
+    inputsTimer = setInterval(watchInputs, 1000);
   }
 };
 
@@ -482,6 +533,7 @@ module.exports.onStop = function () {
   note('keeper told to stop');
   stopped = true;
   if (beatTimer) clearInterval(beatTimer);
+  if (inputsTimer) clearInterval(inputsTimer);
   if (art) art.close();
   if (server) server.close();
 };
