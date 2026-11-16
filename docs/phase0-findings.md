@@ -180,6 +180,8 @@ In Baran's run through every tile, Home brought the launcher back after every ap
 - Opening Art Mode from the Choose art screen: the art channel answered about 4 s later, and the keeper cached the list and all thumbnails in 2 s (3 Art Store pictures; the TV holds no own uploads). The cache lives in `/home/owner/apps_rw/FrameHome1/data/art-cache` and survived a reinstall.
 - Picking a picture: `select_image` went out about 2 s after the choice. With `category_id` from the list (`MY-C0008`) the TV refused it (-7) for `SAM-S1111996`; with `category_id: null` it switched to `SAM-S4509` and announced `recently_set_updated`. Not yet separated: whether the category or that one picture caused the -7.
 - The TV stopped both the launcher and the keeper 11 to 13 s after Art Mode came on, although Art Mode was opened from our app. After a pick, Home lands on Samsung's home.
+- Sent before Art Mode had put up its own picture, a choice was recorded by the TV but the screen went back to the old picture. Waiting for Art Mode's own `image_selected` (about 2 s after it opens), then sending, worked: Baran saw the chosen picture (`SAM-S1111996`) stay, and `get_current_artwork` named it 7 s later. So the -7 earlier came from the category, not from that picture.
+- `get_content_list` returned the same list for `MY-C0002`, `MY-C0004` and `MY-C0008` (the `category` field seems ignored). The slideshow is off.
 
 ### Art service in TV mode (2026-11-16)
 

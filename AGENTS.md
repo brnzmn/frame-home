@@ -44,7 +44,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - A launcher started from the Mac (`tizen run`, a deploy) is treated differently from one in normal use: with an alarm pending it survived Art Mode, and after one Home press it did not. Never judge survival right after a deploy; press Home once first, then stay in Art Mode for minutes.
 - An alarm that fires opens the launcher and ends Art Mode. Do not use alarms to restart anything.
 - Opening the Art app from our launcher also gets launcher and keeper stopped, about 11-13 s in (2026-11-16); the keeper still gets the art channel's first seconds. Test the power-key case with the power key.
-- Choose art: `select_image` with the list's category was refused (-7); send `category_id: null`. Thumbnails and the cache in `apps_rw/FrameHome1/data/art-cache` work and survive a reinstall.
+- Choose art: send `select_image` with `category_id: null` (the list's category got -7), and only after Art Mode's own `image_selected` on opening, or Art Mode puts its picture back. The cache in `apps_rw/FrameHome1/data/art-cache` survives a reinstall.
 - The TV drops a request to open an app while it is still leaving Art Mode (up to about 7 seconds). Ask again until it is on screen.
 - A page hidden for minutes cannot rely on its own timers. Only the worker-driven tick keeps time.
 - The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It reaches the art channel at `ws://127.0.0.1:8001` with no token. It cannot see which app is in front, so it must never open the launcher or anything else.

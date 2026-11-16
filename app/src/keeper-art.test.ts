@@ -175,6 +175,7 @@ function loadKeeper(env: Record<string, string> = {}): any {
   process.env.FRAME_HOME_STATUS_PORT = '0';
   process.env.FRAME_HOME_ART_ASK_MS = '100';
   process.env.FRAME_HOME_ART_CALL_MS = '400';
+  process.env.FRAME_HOME_CHOICE_SETTLE_MS = '1';
   process.env.FRAME_HOME_THUMB_SOCKET_MS = '1000';
   process.env.FRAME_HOME_ART_CACHE = cacheDir;
   delete process.env.FRAME_HOME_CHOICE_TTL_MS;

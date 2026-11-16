@@ -415,12 +415,19 @@ function onArtMessage(text) {
     if (value === 'on') askArtSoon(1000);
     return;
   }
-  note('art event: ' + name + (value ? ' ' + value : ''));
+  var picture = data.content_id || (data.data && data.data.content_id) || '';
+  note('art event: ' + name + (value ? ' ' + value : '') + (picture ? ' ' + picture : ''));
+  // Art Mode announces the picture it opens with; a choice sent before that is overwritten.
+  if (name === 'image_selected' && choiceTimer) {
+    clearTimeout(choiceTimer);
+    choiceTimer = setTimeout(sendChoiceNow, 500);
+  }
 }
 
 function setArt(value, how) {
   if (state.art === value) return;
   state.art = value;
+  if (value === 'on') artOnSince = Date.now();
   note('art mode ' + value + ' (' + how + ')');
 }
 
@@ -728,8 +735,29 @@ function failArtCalls(why) {
 }
 
 /** The art service answered, with Art Mode on: send a waiting choice, then refresh the cache. */
-function artAnswersNow() {
+/**
+ * Art Mode that has just come on first shows its own current picture (an `image_selected` event
+ * about 2 s in, measured 2026-11-16); a choice sent before that was taken and then overwritten on
+ * screen. So a choice waits for that event, or CHOICE_SETTLE_MS after Art Mode came on, whichever
+ * is first. The TV stops the keeper 11-13 s into Art Mode, which leaves enough time.
+ */
+var CHOICE_SETTLE_MS = process.env.FRAME_HOME_CHOICE_SETTLE_MS ? Number(process.env.FRAME_HOME_CHOICE_SETTLE_MS) : 4000;
+var artOnSince = 0;
+var choiceTimer = null;
+
+function sendChoiceNow() {
+  if (choiceTimer) clearTimeout(choiceTimer);
+  choiceTimer = null;
   flushChoice();
+}
+
+function artAnswersNow() {
+  var wait = artOnSince ? artOnSince + CHOICE_SETTLE_MS - Date.now() : 0;
+  if (choice && wait > 0) {
+    if (!choiceTimer) choiceTimer = setTimeout(sendChoiceNow, wait);
+  } else {
+    sendChoiceNow();
+  }
   maybeRefreshArt();
 }
 
@@ -960,7 +988,28 @@ var ART_LIST_SOURCES = [
   { request: 'get_content_list', params: { category: 'MY-C0004' } },
   { request: 'get_content_list', params: { category: 'MY-C0008' } },
   { request: 'get_slideshow_status' },
+  // Not lists: read for the record, to see what decides the picture Art Mode shows.
+  { request: 'get_auto_rotation_status' },
+  { request: 'get_current_artwork' },
 ];
+
+/** One art answer in short, for the record: the list as content ids, no request ids. */
+function artReplySummary(reply) {
+  if (!reply || typeof reply !== 'object') return String(reply);
+  var out = {};
+  Object.keys(reply).forEach(function (key) {
+    if (key === 'request_id' || key === 'id' || key === 'event') return;
+    if (key === 'content_list') {
+      var items = contentItems(reply, null);
+      out.content_ids = items.map(function (item) {
+        return item.id + (item.category ? '@' + item.category : '');
+      });
+      return;
+    }
+    out[key] = reply[key];
+  });
+  return JSON.stringify(out).slice(0, 400);
+}
 
 function maybeRefreshArt() {
   if (artRefresh.running || stopped) return;
@@ -1002,6 +1051,7 @@ function refreshArtCache() {
       } else {
         answered++;
         lists.push(contentItems(reply, source.params && source.params.category));
+        note('art read ' + source.request + (source.params && source.params.category ? ' ' + source.params.category : '') + ': ' + artReplySummary(reply));
       }
       listStep(i + 1);
     });
