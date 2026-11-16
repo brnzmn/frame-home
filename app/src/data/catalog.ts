@@ -45,14 +45,17 @@ const INPUTS: Known[] = [
   { appId: 'input:HDMI3', name: 'PlayStation 5', line: 'HDMI 3', from: '#00296B', to: '#0070D1', ink: '#FFFFFF', glow: '#2C7BFF' },
 ];
 
+// A row holds six tiles at most; there is no sideways scrolling.
 const DOCK: Known[] = [
   { appId: 'org.tizen.netflix-app', name: 'Netflix', line: '', from: '#2A0A0D', to: '#0E0C10', ink: '#E50914', glow: '#E50914' },
   { appId: 'org.tizen.primevideo', name: 'Prime Video', line: '', from: '#0E3A5C', to: '#0B6FB3', ink: '#FFFFFF', glow: '#1A98FF' },
   { appId: 'com.samsung.tv.aria-video', name: 'Apple TV', line: '', from: '#2B2B30', to: '#111114', ink: '#F3EFE8', glow: '#8E8E99' },
   { appId: 'MCmYXNxgcu.DisneyPlus', name: 'Disney+', line: '', from: '#071A4A', to: '#0E3CAF', ink: '#FFFFFF', glow: '#2C5BFF' },
+  { appId: '9Ur5IzDKqV.TizenYouTube', name: 'YouTube', line: '', from: '#FFFFFF', to: '#E9E6EE', ink: '#17151A', glow: '#FF3B3B' },
 ];
 
 const NEXT: Known[] = [
+  { appId: 'rJeHak5zRg.Spotify', name: 'Spotify', line: '', from: '#10231A', to: '#0C0F0D', ink: '#1ED760', glow: '#1ED760' },
   { appId: 'com.samsung.tv.SmartThingsApp', name: 'SmartThings', line: '', from: '#0C56C9', to: '#22A3F2', ink: '#FFFFFF', glow: '#22A3F2' },
   { appId: 'kupCeIdDkX.HueSync', name: 'Hue Sync', line: '', from: '#3B1D4F', to: '#C2466A', ink: '#FFFFFF', glow: '#E0567F' },
 ];
@@ -63,8 +66,6 @@ const ALL_APPS: Known = { appId: ALL_APPS_ID, name: 'All apps', line: 'Everythin
 
 // Everything that has no tile on the home screen goes to the All apps screen.
 const REST: Known[] = [
-  { appId: '9Ur5IzDKqV.TizenYouTube', name: 'YouTube', line: '', from: '#FFFFFF', to: '#E9E6EE', ink: '#17151A', glow: '#FF3B3B' },
-  { appId: 'rJeHak5zRg.Spotify', name: 'Spotify', line: '', from: '#10231A', to: '#0C0F0D', ink: '#1ED760', glow: '#1ED760' },
   { appId: 'GHI3a0zMSx.XboxGamePass', name: 'Xbox', line: '', from: '#0E5C0E', to: '#0A3D0A', ink: '#FFFFFF', glow: '#3FBF3F' },
   { appId: 'com.samsung.tv.gaminghub', name: 'Gaming Hub', line: '', from: '#2B1B5E', to: '#5B3FD1', ink: '#FFFFFF', glow: '#7B5CFF' },
   { appId: 'org.tizen.browser', name: 'Internet', line: '', from: '#2D3142', to: '#1C1F2B', ink: '#F3EFE8', glow: '#7D8BB0' },

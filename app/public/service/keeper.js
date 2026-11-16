@@ -701,6 +701,32 @@ function watchInputs() {
   }
 }
 
+/** The TV's free memory and the keeper's own size in MB, for heartbeats: does the TV stop our apps when memory runs low? */
+function memoryNow() {
+  // Never let a reading break the heartbeat: on the TV a module or /proc may be out of reach.
+  try {
+    var mb = function (bytes) {
+      return Math.round(bytes / 1048576);
+    };
+    var available = null;
+    try {
+      var line = require('fs')
+        .readFileSync('/proc/meminfo', 'utf8')
+        .split('\n')
+        .filter(function (l) {
+          return l.indexOf('MemAvailable:') === 0;
+        })[0];
+      if (line) available = Math.round(parseInt(line.replace(/\D+/g, ' ').trim(), 10) / 1024);
+    } catch (e) {
+      available = 'unreadable: ' + e.message;
+    }
+    var os = require('os');
+    return { availableMB: available, freeMB: mb(os.freemem()), totalMB: mb(os.totalmem()), keeperMB: mb(process.memoryUsage().rss) };
+  } catch (e) {
+    return { error: String(e && e.message) };
+  }
+}
+
 var beatTimer = null;
 function beat() {
   beats++;
@@ -715,6 +741,7 @@ function beat() {
       power: state.power,
       launcher: state.launcher,
       front: foreground(),
+      memory: memoryNow(),
     });
   });
 }

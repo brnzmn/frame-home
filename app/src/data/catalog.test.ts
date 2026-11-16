@@ -30,8 +30,8 @@ describe('buildCatalog', () => {
     expect(rows.map((r) => r.kind)).toEqual(['frame', 'apps', 'apps']);
     expect(names(rows)).toEqual([
       ['Art Mode', 'Art settings', 'Settings'],
-      ['PlayStation 5', 'Netflix', 'Prime Video', 'Apple TV', 'Disney+'],
-      ['SmartThings', 'Hue Sync', 'All apps'],
+      ['PlayStation 5', 'Netflix', 'Prime Video', 'Apple TV', 'Disney+', 'YouTube'],
+      ['Spotify', 'SmartThings', 'Hue Sync', 'All apps'],
     ]);
     expect(rows[0].tiles.map((t) => t.appId)).toEqual(['org.tizen.art-app', 'org.tizen.art-app', 'org.tizen.menu']);
     expect(rows[0].tiles[1].line).toBe('Opens Art Mode for now');
@@ -40,8 +40,8 @@ describe('buildCatalog', () => {
   it('puts everything else on the All apps screen, in rows of six', () => {
     const { all } = buildCatalog([...installed, ...Array.from({ length: 4 }, (_, i) => app(`abcdefghi${i}.Extra${i}`, `Extra ${i}`))]);
     expect(names(all)).toEqual([
-      ['YouTube', 'Spotify', 'Xbox', 'Gaming Hub', 'Internet', 'Apps'],
-      ['Extra 0', 'Extra 1', 'Extra 2', 'Extra 3'],
+      ['Xbox', 'Gaming Hub', 'Internet', 'Apps', 'Extra 0', 'Extra 1'],
+      ['Extra 2', 'Extra 3'],
     ]);
     expect(all.every((r) => r.tiles.length <= PER_ROW)).toBe(true);
     const ids = new Set(buildCatalog(installed).rows.flatMap((r) => r.tiles.map((t) => t.appId)));
@@ -49,7 +49,8 @@ describe('buildCatalog', () => {
   });
 
   it('has an All apps tile that is not an app on the TV', () => {
-    const tile = buildCatalog(installed).rows[2].tiles[2];
+    const { tiles } = buildCatalog(installed).rows[2];
+    const tile = tiles[tiles.length - 1];
     expect(tile).toMatchObject({ appId: ALL_APPS_ID, name: 'All apps', line: 'Everything else' });
   });
 
@@ -63,8 +64,8 @@ describe('buildCatalog', () => {
 
   it('hides apps that are not installed', () => {
     const { rows, all } = buildCatalog([app('org.tizen.art-app'), app('org.tizen.netflix-app'), app('rJeHak5zRg.Spotify')]);
-    expect(names(rows)).toEqual([['Art Mode', 'Art settings'], ['PlayStation 5', 'Netflix'], ['All apps']]);
-    expect(names(all)).toEqual([['Spotify']]);
+    expect(names(rows)).toEqual([['Art Mode', 'Art settings'], ['PlayStation 5', 'Netflix'], ['Spotify', 'All apps']]);
+    expect(names(all)).toEqual([]);
   });
 
   it('gives other store apps a tile on All apps, and skips services, ours and the excluded', () => {
@@ -81,7 +82,7 @@ describe('buildCatalog', () => {
   it('assumes the curated apps are installed when the list is not known yet', () => {
     const { rows, all } = buildCatalog(null);
     expect(names(rows)).toEqual(names(buildCatalog(installed).rows));
-    expect(names(all)).toEqual([['YouTube', 'Spotify', 'Xbox', 'Gaming Hub', 'Internet', 'Apps']]);
+    expect(names(all)).toEqual([['Xbox', 'Gaming Hub', 'Internet', 'Apps']]);
   });
 
   it('no longer has Quick settings or Choose art', () => {
