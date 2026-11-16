@@ -160,6 +160,21 @@ Measured on the TV with `tools/lag-test.mjs` (arrow keys over the debug port, th
 - Our own code is not the cost: the key handler takes 0 to 1 ms.
 - Start, before: the script runs at 345 ms after page start; the TV's app list arrives at 761 ms; tiles are drawn at 1040 ms. After (tiles from the cached app list): script 95, tiles drawn 336, app list 594 ms.
 
+### Apple TV and Hue Sync stop the launcher (2026-11-16)
+
+In Baran's run through every tile, Home brought the launcher back after every app except Apple TV and Hue Sync. Controlled runs (`deploy.mjs build/app --report --debug`, the app opened from the launcher, keeper heartbeats every 5 s with the TV's free memory; log `docs/private/kill-test-2026-11-16b.log`):
+
+| App in front | Launcher stopped by the TV | Keeper | Free memory |
+|---|---|---|---|
+| Apple TV (`com.samsung.tv.aria-video`) | 33–38 s after it opened | kept running | 380–440 MB of 1.9 GB |
+| Hue Sync (`kupCeIdDkX.HueSync`) | 63–68 s after it opened | kept running | 260–400 MB |
+| Netflix | not within 100 s | kept running | 340–460 MB |
+
+- It is not memory pressure: free memory did not drop before the stop. The cause is unknown.
+- In Baran's own run the keeper also stopped answering about 20 s into Hue Sync and did not come back until the next install; in the controlled run it survived.
+- With the launcher gone, Home shows Samsung's home and stays there; the launcher has to be opened from Samsung's apps row.
+- Inside the keeper `process.memoryUsage()` is refused (EACCES); `/proc/meminfo` and `os.freemem()` work.
+
 ### Art service in TV mode (2026-11-16)
 
 The keeper's `/art-probe` (read-only `get_*` requests only) ran on the TV in TV mode: the art channel connected, and none of 12 requests answered within 4 s each (status, device info, current artwork, content lists, slideshow, rotation, brightness, colour temperature, art settings, mat list, photo filters). Art controls inside the launcher cannot be live outside Art Mode; changes would have to be queued and applied when Art Mode comes on.

@@ -52,6 +52,8 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - While the launcher is on screen, a waking console cannot take the screen (black flash, back to us) and then drops off the input list. The launcher must open the input itself; see `newlyConnected` in `app/src/lifecycle.ts`.
 - An HDMI input on screen is `org.tizen.tv-viewer`; launching that id shows the current source (`tizen.tvwindow.setSource` picks it).
 - An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.
+- Apple TV and Hue Sync make the TV stop our hidden launcher within about a minute (not memory); the keeper survives. Home then stays on Samsung's home. Netflix does not do this.
+- `deploy.mjs --open-only --debug` hangs while the launcher still runs hidden; use the full `deploy.mjs build/app --debug`. macOS has no `timeout` command.
 
 ## Commands
 
