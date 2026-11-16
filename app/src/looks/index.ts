@@ -1,10 +1,9 @@
 // Three looks for the home screen, switched by one attribute on <html>. Without it the
 // default look in styles.css stays exactly as it is. See README.md in this folder.
-import './gallery.css';
+// Only Clean ships (Baran's call, 2026-11-16). gallery.css and paper.css stay for reference, unused.
 import './clean.css';
-import './paper.css';
 
-export const LOOKS = ['gallery', 'clean', 'paper'] as const;
+export const LOOKS = ['clean'] as const;
 export type Look = (typeof LOOKS)[number];
 
 function isLook(name: string): name is Look {
