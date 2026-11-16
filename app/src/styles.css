@@ -217,6 +217,26 @@ html, body {
 .card.is-focused .card-line { color: rgba(27, 24, 32, 0.68); }
 .card.is-pressed { transform: scale(1.02); }
 
+/* Choose art (ui/picker.ts): pictures in the app tile's fixed box. A thumbnail fills it and only
+   fades in, so nothing moves when one arrives. Until then the kind shows as a quiet word. */
+.art-tile .tile-word {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.art-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.art-thumb.is-loaded { opacity: 1; }
+/* The first-use screen: one card, not stretched across the row. */
+.rows-art-empty .row-frame { width: 560px; }
+
 .note {
   position: absolute;
   left: var(--edge);
@@ -232,5 +252,5 @@ html, body {
 .note.is-on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wash, .content, .tile, .tile::after, .card, .card::before, .card::after, .note { transition: none; }
+  .wash, .content, .tile, .tile::after, .card, .card::before, .card::after, .note, .art-thumb { transition: none; }
 }

@@ -1,4 +1,4 @@
-import type { Tv, TvApp } from './tv';
+import type { ArtItem, Tv, TvApp } from './tv';
 
 // Only the calls confirmed on the Frame Pro (Tizen 9.0) in docs/phase0-findings.md.
 declare const tizen: any;
@@ -16,6 +16,8 @@ export const INPUT_PREFIX = 'input:';
 /** Samsung's full-screen view of the current input. */
 const TV_VIEWER = 'org.tizen.tv-viewer';
 const KEEPER_URL = 'http://127.0.0.1:47811';
+/** Content ids as the keeper accepts them. */
+const ART_ID = /^[A-Za-z0-9_-]{1,64}$/;
 
 /** Samsung's own API script lives on the TV. It is loaded at run time, never bundled. */
 function loadSamsungApis(): void {
@@ -164,6 +166,35 @@ export function createTizenTv(): Tv {
         return typeof age === 'number' ? age : null;
       } catch {
         return null;
+      }
+    },
+
+    artList: async () => {
+      try {
+        const reply = await fetch(`${KEEPER_URL}/art/list`, { signal: AbortSignal.timeout(1500) });
+        if (!reply.ok) return null;
+        const body = await reply.json();
+        if (!Array.isArray(body?.items)) return null;
+        return body.items
+          .filter((item: any) => item && typeof item.id === 'string' && ART_ID.test(item.id))
+          .map(
+            (item: any): ArtItem => ({
+              id: item.id,
+              kind: item.kind === 'mine' ? 'mine' : 'store',
+              thumbUrl: item.thumb ? `${KEEPER_URL}/art/thumb/${encodeURIComponent(item.id)}` : null,
+            }),
+          );
+      } catch {
+        return null;
+      }
+    },
+
+    chooseArt: async (id) => {
+      try {
+        const reply = await fetch(`${KEEPER_URL}/art/choose?id=${encodeURIComponent(id)}`, { method: 'POST', signal: AbortSignal.timeout(1500) });
+        return reply.ok;
+      } catch {
+        return false;
       }
     },
 
