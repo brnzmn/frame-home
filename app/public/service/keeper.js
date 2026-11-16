@@ -721,7 +721,13 @@ function memoryNow() {
       available = 'unreadable: ' + e.message;
     }
     var os = require('os');
-    return { availableMB: available, freeMB: mb(os.freemem()), totalMB: mb(os.totalmem()), keeperMB: mb(process.memoryUsage().rss) };
+    var keeperMB = null;
+    try {
+      keeperMB = mb(process.memoryUsage().rss); // refused on the TV (EACCES)
+    } catch (e) {
+      keeperMB = null;
+    }
+    return { availableMB: available, freeMB: mb(os.freemem()), totalMB: mb(os.totalmem()), keeperMB: keeperMB };
   } catch (e) {
     return { error: String(e && e.message) };
   }
