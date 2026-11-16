@@ -11,7 +11,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - The Samsung certificate lives in `~/SamsungCertificate/` and `~/tizen-studio-data/`. Every update must be signed with the same author certificate, or the TV rejects the install.
 - Only official Samsung/Tizen tools and mainstream registries. Community installers need Baran's explicit OK.
 - Baran types every password and does every sign-in himself.
-- Art Mode must keep working as it did. After any change that touches power-on or the art controls, check that Art Mode still starts and sleeps on its own.
+- Art Mode must keep working as it did. After any change that touches power-on or the art controls, check that Art Mode still starts and sleeps on its own. Read its sleep settings first (`get_artmode_settings`): on 2026-11-16 Sleep After was off, so it does not sleep on a timer.
 
 ## Gotchas
 

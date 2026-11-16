@@ -200,11 +200,12 @@ Read with a 24-hour token, through `tools/smartthings.mjs`; logs in `docs/privat
 - Hue Sync switches to its video mode whenever the TV comes into TV mode.
 - The token's rate limit is about 10 requests in a short window; a watch every 12 s stays under it.
 - The art channel from the Mac sometimes connects without `ms.channel.ready` while Art Mode is on; the Art app then answers when addressed by its own id. The earlier reading "channel does not open, so asleep" (20:45 to 22:20) is therefore not proof that the TV slept. SmartThings' power reading is always 0 W, and `PowerState` stayed `on`, so nothing seen from the Mac tells a sleeping Art Mode from an awake one.
-- Not verified: that Art Mode still sleeps and wakes by itself with the minute poll running; power-on from a full power-off; that the rules keep running after the token ends (the next day) and after 2026-12-15.
+- The TV's Art Mode settings (`get_artmode_settings`, read-only, 22:40): Sleep After (`motion_timer`) off, motion sensitivity 2 of 3, brightness sensor on, brightness 0. So Art Mode does not go dark on a timer on this TV; Baran saw art showing at 22:40, as set. Nothing of ours sets these values.
+- Not verified: power-on from a full power-off; that the rules keep running after the token ends (the next day) and after 2026-12-15; that the rules stay quiet overnight (watch in `docs/private/smartthings-night-2026-11-16.log`).
 
 ### Not tested yet
 
-- That Art Mode still sleeps and wakes by itself with the SmartThings minute poll running, and that the rules outlive their token.
+- That the SmartThings rules stay quiet overnight and outlive their token.
 - What the TV announces when it goes to sleep from Art Mode, and that Art Mode still sleeps and wakes by itself with the launcher installed. Nothing of ours runs during a long Art Mode stay, so no effect is expected.
 - A full power-off (long press) and a cold start.
 - Hours behind a streaming app with something playing.
