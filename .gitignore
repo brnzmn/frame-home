@@ -17,3 +17,4 @@ probe/probe-config.js
 tools/frame/.tokens/
 docs/private/
 build/
+.claude/worktrees/
