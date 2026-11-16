@@ -2,6 +2,9 @@
 // The keeper service (app/public/service/keeper.js) run against a fake TV: the TV's status
 // pages and its art channel, as recorded from the real one on 2026-11-11.
 import { createHash } from 'node:crypto';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import type { AddressInfo } from 'node:net';
@@ -111,7 +114,7 @@ async function until(check: () => boolean, ms = 3000): Promise<void> {
 }
 
 let tv: FakeTv | undefined;
-let keeper: { onStart(): void; onStop(): void } | undefined;
+let keeper: { onStart(): void; onStop(): void; _forTests: { statusPort(): number | null } } | undefined;
 let opened: string[] = [];
 let statusPort = 0;
 
@@ -119,12 +122,15 @@ async function startKeeper(art: FakeTv['artAnswers'] = 'on', use?: 'off' | 'list
   tv = await startFakeTv();
   tv.artAnswers = art;
   opened = [];
-  statusPort = tv.port + 1 > 65000 ? tv.port - 1 : tv.port + 1;
   process.env.FRAME_HOME_TV_PORT = String(tv.port);
-  process.env.FRAME_HOME_STATUS_PORT = String(statusPort);
+  // Port 0: a free port, read back below, so parallel test files never collide.
+  process.env.FRAME_HOME_STATUS_PORT = '0';
   // The real service asks every five seconds; the tests would crawl.
   process.env.FRAME_HOME_ART_ASK_MS = '150';
   process.env.FRAME_HOME_ART_PROBE_MS = '150';
+  // The picture cache (tested in keeper-art.test.ts) writes into a fresh folder, never the machine's own.
+  process.env.FRAME_HOME_ART_CACHE = mkdtempSync(join(tmpdir(), 'frame-home-keeper-'));
+  process.env.FRAME_HOME_ART_CALL_MS = '150';
   if (use) process.env.FRAME_HOME_ART_USE = use;
   else delete process.env.FRAME_HOME_ART_USE;
   (globalThis as any).tizen = {
@@ -138,6 +144,8 @@ async function startKeeper(art: FakeTv['artAnswers'] = 'on', use?: 'off' | 'list
   delete require.cache[KEEPER];
   keeper = require(KEEPER);
   keeper!.onStart();
+  await until(() => Boolean(keeper!._forTests.statusPort()));
+  statusPort = keeper!._forTests.statusPort();
   if (use !== 'off') await until(() => tv!.asked > 1);
 }
 
