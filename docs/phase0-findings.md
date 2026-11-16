@@ -175,6 +175,12 @@ In Baran's run through every tile, Home brought the launcher back after every ap
 - With the launcher gone, Home shows Samsung's home and stays there; the launcher has to be opened from Samsung's apps row.
 - Inside the keeper `process.memoryUsage()` is refused (EACCES); `/proc/meminfo` and `os.freemem()` work.
 
+### Choose art on the TV (2026-11-16)
+
+- Opening Art Mode from the Choose art screen: the art channel answered about 4 s later, and the keeper cached the list and all thumbnails in 2 s (3 Art Store pictures; the TV holds no own uploads). The cache lives in `/home/owner/apps_rw/FrameHome1/data/art-cache` and survived a reinstall.
+- Picking a picture: `select_image` went out about 2 s after the choice. With `category_id` from the list (`MY-C0008`) the TV refused it (-7) for `SAM-S1111996`; with `category_id: null` it switched to `SAM-S4509` and announced `recently_set_updated`. Not yet separated: whether the category or that one picture caused the -7.
+- The TV stopped both the launcher and the keeper 11 to 13 s after Art Mode came on, although Art Mode was opened from our app. After a pick, Home lands on Samsung's home.
+
 ### Art service in TV mode (2026-11-16)
 
 The keeper's `/art-probe` (read-only `get_*` requests only) ran on the TV in TV mode: the art channel connected, and none of 12 requests answered within 4 s each (status, device info, current artwork, content lists, slideshow, rotation, brightness, colour temperature, art settings, mat list, photo filters). Art controls inside the launcher cannot be live outside Art Mode; changes would have to be queued and applied when Art Mode comes on.
