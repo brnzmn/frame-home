@@ -131,11 +131,20 @@ Every run below used the power key from the Mac (`tools/frame/key.py KEY_POWER`)
 - YouTube in front reports `com.samsung.tv.cobalt-yt`, not its store id. The first Exit press in YouTube opens YouTube's own exit question; the second closes it, and the launcher was back 0.75 seconds later.
 - OK in Art Mode opens Samsung's art selector with Art Mode still on. Back from the selector ends Art Mode.
 
+### PS5 dropping in and out (2026-11-16)
+
+- Baran: the PS5 on HDMI 3 kept appearing and disappearing. With the Frame Home package uninstalled it was stable at once.
+- Not the keeper: with its art questions switched off the PS5 still dropped, and with the launcher closed and only the keeper running it stayed (10+ minutes).
+- The cause: the launcher on screen. When the PS5 wakes it asks the TV for the screen; the TV flashes black and comes back to the launcher, whose page never even goes hidden. The PS5 then drops off the TV's input list (`VIDEOSOURCE`), and the next PS press repeats it. Logged at 15:55, 16:12 and 16:13 local, `docs/private/hdmi-test-2026-11-16.log`.
+- With Samsung's home in front, a waking PS5 only appears on that home and waits for a click, buried under Samsung's channels (Baran's main complaint about it).
+- An HDMI input on screen reports `org.tizen.tv-viewer` in front (the game bar as `com.samsung.tv.gamebar`), not Samsung's home, so the jump-back leaves it alone (10+ minutes of play, no drop).
+- `tizen.application.launch('org.tizen.tv-viewer')` from the launcher shows the current source full screen; `tizen.tvwindow.getSource('MAIN')` reads it.
+- Fix, seen working on the TV: a PlayStation 5 tile opens HDMI 3 that way, and when an input switches on while the launcher is on screen, the launcher opens it. It reached the PS5 within a second of it waking (16:38:17); the TV's own black-flash attempt still comes first, so the round trip takes about 2 seconds.
+
 ### Not tested yet
 
 - The SmartThings power-on rule, and that it leaves Art Mode alone. After this evening it is the remaining way to get the launcher at power-on without changing a TV setting.
 - What the TV announces when it goes to sleep from Art Mode, and that Art Mode still sleeps and wakes by itself with the launcher installed. Nothing of ours runs during a long Art Mode stay, so no effect is expected.
 - A full power-off (long press) and a cold start.
-- An HDMI input shown inside the app, with a live source connected.
 - Hours behind a streaming app with something playing.
 - Home pressed from inside another app.

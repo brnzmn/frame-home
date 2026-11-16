@@ -49,6 +49,8 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 - The service (`app/public/service/keeper.js`) runs on Node 18 with no packages and is shipped unbuilt. It reaches the art channel at `ws://127.0.0.1:8001` with no token. It cannot see which app is in front, so it must never open the launcher or anything else.
 - To see what launcher and service do while hidden: `node tools/probe-server.mjs`, then `deploy.mjs build/app --report`. Their joint record lands in `docs/private/probe-events.log`. A new test run gets a new file name; never empty an old log.
 - SmartThings tokens last 24 hours and Samsung has said all of them end on 2026-12-15. Never build anything that needs a token at run time; a rule on the account is the only thing that may stay.
+- While the launcher is on screen, a waking console cannot take the screen (black flash, back to us) and then drops off the input list. The launcher must open the input itself; see `newlyConnected` in `app/src/lifecycle.ts`.
+- An HDMI input on screen is `org.tizen.tv-viewer`; launching that id shows the current source (`tizen.tvwindow.setSource` picks it).
 - An app in front may report another id than its store id (YouTube is `com.samsung.tv.cobalt-yt`), and the TV's app-status page only knows store apps.
 
 ## Commands

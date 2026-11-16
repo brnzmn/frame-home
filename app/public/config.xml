@@ -4,7 +4,7 @@
     <tizen:service id="FrameHome1.Keeper" on-boot="true" auto-restart="true">
         <tizen:content src="service/keeper.js"/>
         <tizen:name>FrameHomeKeeper</tizen:name>
-        <tizen:description>Opens Frame Home again when the TV comes out of Art Mode</tizen:description>
+        <tizen:description>Listens to the art channel and keeps Frame Home's record; opens nothing</tizen:description>
     </tizen:service>
     <content src="index.html"/>
     <!-- Opening the launcher while it is already running brings it forward as it is, without
