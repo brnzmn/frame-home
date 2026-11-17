@@ -1,0 +1,4583 @@
+{
+  "version": 1,
+  "startedAt": "2026-11-10T19:35:16.685Z",
+  "checks": {
+    "env": {
+      "status": "ok",
+      "detail": {
+        "userAgent": "Mozilla/5.0 (SMART-TV; LINUX; Tizen 9.0) AppleWebKit/537.36 (KHTML, like Gecko) 120.0.6099.5/9.0 TV Safari/537.36",
+        "inner": [
+          1920,
+          1080
+        ],
+        "screen": [
+          1920,
+          1080
+        ],
+        "dpr": 1,
+        "chromium": null,
+        "platformVersion": "9.0",
+        "model": "LS03F",
+        "realModel": "TQ65LS03FWUXXC",
+        "firmware": "T-RSMFDEUC-0090-1301.0",
+        "ownId": "FrmHmPrb01.FrameProbe"
+      }
+    },
+    "lifecycle.statusListener": {
+      "status": "ok",
+      "detail": null
+    },
+    "keys": {
+      "status": "ok",
+      "detail": {
+        "supported": 46,
+        "homeLike": [
+          "Menu",
+          "Exit",
+          "Source"
+        ]
+      }
+    },
+    "inputs.current": {
+      "status": "fail",
+      "detail": "Cannot convert function (s) { setCheck('inputs.current', 'ok', sourceName(s)); } to enum."
+    },
+    "net.mac": {
+      "status": "ok",
+      "detail": {
+        "status": 200
+      }
+    },
+    "apps.list": {
+      "status": "ok",
+      "detail": {
+        "total": 526,
+        "shown": 244
+      }
+    },
+    "apps.frame": {
+      "status": "ok",
+      "detail": [
+        "mde-framework = com.samsung.tv.mde-framework (hidden)",
+        "ArtApp = org.tizen.art-app",
+        "TVDeviceCare = lib-selfdiagframework-tv",
+        "Multi-LLM framework = com.samsung.tv.multi-llm-framework (hidden)",
+        "AmbientSupport = com.samsung.tv.ambient-support",
+        "ambientinfo-resources = com.samsung.tv.ambientinfo-resources (hidden)",
+        "AmbientComponent = com.samsung.tv.coba.art (hidden)",
+        "com.samsung.tv.ambient-sound = com.samsung.tv.ambient-sound (hidden)",
+        "Wizard AITech = com.samsung.tv.wizard.AmbientInfo",
+        "Wizard Art = com.samsung.tv.wizard.art",
+        "ambientbg-tranquilnature = com.samsung.tv.ambientbg-tranquilnature (hidden)",
+        "Ad Web Framework = com.samsung.tv.ad-web-framework (hidden)",
+        "HomeArt = com.samsung.tv.home.art (hidden)",
+        "voice-interaction-framework = com.samsung.tv.vif (hidden)",
+        "AmbientFTE = com.samsung.tv.ambientfte",
+        "Frame Probe = FrmHmPrb01.FrameProbe"
+      ]
+    },
+    "net.tmdb": {
+      "status": "ok",
+      "detail": {
+        "status": 401,
+        "ms": 485
+      }
+    },
+    "apps.icons": {
+      "status": "partial",
+      "detail": {
+        "loaded": 85,
+        "failed": 159,
+        "failedNames": [
+          "dtv-org.tizen.UsbSyncDisplay",
+          "SAFCommonPlugin",
+          "remotepc",
+          "ContentSharing.Provider.Ftp",
+          "Prime Video",
+          "Sync Demo Gui",
+          "voice instant application",
+          "Software Update",
+          "Welcome Mode App",
+          "RequestSupport",
+          "automation-app",
+          "virtual-remote",
+          "CompSmartThings",
+          "RSCM GUI",
+          "sound-test",
+          "YoutubeTV",
+          "coba-adagent",
+          "RunningApps",
+          "csapi-tv-multimedia-aifw-api",
+          "Hotel"
+        ]
+      }
+    },
+    "art.local.8002": {
+      "status": "fail",
+      "detail": {
+        "ms": 752
+      }
+    },
+    "art.local.8001": {
+      "status": "ok",
+      "detail": {
+        "firstEvent": "ms.channel.connect",
+        "ms": 769
+      }
+    },
+    "inputs.list": {
+      "status": "ok",
+      "detail": {
+        "connected": [
+          "TV1"
+        ],
+        "disconnected": [
+          "HDMI1",
+          "HDMI2",
+          "HDMI3",
+          "HDMI4"
+        ]
+      }
+    },
+    "fps": {
+      "status": "ok",
+      "detail": {
+        "plain": {
+          "fps": 57,
+          "worstFrameMs": 83
+        },
+        "shadow": {
+          "fps": 54,
+          "worstFrameMs": 283
+        },
+        "blur": {
+          "fps": 45,
+          "worstFrameMs": 500
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "t": "19:35:16.810",
+      "type": "started",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:16.820",
+      "type": "pageshow",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:16.842",
+      "type": "focus",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:16.844",
+      "type": "focus",
+      "data": null,
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.116",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.324",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.588",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:19.806",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.013",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.190",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.376",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.572",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.745",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:20.948",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    },
+    {
+      "t": "19:35:21.102",
+      "type": "key",
+      "data": {
+        "code": 40,
+        "key": "ArrowDown"
+      },
+      "visible": "visible"
+    }
+  ],
+  "heartbeats": {
+    "total": 5,
+    "whileHidden": 0
+  },
+  "supportedKeys": [
+    "0=48",
+    "1=49",
+    "2=50",
+    "3=51",
+    "4=52",
+    "5=53",
+    "6=54",
+    "7=55",
+    "8=56",
+    "9=57",
+    "VolumeUp=447",
+    "VolumeDown=448",
+    "VolumeMute=449",
+    "ChannelUp=427",
+    "ChannelDown=428",
+    "ColorF0Red=403",
+    "ColorF1Green=404",
+    "ColorF2Yellow=405",
+    "ColorF3Blue=406",
+    "Menu=10133",
+    "Tools=10135",
+    "Info=457",
+    "Exit=10182",
+    "Search=10225",
+    "Guide=458",
+    "MediaRewind=412",
+    "MediaPause=19",
+    "MediaFastForward=417",
+    "MediaRecord=416",
+    "MediaPlay=415",
+    "MediaStop=413",
+    "MediaPlayPause=10252",
+    "MediaTrackPrevious=10232",
+    "MediaTrackNext=10233",
+    "Source=10072",
+    "PictureSize=10140",
+    "PreviousChannel=10190",
+    "ChannelList=10073",
+    "E-Manual=10146",
+    "MTS=10195",
+    "3D=10199",
+    "Soccer=10228",
+    "Caption=10221",
+    "Teletext=10200",
+    "Extra=10253",
+    "Minus=189"
+  ],
+  "apps": [
+    {
+      "id": "SmartControlService",
+      "name": "SmartControlService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/SmartControlService/shared/res/SmartControlService.png",
+      "packageId": "SmartControlService",
+      "version": "3.1.13"
+    },
+    {
+      "id": "com.samsung.tv.knox-browser-autofill",
+      "name": "Workspace Browser autofill service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.knox-browser",
+      "version": "8.20.105"
+    },
+    {
+      "id": "org.tizen.channel-list",
+      "name": "Channel-list",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.channel-list/shared/res/org.tizen.channel-list.png",
+      "packageId": "org.tizen.channel-list",
+      "version": "0.2.2"
+    },
+    {
+      "id": "com.samsung.rdm.b2b.general",
+      "name": "B2B RDM Handler",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.rdm.b2b.general",
+      "version": "1.0.17"
+    },
+    {
+      "id": "org.tizen.UsbSyncDisplay",
+      "name": "dtv-org.tizen.UsbSyncDisplay",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.UsbSyncDisplay",
+      "version": "0.0.1"
+    },
+    {
+      "id": "com.samsung.tv.coba.plateauhome",
+      "name": "coba-plateauhome",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.plateauhome",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.mde-framework",
+      "name": "mde-framework",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.mde-framework/shared/res/mde-framework.png",
+      "packageId": "com.samsung.tv.mde-framework",
+      "version": "6.25.101"
+    },
+    {
+      "id": "com.samsung.tv.SAFCommonPlugin",
+      "name": "SAFCommonPlugin",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.SAFCommonPlugin",
+      "version": "5.26.07220"
+    },
+    {
+      "id": "org.volt.apps",
+      "name": "Apps",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.store/shared/res/home_i_icon_apps.png",
+      "packageId": "com.samsung.tv.store",
+      "version": "8.25.11171"
+    },
+    {
+      "id": "content-grab-service",
+      "name": "content-grab-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "content-grab-service",
+      "version": "0.3"
+    },
+    {
+      "id": "org.tizen.ep-hotel-channellist",
+      "name": "Channel-list",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-channellist/shared/res/org.tizen.ep-hotel-channellist.png",
+      "packageId": "org.tizen.ep-hotel-channellist",
+      "version": "0.2.2"
+    },
+    {
+      "id": "org.tizen.remotepc",
+      "name": "remotepc",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remotepc",
+      "version": "2.14.1"
+    },
+    {
+      "id": "org.tizen.epg",
+      "name": "Epg",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.epg/shared/res/org.tizen.epg.png",
+      "packageId": "org.tizen.epg",
+      "version": "0.3.1"
+    },
+    {
+      "id": "lib-ariafw-tv",
+      "name": "LibAriaFW",
+      "show": false,
+      "iconPath": "",
+      "packageId": "lib-ariafw-tv",
+      "version": "3.007.30090"
+    },
+    {
+      "id": "com.samsung.tv.coss.provider.d2d",
+      "name": "ContentSharing.Provider.Ftp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coss.provider.d2d",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.MultifunctionButton",
+      "name": "MultifunctionButton",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.MultifunctionButton/shared/res/MultifunctionButton.png",
+      "packageId": "com.samsung.tv.MultifunctionButton",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.channel-list",
+      "name": "ChannelList",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.channel-list/shared/res/images.png",
+      "packageId": "com.samsung.tv.channel-list",
+      "version": "1.0.2"
+    },
+    {
+      "id": "org.tizen.primevideo-dummy",
+      "name": "Prime Video",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.primevideo",
+      "version": "5.3.22"
+    },
+    {
+      "id": "org.tizen.tts-engine-neural",
+      "name": "org.tizen.tts-engine-neural",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tts-engine-neural",
+      "version": "25.25.10311"
+    },
+    {
+      "id": "com.samsung.tv.photo-analysis-datamgr",
+      "name": "photo-analysis-datamgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.photo-analysis-datamgr",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.bixby-prov",
+      "name": "Bixby Provisioning",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bixby-prov/shared/res/bixby-prov.png",
+      "packageId": "com.samsung.tv.bixby-prov",
+      "version": "25.25.09161"
+    },
+    {
+      "id": "org.tizen.sealayer",
+      "name": "org.tizen.sealayer",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.sealayer",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.UsbSyncDisplay.gui",
+      "name": "Sync Demo Gui",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.UsbSyncDisplay",
+      "version": "0.0.1"
+    },
+    {
+      "id": "rct-service",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "rct-service",
+      "version": "0.1"
+    },
+    {
+      "id": "acm-watcher",
+      "name": "",
+      "show": false,
+      "iconPath": "",
+      "packageId": "acm-watcher",
+      "version": "0.0.1"
+    },
+    {
+      "id": "com.sausng.tv.storageshare-sourceprovider",
+      "name": "StorageShare-SourceProvider",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.storageshare-sourceprovider",
+      "version": "1.1.10"
+    },
+    {
+      "id": "com.samsung.tv.airplay-service-2",
+      "name": "airplay-service-2",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.airplay-app-2/shared/res/airplay-service-2.png",
+      "packageId": "com.samsung.tv.airplay-app-2",
+      "version": "6.15.904"
+    },
+    {
+      "id": "com.samsung.tv.voice-instant-app",
+      "name": "voice instant application",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.voice-instant-app",
+      "version": "25.26.06110"
+    },
+    {
+      "id": "org.tizen.tv.swu-update-details",
+      "name": "Software Update",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.swu-ui",
+      "version": "17.019.0"
+    },
+    {
+      "id": "org.tizen.art-app",
+      "name": "ArtApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.art-app/shared/res/ArtApp.png",
+      "packageId": "org.tizen.art-app",
+      "version": "3.50.106"
+    },
+    {
+      "id": "org.tizen.provider-resetpsid",
+      "name": "provider-resetpsid",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.provider-resetpsid",
+      "version": "1.0"
+    },
+    {
+      "id": "lib-selfdiagframework-tv",
+      "name": "TVDeviceCare",
+      "show": true,
+      "iconPath": "/usr/apps/lib-selfdiagframework-tv/shared/res/TVDeviceCare.png",
+      "packageId": "lib-selfdiagframework-tv",
+      "version": "1.1.6"
+    },
+    {
+      "id": "org.tizen.welcome-mode",
+      "name": "Welcome Mode App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.welcome-mode",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tizen.samsung-analytics",
+      "name": "samsung-analytics",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.samsung-analytics/shared/res/samsung-analytics.png",
+      "packageId": "com.samsung.tizen.samsung-analytics",
+      "version": "6.18.5"
+    },
+    {
+      "id": "com.samsung.tv.broadcastingmenu",
+      "name": "broadcastingmenu",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.broadcastingmenu/shared/res/com.samsung.tv.broadcastingmenu.png",
+      "packageId": "com.samsung.tv.broadcastingmenu",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.remoteguide",
+      "name": "Samsung Remote Key Guide",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.remoteguide/shared/res/images.png",
+      "packageId": "com.samsung.tv.remoteguide",
+      "version": "1.5.4"
+    },
+    {
+      "id": "com.samsung.tv.QLPanelViewPlugin",
+      "name": "QLPanelViewPlugin",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.QLPanelViewPlugin/shared/res/ModeSampleApp.png",
+      "packageId": "com.samsung.tv.QLPanelViewPlugin",
+      "version": "1.0.6"
+    },
+    {
+      "id": "org.tizen.stand-by-scan",
+      "name": "stand-by-scan",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.stand-by-scan/shared/res/org.tizen.stand-by-scan.png",
+      "packageId": "org.tizen.stand-by-scan",
+      "version": "0.3"
+    },
+    {
+      "id": "org.tizen.netflix-app",
+      "name": "Netflix",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.netflix-app/shared/res/org.tizen.netflix-app.png",
+      "packageId": "org.tizen.netflix-app",
+      "version": "80.24.16020"
+    },
+    {
+      "id": "com.samsung.tv.smartthingsfind-ondemand",
+      "name": "SmartThings-Find",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.smartthingsfind-daemon",
+      "version": "4.0.3"
+    },
+    {
+      "id": "org.tizen.request-support",
+      "name": "RequestSupport",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.request-support",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.wizard.hotplug",
+      "name": "Com.Samsung.TV.Wizard.Hotplug",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.wizard.hotplug/shared/res/MyFirstPrismApp.png",
+      "packageId": "com.samsung.tv.wizard.hotplug",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.multi-llm-framework",
+      "name": "Multi-LLM framework",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.multi-llm-framework/shared/res/chatgpt_icon.png",
+      "packageId": "com.samsung.tv.multi-llm-framework",
+      "version": "25.024.07170"
+    },
+    {
+      "id": "org.tizen.automation-app",
+      "name": "automation-app",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.automation-app",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.tvsensor-iot-service",
+      "name": "com.samsung.tv.tvsensor-iot-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.tvsensor-iot-service",
+      "version": "1.1.17"
+    },
+    {
+      "id": "org.tizen.5-way-function",
+      "name": "PanelKeyApp",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.PanelKeyApp/shared/res/PanelKeyApp.png",
+      "packageId": "com.samsung.tv.PanelKeyApp",
+      "version": "7.0.1"
+    },
+    {
+      "id": "org.tizen.function-osd",
+      "name": "virtual-remote",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.virtual-remote",
+      "version": "1.0.19"
+    },
+    {
+      "id": "com.samsung.tv.coba.smartthings",
+      "name": "CompSmartThings",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.smartthings",
+      "version": "1.0.1"
+    },
+    {
+      "id": "org.tizen.rscm-gui",
+      "name": "RSCM GUI",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-shop-care-hub",
+      "version": "0.3.18"
+    },
+    {
+      "id": "aifw-data-managerd",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "aifw-data-managerd",
+      "version": "1.0"
+    },
+    {
+      "id": "org.tizen.sound-test",
+      "name": "sound-test",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.sound-test",
+      "version": "0.2.2"
+    },
+    {
+      "id": "com.samsung.tv.MultiControlApp",
+      "name": "MultiControlApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.MultiControlApp/shared/res/MultiControlApp.png",
+      "packageId": "com.samsung.tv.MultiControlApp",
+      "version": "1.3.126"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-yttv",
+      "name": "YoutubeTV",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.coba.adagent",
+      "name": "coba-adagent",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.adagent",
+      "version": "26.1.6225"
+    },
+    {
+      "id": "org.tizen.RunningAppsService",
+      "name": "RunningAppsService",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.RunningAppsService",
+      "version": "1.0.2"
+    },
+    {
+      "id": "org.tizen.RunningApps",
+      "name": "RunningApps",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.RunningApps",
+      "version": "1.0.2"
+    },
+    {
+      "id": "com.samsung.tv.ai-discovery-service",
+      "name": "ai-discovery-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ai-discovery-service",
+      "version": "0.2.73"
+    },
+    {
+      "id": "csapi-tv-multimedia-aifw-api",
+      "name": "csapi-tv-multimedia-aifw-api",
+      "show": true,
+      "iconPath": "",
+      "packageId": "csapi-tv-multimedia-aifw-api",
+      "version": "0.0.4"
+    },
+    {
+      "id": "com.samsung.tv.antenna-selection",
+      "name": "Antenna Selection",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.antenna-selection/shared/res/com.samsung.tv.antenna-selection.png",
+      "packageId": "com.samsung.tv.antenna-selection",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tizen.samsung-pass-agent",
+      "name": "samsung-pass",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.samsung-pass-agent/shared/res/samsung-pass.png",
+      "packageId": "com.samsung.tizen.samsung-pass-agent",
+      "version": "4.0.5"
+    },
+    {
+      "id": "com.samsung.tv.subtitle-recog-dbmgr",
+      "name": "subtitle-recog-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.subtitle-recog-dbmgr",
+      "version": "25.7.22"
+    },
+    {
+      "id": "org.tizen.registertv-ux",
+      "name": "registertv-ux",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.registertv-ux",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.cloning",
+      "name": "cloning",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.cloning/shared/res/org.tizen.cloning.png",
+      "packageId": "org.tizen.cloning",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.visualcontroller",
+      "name": "VisualController",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.visualcontroller/shared/res/images.png",
+      "packageId": "com.samsung.tv.visualcontroller",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.acr",
+      "name": "ACRServiceApp",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.acr-service-app",
+      "version": "25.1.17"
+    },
+    {
+      "id": "com.samsung.tv.ambient-support",
+      "name": "AmbientSupport",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.ambient-support/shared/res/AmbientSupport.png",
+      "packageId": "com.samsung.tv.ambient-support",
+      "version": "1.0.1"
+    },
+    {
+      "id": "org.tizen.homesetting",
+      "name": "HomeSetting",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.homesetting",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.ep.coba.hotel",
+      "name": "Hotel",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.ep.coba.hotel",
+      "version": "4.0.1"
+    },
+    {
+      "id": "com.samsung.tv.coba.mviotcamera",
+      "name": "CoBA MultiView IotCamera",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.mviotcamera",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.screen-analysis-dbmgr",
+      "name": "screen-analysis-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.screen-analysis-dbmgr",
+      "version": "25.03.13"
+    },
+    {
+      "id": "com.samsung.tizen.samsung-cloud",
+      "name": "samsungcloud",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.samsung-cloud/shared/res/samsungcloud.png",
+      "packageId": "com.samsung.tizen.samsung-cloud",
+      "version": "5.0.9"
+    },
+    {
+      "id": "com.samsung.tv.quicklaunch",
+      "name": "QuickLaunch",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.quicklaunch/shared/res/QuickLaunch.png",
+      "packageId": "com.samsung.tv.quicklaunch",
+      "version": "3.7.018"
+    },
+    {
+      "id": "com.samsung.tv.preview-updater",
+      "name": "IotPreviewd",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.preview-updater/shared/res/IoTPreviewManager.png",
+      "packageId": "com.samsung.tv.preview-updater",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.ep-tbmapp-launcher",
+      "name": "ep-tbmapp-launcher",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.ep-tbmapp-launcher/shared/res/com.samsung.ep-tbmapp-launcher.png",
+      "packageId": "com.samsung.ep-tbmapp-launcher",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.tts-download-ui",
+      "name": "neural TTS engine",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tts-engine-neural",
+      "version": "25.25.10311"
+    },
+    {
+      "id": "org.tizen.emanual-app",
+      "name": "emanual-app",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.emanual-app/shared/res/org.tizen.emanual-app.png",
+      "packageId": "org.tizen.emanual-app",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.CSAccountPIN",
+      "name": "CSAccountPIN",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.CSAccount/shared/res/images.png",
+      "packageId": "com.samsung.tv.CSAccount",
+      "version": "125.26.05281"
+    },
+    {
+      "id": "com.samsung.tv.utterance-recommender-core",
+      "name": "utterance-recommender-core",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.utterance-recommender-service",
+      "version": "1.4.2225"
+    },
+    {
+      "id": "com.samsung.tv.MultiControl-Service",
+      "name": "MultiControlService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.MultiControl-Service/shared/res/MultiControlService.png",
+      "packageId": "com.samsung.tv.MultiControl-Service",
+      "version": "1.3.9"
+    },
+    {
+      "id": "unified-drm-atsc-RoseM",
+      "name": "unified-drm-atsc-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-atsc-RoseM",
+      "version": "25.02.17090"
+    },
+    {
+      "id": "com.samsung.tv.autoswitch-app",
+      "name": "autoswitch-app",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.autoswitch-app/shared/res/autoswitch-app.png",
+      "packageId": "com.samsung.tv.autoswitch-app",
+      "version": "2.3.90"
+    },
+    {
+      "id": "com.samsung.tv.autosetup-channel-list",
+      "name": "TV App autosetup-channel-list",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.autosetup-channel-list/shared/res/com.samsung.tv.autosetup-channel-list.png",
+      "packageId": "com.samsung.tv.autosetup-channel-list",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.SMSourceAPP",
+      "name": "SMSourceAPP",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.SMSourceAPP/shared/res/org.tizen.SMSourceAPP.png",
+      "packageId": "org.tizen.SMSourceAPP",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.usb-launcher-tv",
+      "name": "usb-launcher-tv",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.usb-launcher-tv/shared/res/org.tizen.usb-launcher-tv.png",
+      "packageId": "org.tizen.usb-launcher-tv",
+      "version": "24.04.01"
+    },
+    {
+      "id": "org.tizen.voice-app",
+      "name": "voice application",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.voice-app/shared/res/voice-app-tpk.png",
+      "packageId": "org.tizen.voice-app",
+      "version": "25.26.07240"
+    },
+    {
+      "id": "com.samsung.tv.coba.viewplugin.storagepreview",
+      "name": "StorageShare-ViewPlugin",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.viewplugin.storagepreview",
+      "version": "1.0.9"
+    },
+    {
+      "id": "org.tizen.AgingApp",
+      "name": "AgingApp",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.AgingApp/shared/res/org.tizen.AgingApp.png",
+      "packageId": "org.tizen.AgingApp",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-9224",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.coba.edenview",
+      "name": "CoBA EdenView",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.edenview",
+      "version": "3.5.26220"
+    },
+    {
+      "id": "com.samsung.tv.adagent-service",
+      "name": "adagent-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.pisa-service/shared/res/adagent-service.png",
+      "packageId": "com.samsung.tv.pisa-service",
+      "version": "31.10.2825"
+    },
+    {
+      "id": "com.samsung.tv.farfieldvoice",
+      "name": "com.samsung.tv.farfieldvoice",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.farfieldvoice/shared/res/farfield-voice-service.png",
+      "packageId": "com.samsung.tv.farfieldvoice",
+      "version": "26.25.01050"
+    },
+    {
+      "id": "com.samsung.tv.food",
+      "name": "Samsung Food",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.food/shared/res/FoodServiceApp.png",
+      "packageId": "com.samsung.tv.food",
+      "version": "1.0.55"
+    },
+    {
+      "id": "com.samsung.tv.coba.mobilebff",
+      "name": "CoBA Sample App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.mobilebff",
+      "version": "1.0.0"
+    },
+    {
+      "id": "dmr_service_app",
+      "name": "dmr_service_app",
+      "show": false,
+      "iconPath": "",
+      "packageId": "dmr_service_app",
+      "version": "1.0.7"
+    },
+    {
+      "id": "org.tizen.factory-analysis-viewer",
+      "name": "factory-analysis-viewer",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.factory-analysis-viewer",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.AVControl",
+      "name": "AVControl",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.AVControl/shared/res/org.tizen.AVControl.png",
+      "packageId": "org.tizen.AVControl",
+      "version": "0.2.0"
+    },
+    {
+      "id": "com.samsung.tv.aispeaker-oobe-app",
+      "name": "SoundbarOOBEApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.aispeaker-oobe-app/shared/res/images.png",
+      "packageId": "com.samsung.tv.aispeaker-oobe-app",
+      "version": "1.0.6325"
+    },
+    {
+      "id": "com.samsung.tv.ambientinfo-resources",
+      "name": "ambientinfo-resources",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ambientinfo-resources",
+      "version": "1.0.12"
+    },
+    {
+      "id": "com.samsung.tv.content-tiles-provider",
+      "name": "content-tiles-provider",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.contentservicemanager",
+      "version": "1.0.8"
+    },
+    {
+      "id": "com.samsung.tv.aov-service",
+      "name": "aov-service",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.aov-service/shared/res/aov-service.png",
+      "packageId": "com.samsung.tv.aov-service",
+      "version": "1.23.12110"
+    },
+    {
+      "id": "com.samsung.tv.ContentsBrowserDetail",
+      "name": "Universal Guide Detail",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ContentsBrowserDetail/shared/res/ContentsBrowserDetail.png",
+      "packageId": "com.samsung.tv.ContentsBrowserDetail",
+      "version": "5.26.08241"
+    },
+    {
+      "id": "com.samsung.tv.coba.samsungaccount",
+      "name": "CoBA SamsungAccount App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.samsungaccount",
+      "version": "125.26.08241"
+    },
+    {
+      "id": "com.samsung.tv.coba.art",
+      "name": "AmbientComponent",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.art",
+      "version": "3.51.26"
+    },
+    {
+      "id": "org.tizen.tv.swu",
+      "name": "Software Update",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.swu-ui",
+      "version": "17.019.0"
+    },
+    {
+      "id": "com.samsung.tv.pisa-service",
+      "name": "pisa-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.pisa-service/shared/res/pisa-service.png",
+      "packageId": "com.samsung.tv.pisa-service",
+      "version": "31.10.2825"
+    },
+    {
+      "id": "org.tizen.easysetup-UI",
+      "name": "org.tizen.easysetup-UI",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.easysetup-UI/shared/res/org.tizen.easysetup-UI.png",
+      "packageId": "org.tizen.easysetup-UI",
+      "version": "18.11.07.1"
+    },
+    {
+      "id": "com.samsung.tv.ambient-sound",
+      "name": "com.samsung.tv.ambient-sound",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ambient-sound/shared/res/ambient-sound-service.png",
+      "packageId": "com.samsung.tv.ambient-sound",
+      "version": "1.25.17"
+    },
+    {
+      "id": "com.samsung.tv.termsclient",
+      "name": "termsclient",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.termsclient/shared/res/termsclient.png",
+      "packageId": "com.samsung.tv.termsclient",
+      "version": "1.1.2925"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.networksettings.res",
+      "name": "Resourcenetworksettings",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.networksettings.res",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.remoteless",
+      "name": "remoteless",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.remoteless/shared/res/remoteless.png",
+      "packageId": "com.samsung.tv.remoteless",
+      "version": "1.30.90"
+    },
+    {
+      "id": "com.samsung.tv.health-mde-service",
+      "name": "health-mde-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.health-mde-service/shared/res/health-mde-service.png",
+      "packageId": "com.samsung.tv.health-mde-service",
+      "version": "1.25.10"
+    },
+    {
+      "id": "com.samsung.tv.rotation-accessory-pairing",
+      "name": "com.samsung.tv.rotation-accessory-pairing",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.rotation-accessory-pairing/shared/res/com.samsung.tv.rotation-accessory-pairing.png",
+      "packageId": "com.samsung.tv.rotation-accessory-pairing",
+      "version": "1.7.90"
+    },
+    {
+      "id": "org.tizen.NetworkSetting-Tizen",
+      "name": "NetworkSetting-Tizen",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.NetworkSetting-Tizen",
+      "version": "0.2.9"
+    },
+    {
+      "id": "com.samsung.tv.wakeup-engine-alexa",
+      "name": "com.samsung.tv.wakeup-engine-alexa",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.wakeup-engine-alexa/shared/res/wakeup-engine-alexa.png",
+      "packageId": "com.samsung.tv.wakeup-engine-alexa",
+      "version": "24.25.12121"
+    },
+    {
+      "id": "org.tizen.rm-survey",
+      "name": " RM survey popup ",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-management",
+      "version": "0.6"
+    },
+    {
+      "id": "com.samsung.tv.buds-easy-connector",
+      "name": "buds-easy-connector",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.buds-easy-connector/shared/res/buds-easy-connector.png",
+      "packageId": "com.samsung.tv.buds-easy-connector",
+      "version": "2.11.100"
+    },
+    {
+      "id": "com.samsung.tv.ST-LifePlus",
+      "name": "com.samsung.tv.stpreview",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.stpreview",
+      "version": "2.26.08261"
+    },
+    {
+      "id": "com.samsung.tv.spotlight-ss",
+      "name": "com.samsung.tv.spotlight-ss",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.spotlight-ss/shared/res/1920x1080.png",
+      "packageId": "com.samsung.tv.spotlight-ss",
+      "version": "1.0.11"
+    },
+    {
+      "id": "comss",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "comss",
+      "version": "0.0.4"
+    },
+    {
+      "id": "p2p-asm-UI",
+      "name": "p2p-asm-UI",
+      "show": true,
+      "iconPath": "",
+      "packageId": "p2p-asm-UI",
+      "version": "25.08.08.0"
+    },
+    {
+      "id": "com.samsung.tv.tap-service-agent-ui",
+      "name": "com.samsung.tv.tap-service-agent",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.tap-service-agent/shared/res/com.samsung.tv.tap-service-agent.png",
+      "packageId": "com.samsung.tv.tap-service-agent",
+      "version": "3.0.10"
+    },
+    {
+      "id": "com.samsung.tv.musicwidget",
+      "name": "MusicWidget.Tizen",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.musicwidget/shared/res/shared/res/music_initial_state.png",
+      "packageId": "com.samsung.tv.musicwidget",
+      "version": "1.0.38"
+    },
+    {
+      "id": "com.samsung.tv.CinemaGraphApp",
+      "name": "CinemaGraphApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.CinemaGraphApp/shared/res/CinemaGraphApp.png",
+      "packageId": "com.samsung.tv.CinemaGraphApp",
+      "version": "1.0.36"
+    },
+    {
+      "id": "com.samsung.tv.quickshare-service",
+      "name": "QuickShare-Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.quickshare-service/shared/res/qs-service.png",
+      "packageId": "com.samsung.tv.quickshare-service",
+      "version": "1.0.82"
+    },
+    {
+      "id": "com.samsung.mtm-banner",
+      "name": "maintenance-mode",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.maintenance-mode",
+      "version": "0.1.0"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-plugin",
+      "name": "plugin-launcher-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.smartthings-plugin/shared/res/plugin-launcher-service.png",
+      "packageId": "com.samsung.tizen.smartthings-plugin",
+      "version": "6.0.9"
+    },
+    {
+      "id": "samsunghealth-service-tv",
+      "name": "SamsungHealth-Daemon",
+      "show": false,
+      "iconPath": "",
+      "packageId": "samsunghealth-service-tv",
+      "version": "5.25.02061"
+    },
+    {
+      "id": "org.tizen.heremaps-uc",
+      "name": "HereMaps UC",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.heremaps-uc",
+      "version": "1.1.1"
+    },
+    {
+      "id": "org.tizen.stt-client",
+      "name": "stt-client",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.voice-client/shared/res/stt-client.png",
+      "packageId": "org.tizen.voice-client",
+      "version": "26.25.08141"
+    },
+    {
+      "id": "com.samsung.tv.hdmi-troubleshooting",
+      "name": "hdmi-troubleshooting",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.hdmi-troubleshooting",
+      "version": "0.4"
+    },
+    {
+      "id": "2025ePop01.SmartTV",
+      "name": "2025.SmartTV.Rose",
+      "show": true,
+      "iconPath": "/opt/usr/apps/2025ePop01/shared/res/2025ePop01.SmartTV.png",
+      "packageId": "2025ePop01",
+      "version": "1.9.0"
+    },
+    {
+      "id": "com.samsung.tv.alexa-fullscreen-app",
+      "name": "alexa-fullscreen-app",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.alexa-client/shared/res/alexa_icon.png",
+      "packageId": "com.samsung.tv.alexa-client",
+      "version": "25.026.06160"
+    },
+    {
+      "id": "com.samsung.tv.mycontents",
+      "name": "MyContents",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.mycontents/shared/res/MyContents.png",
+      "packageId": "com.samsung.tv.mycontents",
+      "version": "5.26.08050"
+    },
+    {
+      "id": "com.samsung.tv.ghdaemon",
+      "name": "GHDaemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ghdaemon/shared/res/GHDaemon.png",
+      "packageId": "com.samsung.tv.ghdaemon",
+      "version": "6.25.10161"
+    },
+    {
+      "id": "com.samsung.tv.ghservice",
+      "name": "GHService",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ghservice",
+      "version": "6.25.10161"
+    },
+    {
+      "id": "com.samsung.tv.wizard.AmbientInfo",
+      "name": "Wizard AITech",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wizard.AmbientInfo",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.voiceassistant-music",
+      "name": "voiceassistant-music",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.voiceassistant-music/shared/res/voiceassistant-music.png",
+      "packageId": "com.samsung.tv.voiceassistant-music",
+      "version": "8.0.65"
+    },
+    {
+      "id": "com.samsung.tv.tlog-guide",
+      "name": "TlogGuide",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.tlog-guide",
+      "version": "1.1.12"
+    },
+    {
+      "id": "org.tizen.primevideo",
+      "name": "Prime Video",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.primevideo/shared/res/ignition.png",
+      "packageId": "org.tizen.primevideo",
+      "version": "5.3.22"
+    },
+    {
+      "id": "org.tizen.btappui",
+      "name": "btappui",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.btappui/shared/res/org.tizen.btappui-Tizen.png",
+      "packageId": "org.tizen.btappui",
+      "version": "25.07.07"
+    },
+    {
+      "id": "com.samsung.tv.home.sidebar",
+      "name": "HomeSidebar",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.home.sidebar",
+      "version": "3.5.26050"
+    },
+    {
+      "id": "capi-bnr-tv",
+      "name": "bnr-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "capi-bnr-tv",
+      "version": "2.8"
+    },
+    {
+      "id": "com.samsung.tv.lightweight-node-service",
+      "name": "Lightweight Node.js Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.lightweight-node-service/shared/res/service.png",
+      "packageId": "com.samsung.tv.lightweight-node-service",
+      "version": "1.1.7125"
+    },
+    {
+      "id": "com.samsung.tv.coba.epg",
+      "name": "CoBA EPG App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.epg",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.buds360-app-engine",
+      "name": "buds360-app-engine",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.buds360-app-engine",
+      "version": "1.0.13"
+    },
+    {
+      "id": "com.samsung.tv.shortcut",
+      "name": "Shortcut",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.shortcut/shared/res/Shortcut.png",
+      "packageId": "com.samsung.tv.shortcut",
+      "version": "1.0.15"
+    },
+    {
+      "id": "com.samsung.tv.aoc-enabler",
+      "name": "aoc-enabler",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.aoc-enabler",
+      "version": "2.0"
+    },
+    {
+      "id": "com.samsung.tv.preview-downloader",
+      "name": "com.samsung.tv.preview-downloader",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.preview-downloader/shared/res/LiveRecommendDownloader.png",
+      "packageId": "com.samsung.tv.preview-downloader",
+      "version": "1.0.5"
+    },
+    {
+      "id": "unified-drm-playready-RoseM",
+      "name": "unified-drm-playready-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-playready-RoseM",
+      "version": "26.02.19090"
+    },
+    {
+      "id": "org.tizen.screen-reader-ui",
+      "name": "screen-reader-ui",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.screen-reader",
+      "version": "0.1.0"
+    },
+    {
+      "id": "org.tizen.registertv",
+      "name": "registertv",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.registertv",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.rscm-screensaver",
+      "name": "RSCM ScreenSaver",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-shop-care-hub",
+      "version": "0.3.18"
+    },
+    {
+      "id": "com.samsung.tv.hybrid-aot-manager",
+      "name": "HybridAOTManager",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.hybrid-aot-manager/shared/res/HybridAOTManager.png",
+      "packageId": "com.samsung.tv.hybrid-aot-manager",
+      "version": "2.1.1"
+    },
+    {
+      "id": "com.samsung.tv.wizard.art",
+      "name": "Wizard Art",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wizard.art",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.MenuEasySetup",
+      "name": "org.tizen.MenuEasySetup",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.MenuEasySetup/shared/res/org.tizen.easysetup-UI.png",
+      "packageId": "org.tizen.MenuEasySetup",
+      "version": "18.11.07.1"
+    },
+    {
+      "id": "unified-drm-KnoxVault-RoseM",
+      "name": "unified-drm-KnoxVault-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-KnoxVault-RoseM",
+      "version": "25.03.19090"
+    },
+    {
+      "id": "com.samsung.tv.CSSP",
+      "name": "CSSP",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.CSSP",
+      "version": "125.26.05211"
+    },
+    {
+      "id": "com.samsung.tv.bixby-promotion",
+      "name": "Bixby",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bixby-promotion/shared/res/image.png",
+      "packageId": "com.samsung.tv.bixby-promotion",
+      "version": "25.24.10160"
+    },
+    {
+      "id": "org.tizen.isf-kbd-mode-changer",
+      "name": "isf-kbd-mode-changer",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.isf-kbd-mode-changer",
+      "version": "0.0.1"
+    },
+    {
+      "id": "org.tizen.was-reset",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.was-reset",
+      "version": "0.0.3"
+    },
+    {
+      "id": "com.samsung.tv.STVirtualHomeApp",
+      "name": "VirtualHomeApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.SmartThingsApp/shared/res/VirtualHomeApp.png",
+      "packageId": "com.samsung.tv.SmartThingsApp",
+      "version": "10.2.47"
+    },
+    {
+      "id": "org.tizen.app-selector",
+      "name": "app-selector-tv",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.app-selector",
+      "version": "1.0.2"
+    },
+    {
+      "id": "com.samsung.tv.soccermodeuiapp",
+      "name": "FluxApplication",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.soccermodeuiapp/shared/res/FluxApplication.png",
+      "packageId": "com.samsung.tv.soccermodeuiapp",
+      "version": "1.0.11"
+    },
+    {
+      "id": "com.samsung.tv.iacr",
+      "name": "iacr",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iacr/shared/res/iacr.png",
+      "packageId": "com.samsung.tv.iacr",
+      "version": "1.0.2"
+    },
+    {
+      "id": "com.samsung.tv.searchall",
+      "name": "com.samsung.tv.searchall",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.searchall/shared/res/com.samsung.tv.searchall",
+      "packageId": "com.samsung.tv.searchall",
+      "version": "8.26.07291"
+    },
+    {
+      "id": "com.samsung.tv.ai-interpreter-service",
+      "name": "AIInterpreterService",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ai-interpreter-service",
+      "version": "1.3.14"
+    },
+    {
+      "id": "unified-drm-hdcp-RoseM",
+      "name": "unified-drm-hdcp-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-hdcp-RoseM",
+      "version": "25.05.14090"
+    },
+    {
+      "id": "com.samsung.tv.coba.privacychoice",
+      "name": "PrivacyChoice",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.privacy_app",
+      "version": "1.1.6025"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-7507",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.wizard.AITech",
+      "name": "Wizard AITech",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wizard.AITech",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.aov-dashboard",
+      "name": "aov-dashboard",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.aov-dashboard",
+      "version": "1.24.443"
+    },
+    {
+      "id": "com.samsung.tizen.samsung-service-manager",
+      "name": "samsung-service-manager",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.samsung-service-manager/shared/res/samsung-service-manager.png",
+      "packageId": "com.samsung.tizen.samsung-service-manager",
+      "version": "5.0.20"
+    },
+    {
+      "id": "com.samsung.tv.home.game",
+      "name": "HomeGame",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.home.game/shared/res/Business.png",
+      "packageId": "com.samsung.tv.home.game",
+      "version": "3.5.26050"
+    },
+    {
+      "id": "com.samsung.tv.ai-discovery-sceneanalyzer",
+      "name": "ai-discovery-sceneanalyzer",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ai-discovery-sceneanalyzer",
+      "version": "0.5.31"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-camera",
+      "name": "SmartThingsCamera",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsCamera.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "com.lighting.HueSyncService",
+      "name": "Hue Sync service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/2hy8Y93qcx/shared/res/HueSyncService.png",
+      "packageId": "2hy8Y93qcx",
+      "version": "1.11.71"
+    },
+    {
+      "id": "com.samsung.tv.bt-info-sync",
+      "name": "com.samsung.tv.bt-info-sync",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bt-info-sync/shared/res/com.samsung.tv.bt-info-sync.png",
+      "packageId": "com.samsung.tv.bt-info-sync",
+      "version": "1.18.90"
+    },
+    {
+      "id": "unified-drm-atsc3us-cdm-RoseM",
+      "name": "unified-drm-atsc3us-cdm-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-atsc3us-cdm-RoseM",
+      "version": "24.12.31090"
+    },
+    {
+      "id": "com.samsung.tv.buds-scanner",
+      "name": "buds-scanner",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.buds-scanner/shared/res/buds-scanner.png",
+      "packageId": "com.samsung.tv.buds-scanner",
+      "version": "2.9.90"
+    },
+    {
+      "id": "org.tizen.rm-network-status",
+      "name": " Network status widget ",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-management",
+      "version": "0.6"
+    },
+    {
+      "id": "com.samsung.tv.coba.msview",
+      "name": "Presentation",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.msview",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.sboard-app",
+      "name": "Samsung Keyboard",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.sboard-app",
+      "version": "9.0.2"
+    },
+    {
+      "id": "ep-hotel-protocol",
+      "name": "ep-hotel-protocol",
+      "show": true,
+      "iconPath": "",
+      "packageId": "ep-hotel-protocol",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.aria-engine",
+      "name": "com.samsung.tv.aria-engine",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.aria-engine",
+      "version": "1.0.27"
+    },
+    {
+      "id": "com.samsung.tv.coba.pconscreen",
+      "name": "Workspace",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.coba.pconscreen/shared/res/PConScreen.png",
+      "packageId": "com.samsung.tv.coba.pconscreen",
+      "version": "1.90.00027"
+    },
+    {
+      "id": "com.samsung.tv.knox-browser",
+      "name": "Workspace Browser",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.knox-browser/shared/res/com.samsung.tv.knox-browser.png",
+      "packageId": "com.samsung.tv.knox-browser",
+      "version": "8.20.105"
+    },
+    {
+      "id": "org.tizen.ug-load",
+      "name": "ug-load",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ug-load/shared/res/org.tizen.ug-load.png",
+      "packageId": "org.tizen.ug-load",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.ep-hotel-security",
+      "name": "ep-hotel-security",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-security/shared/res/org.tizen.ep-hotel-security.png",
+      "packageId": "org.tizen.ep-hotel-security",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.visionairow",
+      "name": "VisionAIRow",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.visionairow",
+      "version": "25.1.10"
+    },
+    {
+      "id": "com.samsung.tv.music-flex",
+      "name": "Music Flex",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.music-flex/shared/res/1200.png",
+      "packageId": "com.samsung.tv.music-flex",
+      "version": "0.6.1"
+    },
+    {
+      "id": "org.tizen.picture-test",
+      "name": "picture-test",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.picture-test",
+      "version": "0.3"
+    },
+    {
+      "id": "com.samsung.tv.ambientbg-tranquilnature",
+      "name": "ambientbg-tranquilnature",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ambientbg-tranquilnature",
+      "version": "1.0.31"
+    },
+    {
+      "id": "com.samsung.video-test",
+      "name": "video-test",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.video-test",
+      "version": "0.3"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting",
+      "name": "Setting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting",
+      "version": "1.1.11"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-9878",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.accf-service",
+      "name": "accf-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.accf-service",
+      "version": "1.0.1"
+    },
+    {
+      "id": "org.tizen.smart_security",
+      "name": "smart_security",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.smart_security",
+      "version": "5.0.7"
+    },
+    {
+      "id": "com.samsung.tv.gsl-dbmgr",
+      "name": "gsl-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.gsl-dbmgr",
+      "version": "1.2.4"
+    },
+    {
+      "id": "adplatform.ADPlayer",
+      "name": "Ad Player",
+      "show": false,
+      "iconPath": "/opt/usr/apps/adplatform/shared/res/adplatform.ADPlayer.png",
+      "packageId": "adplatform",
+      "version": "0.11.1"
+    },
+    {
+      "id": "com.samsung.tv.csft-daemon",
+      "name": "csft-daemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.csft-service/shared/res/csft-daemon.png",
+      "packageId": "com.samsung.tv.csft-service",
+      "version": "125.25.04171"
+    },
+    {
+      "id": "com.samsung.tv.iot-service-notification-v2",
+      "name": "IoT Service Notification V2",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iot-service-notification-v2/shared/res/images.png",
+      "packageId": "com.samsung.tv.iot-service-notification-v2",
+      "version": "125.26.09112"
+    },
+    {
+      "id": "com.samsung.tv.channel-manager",
+      "name": "ChannelManager",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.channel-manager/shared/res/images.png",
+      "packageId": "com.samsung.tv.channel-manager",
+      "version": "1.0.2"
+    },
+    {
+      "id": "org.tizen.rs-network-status",
+      "name": " Network status widget ",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.request-support",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.bmp",
+      "name": "BMP",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bmp/shared/res/com.samsung.tv.bmp.png",
+      "packageId": "com.samsung.tv.bmp",
+      "version": "5.0.29"
+    },
+    {
+      "id": "com.samsung.tv.coba.source.StorageShare",
+      "name": "StorageShare-Coba",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.source.StorageShare",
+      "version": "1.0.8"
+    },
+    {
+      "id": "com.samsung.tv.qse-daemon",
+      "name": "qse-daemon",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.qse-daemon",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-1566",
+      "name": "YouTubeTestSuite",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.context-aware-agent-toast-view",
+      "name": "Context Aware Agent UI Viewer",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.context-aware-agent",
+      "version": "2.5.7"
+    },
+    {
+      "id": "com.samsung.tv.gsl-service",
+      "name": "gsl-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.gsl-service",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.intelligent-action-app",
+      "name": "Intelligent Action Application",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.intelligent-action-app/shared/res/IntellignetActionApp.png",
+      "packageId": "com.samsung.tv.intelligent-action-app",
+      "version": "25.26.03110"
+    },
+    {
+      "id": "org.tizen.factory",
+      "name": "factory",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.factory/shared/res/org.tizen.factory.png",
+      "packageId": "org.tizen.factory",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.ad-web-framework",
+      "name": "Ad Web Framework",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ad-web-framework/shared/res/ad-web-framework.png",
+      "packageId": "com.samsung.tv.ad-web-framework",
+      "version": "1.1.0324"
+    },
+    {
+      "id": "com.samsung.tv.notification-serviceapp",
+      "name": "NotificationServiceApp",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.notification-serviceapp/shared/res/NotificationServiceApp.png",
+      "packageId": "com.samsung.tv.notification-serviceapp",
+      "version": "1.0.15"
+    },
+    {
+      "id": "WSRedi0001.WorkspaceRedi",
+      "name": "Workspace",
+      "show": true,
+      "iconPath": "/opt/usr/apps/WSRedi0001/shared/res/WSRedi0001.WorkspaceRedi.png",
+      "packageId": "WSRedi0001",
+      "version": "1.1.6"
+    },
+    {
+      "id": "org.tizen.connection-guide-app",
+      "name": "ConnectionGuideApp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.connection-guide-app",
+      "version": "0.3.1"
+    },
+    {
+      "id": "org.tizen.sso",
+      "name": "sso",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.sso",
+      "version": "0.3.1"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-5494",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "org.tizen.tv.ci-app",
+      "name": "CI application",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.tv.ci-app",
+      "version": "4.01"
+    },
+    {
+      "id": "com.samsung.tv.qsymphony",
+      "name": "QSymphony",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.qsymphony",
+      "version": "1.0.81"
+    },
+    {
+      "id": "com.samsung.tv.bixby-context-client",
+      "name": "Bixby Context Client",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bixby-context-client/shared/res/bixby-context-client.png",
+      "packageId": "com.samsung.tv.bixby-context-client",
+      "version": "26.25.08040"
+    },
+    {
+      "id": "com.samsung.tv.notification-app",
+      "name": "NotificationApp",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.notification-app/shared/res/images.png",
+      "packageId": "com.samsung.tv.notification-app",
+      "version": "1.0.13"
+    },
+    {
+      "id": "com.samsung.tv.digitalbutler-app",
+      "name": "Digital Butler",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.digitalbutler-app/shared/res/icon.png",
+      "packageId": "com.samsung.tv.digitalbutler-app",
+      "version": "4.6.2"
+    },
+    {
+      "id": "com.samsung.tv.health-mde-setting",
+      "name": "HealthMdeSetting",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.health-mde-setting/shared/res/HealthMdeSetting.png",
+      "packageId": "com.samsung.tv.health-mde-setting",
+      "version": "1.25.14"
+    },
+    {
+      "id": "com.samsung.tv.widget.container",
+      "name": "WidgetContainer",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.widget.container/shared/res/WidgetContainer.png",
+      "packageId": "com.samsung.tv.widget.container",
+      "version": "1.1.0"
+    },
+    {
+      "id": "WykOS4t4F0.cmsWebApp",
+      "name": "cmsWebApp",
+      "show": false,
+      "iconPath": "/opt/usr/apps/WykOS4t4F0/shared/res/WykOS4t4F0.cmsWebApp.png",
+      "packageId": "WykOS4t4F0",
+      "version": "125.26.04291"
+    },
+    {
+      "id": "org.tizen.hdmicec",
+      "name": "HdmiCec",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.hdmicec",
+      "version": "0.13.4"
+    },
+    {
+      "id": "org.tizen.mbr-daemon",
+      "name": "mbr-daemon",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.mbr-daemon",
+      "version": "0.2.1"
+    },
+    {
+      "id": "org.tizen.volume-app",
+      "name": "volume-app",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.volume-app",
+      "version": "0.1.2"
+    },
+    {
+      "id": "com.samsung.tv.lifeplus",
+      "name": "LifePlus",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.lifeplus/shared/res/Life.png",
+      "packageId": "com.samsung.tv.lifeplus",
+      "version": "2.26.06251"
+    },
+    {
+      "id": "com.samsung.tv.contentservicemanager",
+      "name": "ContentServiceManager",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.contentservicemanager",
+      "version": "1.0.8"
+    },
+    {
+      "id": "com.samsung.tv.foodPreview",
+      "name": "FoodPreviewService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.food/shared/res/FoodPreviewService.png",
+      "packageId": "com.samsung.tv.food",
+      "version": "1.0.55"
+    },
+    {
+      "id": "org.tizen.tv.swu-voice-notification",
+      "name": "",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.swu-ui",
+      "version": "17.019.0"
+    },
+    {
+      "id": "com.samsung.hitcomp",
+      "name": "hitcomp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.hitcomp",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.health-mde-workout-tracker",
+      "name": "Workout Tracker",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.health-mde-workout-tracker/shared/res/HealthMdeWorkoutTracker.png",
+      "packageId": "com.samsung.tv.health-mde-workout-tracker",
+      "version": "1.25.26"
+    },
+    {
+      "id": "com.samsung.tv.pluginviewer-app",
+      "name": "PluginViewer App",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.pluginviewer-app/shared/res/com.samsung.tv.pluginviewer-app.png",
+      "packageId": "com.samsung.tv.pluginviewer-app",
+      "version": "2.0.49"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-8346",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "org.tizen.chromium-efl.wrt-service-launcher",
+      "name": "Tizen Web Service Launcher",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.chromium-efl",
+      "version": "1.1.120"
+    },
+    {
+      "id": "com.samsung.tv.reminder",
+      "name": "Reminder",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.reminder/shared/res/images.png",
+      "packageId": "com.samsung.tv.reminder",
+      "version": "1.24.12101"
+    },
+    {
+      "id": "org.tizen.ephotel-cloning",
+      "name": "hotelcloning",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ephotel-cloning/shared/res/org.tizen.ephotel-cloning.png",
+      "packageId": "org.tizen.ephotel-cloning",
+      "version": "0.8"
+    },
+    {
+      "id": "com.samsung.tv.kmx-setting-app",
+      "name": "kmx-setting-app",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.kmx-setting-app/shared/res/icon.png",
+      "packageId": "com.samsung.tv.kmx-setting-app",
+      "version": "3.10.11"
+    },
+    {
+      "id": "ZODRT12q2l.WebAccountExtension",
+      "name": "WebAccountExtension",
+      "show": false,
+      "iconPath": "/opt/usr/apps/ZODRT12q2l/shared/res/ZODRT12q2l.WebAccountExtension.png",
+      "packageId": "ZODRT12q2l",
+      "version": "125.26.03041"
+    },
+    {
+      "id": "com.samsung.tv.aria-dummy",
+      "name": "Apple TV",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.aria-video/shared/res/icon.png",
+      "packageId": "com.samsung.tv.aria-video",
+      "version": "16.2.0"
+    },
+    {
+      "id": "org.tizen.screen-reader",
+      "name": "screen-reader",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.screen-reader",
+      "version": "0.1.0"
+    },
+    {
+      "id": "com.samsung.tv.app-selector",
+      "name": "app-selector-tv",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.app-selector",
+      "version": "1.0.2"
+    },
+    {
+      "id": "mini-hdmicec-service",
+      "name": "mini HdmiCec Service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "mini-hdmicec-service",
+      "version": "0.38.3"
+    },
+    {
+      "id": "com.samsung.tv.nvision-analysis-dbmgr",
+      "name": "nvision-analysis-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.nvision-analysis-dbmgr",
+      "version": "2.1.48"
+    },
+    {
+      "id": "com.samsung.tv.utterance-recommender-app",
+      "name": "utterance-recommender-app",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.utterance-recommender-service",
+      "version": "1.4.2225"
+    },
+    {
+      "id": "com.samsung.tv.easysetup-client",
+      "name": "EasySetup Client",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.easysetup-client/shared/res/EasySetupClient.png",
+      "packageId": "com.samsung.tv.easysetup-client",
+      "version": "10.2.5"
+    },
+    {
+      "id": "com.samsung.tv.coba.newhome",
+      "name": "CoBAHomeComp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.newhome",
+      "version": "3.5.26220"
+    },
+    {
+      "id": "30IKH0OX8U.tilesservice",
+      "name": "Aria Video BG Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/30IKH0OX8U/shared/res/30IKH0OX8U.tilesservice.png",
+      "packageId": "30IKH0OX8U",
+      "version": "16.2.0"
+    },
+    {
+      "id": "com.samsung.tv.context-aware-grab-control",
+      "name": "Context Aware Agent GrabControl",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.context-aware-agent",
+      "version": "2.5.7"
+    },
+    {
+      "id": "com.samsung.tv.home.art",
+      "name": "HomeArt",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.home.art",
+      "version": "3.5.26050"
+    },
+    {
+      "id": "rJeHak5zRg.ContinueWatchingService",
+      "name": "ContinueWatchingService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/rJeHak5zRg/shared/res/rJeHak5zRg.ContinueWatchingService.png",
+      "packageId": "rJeHak5zRg",
+      "version": "2.1.71"
+    },
+    {
+      "id": "com.samsung.ep-plateau-info",
+      "name": "com.samsung.ep-plateau-info",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.ep-plateau-info",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.gamepadguide",
+      "name": "GamePadGuide",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.gamepadguide/shared/res/com.samsung.tv.gamepad-guide.png",
+      "packageId": "com.samsung.tv.gamepadguide",
+      "version": "2.25.10171"
+    },
+    {
+      "id": "com.samsung.tv.coba.mvmobile",
+      "name": "CoBA MultiView Mobile",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.mvmobile",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.xrfw-datamgr",
+      "name": "xrfw-datamgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.xrfw-datamgr",
+      "version": "5.7.25"
+    },
+    {
+      "id": "org.tizen.smarthub-connection-test",
+      "name": "Smarthub Connection Test",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.smarthub-connection-test",
+      "version": "0.2"
+    },
+    {
+      "id": "com.samsung.tv.store",
+      "name": "Apps",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.store/shared/res/home_i_icon_apps.png",
+      "packageId": "com.samsung.tv.store",
+      "version": "8.25.11171"
+    },
+    {
+      "id": "com.samsung.tizen.mcf-agent",
+      "name": "mcf-agent",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.mcf-agent/shared/res/mcf-agent.png",
+      "packageId": "com.samsung.tizen.mcf-agent",
+      "version": "4.0.147"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.QuickShare",
+      "name": "QuickShareSetting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.QuickShare",
+      "version": "1.0.1"
+    },
+    {
+      "id": "org.tizen.primevideo_companionapp",
+      "name": "",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.primevideo",
+      "version": "5.3.22"
+    },
+    {
+      "id": "com.samsung.tv.floating-menu",
+      "name": "FloatingMenu",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.floating-menu/shared/res/FloatingMenu.png",
+      "packageId": "com.samsung.tv.floating-menu",
+      "version": "1.0.9"
+    },
+    {
+      "id": "com.samsung.tv.wizard",
+      "name": "Wizard",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wizard",
+      "version": "1.0.6"
+    },
+    {
+      "id": "org.tizen.menu",
+      "name": "org.tizen.menu",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.menu/shared/res/images.png",
+      "packageId": "org.tizen.menu",
+      "version": "1.0.5"
+    },
+    {
+      "id": "org.tizen.bt-settings-external-controller",
+      "name": "bt-settings-external-controller",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.bt-settings-external-controller",
+      "version": "24.12.31"
+    },
+    {
+      "id": "com.samsung.tv.multiview-bluetooth-audio",
+      "name": "",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.multiview-bluetooth-audio",
+      "version": "25.05.08.00"
+    },
+    {
+      "id": "com.samsung.tv.dotnet-policy-checker",
+      "name": "DotnetPolicyChecker",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.dotnet-policy-checker/shared/res/DotnetPolicyChecker.png",
+      "packageId": "com.samsung.tv.dotnet-policy-checker",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.aisound-app",
+      "name": "aisound-app",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.aisound-app/shared/res/com.samsung.tv.aisound-app.png",
+      "packageId": "com.samsung.tv.aisound-app",
+      "version": "1.0"
+    },
+    {
+      "id": "ByJlgt0XeD.CastSettingsApp",
+      "name": "Google Cast Settings",
+      "show": false,
+      "iconPath": "/opt/usr/apps/ByJlgt0XeD/shared/res/ByJlgt0XeD.CastSettingsApp.png",
+      "packageId": "ByJlgt0XeD",
+      "version": "1.21.90"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-ytkids",
+      "name": "YoutubeKids",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.vif",
+      "name": "voice-interaction-framework",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.vif/shared/res/voice-interaction-framework.png",
+      "packageId": "com.samsung.tv.vif",
+      "version": "26.08.10252"
+    },
+    {
+      "id": "com.samsung.ep-plateau-agent",
+      "name": "com.samsung.ep-plateau-agent",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.ep-plateau-agent/shared/res/org.tizen.factory.png",
+      "packageId": "com.samsung.ep-plateau-agent",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.screen-analysis-dbmgr-nb",
+      "name": "screen-analysis-dbmgr-nb",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.screen-analysis-dbmgr-nb",
+      "version": "25.03.11"
+    },
+    {
+      "id": "com.samsung.tv.AICompanionUILauncher",
+      "name": "Vision AI Companion",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.AICompanionUILauncher/shared/res/AICompanionUILauncher.png",
+      "packageId": "com.samsung.tv.AICompanionUILauncher",
+      "version": "1.0.8"
+    },
+    {
+      "id": "org.tizen.wizard-loading",
+      "name": "wizard-loading",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.wizard",
+      "version": "1.1"
+    },
+    {
+      "id": "com.samsung.ep.hotel-quicksetting-editor",
+      "name": "QuickEditorApp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.ep.hotel-quicksetting-editor",
+      "version": "3.0.1"
+    },
+    {
+      "id": "org.tizen.UsbSyncDisplay.usdmanager",
+      "name": "USD Manager",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.UsbSyncDisplay",
+      "version": "0.0.1"
+    },
+    {
+      "id": "com.samsung.tv.ezcalapp",
+      "name": "ezcalapp",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.ezcalapp/shared/res/ezcalapp.png",
+      "packageId": "com.samsung.tv.ezcalapp",
+      "version": "1.4.3"
+    },
+    {
+      "id": "com.samsung.tv.speakerlocation-app",
+      "name": "speakerlocation-app",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.speakerlocation-app/shared/res/com.samsung.tv.speakerlocation-app.png",
+      "packageId": "com.samsung.tv.speakerlocation-app",
+      "version": "1.0"
+    },
+    {
+      "id": "com.samsung.tv.aria-video",
+      "name": "Apple TV",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.aria-video/shared/res/icon.png",
+      "packageId": "com.samsung.tv.aria-video",
+      "version": "16.2.0"
+    },
+    {
+      "id": "org.tizen.voice-onboarding",
+      "name": "voice-onboarding",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.voice-onboarding",
+      "version": "0.2"
+    },
+    {
+      "id": "com.samsung.tv.coba.remoteworkspace",
+      "name": "Remoteworkspace",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.remoteworkspace",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.bixbycapsuleviewer",
+      "name": "bixbycapsuleviewer",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.bixbycapsuleviewer/shared/res/bixbycapsuleviewer.png",
+      "packageId": "com.samsung.tv.bixbycapsuleviewer",
+      "version": "25.026.07160"
+    },
+    {
+      "id": "com.samsung.tv.contents-cognition-dbmgr",
+      "name": "contents-cognition-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.contents-cognition-dbmgr",
+      "version": "25.03.03"
+    },
+    {
+      "id": "com.samsung.tv.csfs",
+      "name": "csfs",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.csfs/shared/res/CSFS.png",
+      "packageId": "com.samsung.tv.csfs",
+      "version": "3.5.26220"
+    },
+    {
+      "id": "com.samsung.tv.kmx-restore",
+      "name": "KMX Recovery",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.kmx-restore",
+      "version": "1.0.62"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.networksettings",
+      "name": "Setting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.networksettings",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.rm-service-icon",
+      "name": " RM service icon ",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-management",
+      "version": "0.6"
+    },
+    {
+      "id": "org.tizen.graphiczoom",
+      "name": "",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.graphiczoom",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.vd-sc-client-service",
+      "name": "vd-sc-client-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.vd-sc-client-service",
+      "version": "10.2.17"
+    },
+    {
+      "id": "com.samsung.tizen.hrs-agent.storage",
+      "name": "hrs-agent",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.hrs-agent.storage/shared/res/hrs-agent.png",
+      "packageId": "com.samsung.tizen.hrs-agent.storage",
+      "version": "4.0.47"
+    },
+    {
+      "id": "org.tizen.registerav",
+      "name": "registerav",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.registerav",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.knox-browser-cookiex",
+      "name": "Workspace Browser cookie purge service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.knox-browser",
+      "version": "8.20.105"
+    },
+    {
+      "id": "com.samsung.tv.gamebar",
+      "name": "GameBar",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.gamebar/shared/res/com.samsung.tv.gamebar.png",
+      "packageId": "com.samsung.tv.gamebar",
+      "version": "5.0.0"
+    },
+    {
+      "id": "com.samsung.tv.slive-daemon",
+      "name": "SliveProviderDaemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.slive-daemon/shared/res/slive-provider-daemon.png",
+      "packageId": "com.samsung.tv.slive-daemon",
+      "version": "2.9.04422"
+    },
+    {
+      "id": "com.samsung.tv.canalysis-service",
+      "name": "canalysis-daemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.canalysis-service/shared/res/canalysis-daemon.png",
+      "packageId": "com.samsung.tv.canalysis-service",
+      "version": "25.0.62"
+    },
+    {
+      "id": "org.tizen.tts-download-service",
+      "name": "tts-download-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.tts-engine-neural/shared/res/tts-download-service.png",
+      "packageId": "org.tizen.tts-engine-neural",
+      "version": "25.25.10311"
+    },
+    {
+      "id": "unified-drm-tvp-RoseM",
+      "name": "unified-drm-tvp-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-tvp-RoseM",
+      "version": "25.05.09090"
+    },
+    {
+      "id": "com.samsung.tv.context-aware-agent",
+      "name": "ContextAwareAgent",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.context-aware-agent",
+      "version": "2.5.7"
+    },
+    {
+      "id": "com.samsung.tv.smartthings-partial-app",
+      "name": "SmartThingsPartialApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.SmartThingsApp/shared/res/SmartThingsPartialApp.png",
+      "packageId": "com.samsung.tv.SmartThingsApp",
+      "version": "10.2.47"
+    },
+    {
+      "id": "relumino-service",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "relumino-service",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.reminder",
+      "name": "",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.reminder",
+      "version": "0.2"
+    },
+    {
+      "id": "org.tizen.ep-hotel-alarm",
+      "name": "EP Hotel Alarm",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-alarm/shared/res/org.tizen.ep-hotel-alarm.png",
+      "packageId": "org.tizen.ep-hotel-alarm",
+      "version": "0.2"
+    },
+    {
+      "id": "org.tizen.ep-hotel-channel",
+      "name": "ep-hotel-channel",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-channel/shared/res/org.tizen.ep-hotel-channel.png",
+      "packageId": "org.tizen.ep-hotel-channel",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.SecurityCenter",
+      "name": "SecurityCenter",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.SecurityCenter/shared/res/SecurityCenter_298x298.png",
+      "packageId": "com.samsung.tv.SecurityCenter",
+      "version": "2.0.37"
+    },
+    {
+      "id": "com.samsung.tv.googlecast-service",
+      "name": "googlecast-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.googlecast-app/shared/res/googlecast-app.png",
+      "packageId": "com.samsung.tv.googlecast-app",
+      "version": "1.38.90"
+    },
+    {
+      "id": "org.tizen.dpm-syspopup",
+      "name": "dpm-syspopup",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.dpm-syspopup",
+      "version": "1.0.0"
+    },
+    {
+      "id": "mobilebff",
+      "name": "MobileBFF",
+      "show": false,
+      "iconPath": "",
+      "packageId": "mobilebff",
+      "version": "1.2.38"
+    },
+    {
+      "id": "org.tizen.tv.swu-standalone",
+      "name": "Software Update",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.swu-ui",
+      "version": "17.019.0"
+    },
+    {
+      "id": "com.samsung.tv.multiviewsetupapp",
+      "name": "MultiViewSetupApp",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.multiviewsetupapp/shared/res/images.png",
+      "packageId": "com.samsung.tv.multiviewsetupapp",
+      "version": "1.0.4"
+    },
+    {
+      "id": "com.samsung.tv.coba.mvcontents",
+      "name": "CoBA MultiView Contents",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.mvcontents",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.registerav-ux",
+      "name": "registerav-ux",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.registerav-ux",
+      "version": "1.0.0"
+    },
+    {
+      "id": "gsl-chrome-app",
+      "name": "gsl-chrome-app",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.gsl-service",
+      "version": "0.2.1"
+    },
+    {
+      "id": "GHI3a0zMSx.Service",
+      "name": "XboxGamePassService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/GHI3a0zMSx/shared/res/GHI3a0zMSx.Service.png",
+      "packageId": "GHI3a0zMSx",
+      "version": "4.70.698"
+    },
+    {
+      "id": "com.samsung.tv.coba.mvicon",
+      "name": "CoBA.MVIcon",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.mvicon",
+      "version": "1.0.0"
+    },
+    {
+      "id": "HEPsqFNie0.tvplusstandalone",
+      "name": "Samsung TV Plus",
+      "show": false,
+      "iconPath": "/opt/usr/apps/HEPsqFNie0/shared/res/HEPsqFNie0.tvplusstandalone.png",
+      "packageId": "HEPsqFNie0",
+      "version": "8.2.008"
+    },
+    {
+      "id": "org.tizen.chromium-efl.wrt-service",
+      "name": "Tizen Web Service Daemon",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.chromium-efl",
+      "version": "1.1.120"
+    },
+    {
+      "id": "com.samsung.tizen.knox-matrix",
+      "name": "knox-matrix",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tizen.knox-matrix",
+      "version": "6.0.24"
+    },
+    {
+      "id": "com.samsung.tv.adplayer",
+      "name": "AdPlayer",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.adplayer/shared/res/AdPlayer.png",
+      "packageId": "com.samsung.tv.adplayer",
+      "version": "2.2.7925"
+    },
+    {
+      "id": "com.samsung.tv.coba.homeversion",
+      "name": "HomeVersion",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.homeversion",
+      "version": "1.3.26220"
+    },
+    {
+      "id": "org.tizen.browser",
+      "name": "Internet",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.browser/shared/res/org.tizen.browser.png",
+      "packageId": "org.tizen.browser",
+      "version": "8.1.07220"
+    },
+    {
+      "id": "org.tizen.register-device-ux",
+      "name": "register-device-ux",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.register-device-ux",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-plugin-platform",
+      "name": "pluginplatform",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.smartthings-plugin/shared/res/pluginplatform.png",
+      "packageId": "com.samsung.tizen.smartthings-plugin",
+      "version": "6.0.9"
+    },
+    {
+      "id": "com.samsung.tv.iot-hub-control",
+      "name": "iot-hub-control",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.iot-hub-control",
+      "version": "1.90.186"
+    },
+    {
+      "id": "unified-drm-fps",
+      "name": "unified-drm-fps",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-fps",
+      "version": "3.20.090"
+    },
+    {
+      "id": "org.tizen.alert-syspopup",
+      "name": "volume",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.alert-syspopup/shared/res/org.tizen.alert-syspopup.png",
+      "packageId": "org.tizen.alert-syspopup",
+      "version": "0.2.3"
+    },
+    {
+      "id": "com.samsung.tv.account-extra-service",
+      "name": "account-extra-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.account-extra-service/shared/res/account-extra-service.png",
+      "packageId": "com.samsung.tv.account-extra-service",
+      "version": "125.25.04102"
+    },
+    {
+      "id": "GHI3a0zMSx.XboxGamePass",
+      "name": "Xbox",
+      "show": true,
+      "iconPath": "/opt/usr/apps/GHI3a0zMSx/shared/res/GHI3a0zMSx.XboxGamePass.png",
+      "packageId": "GHI3a0zMSx",
+      "version": "4.70.698"
+    },
+    {
+      "id": "org.tizen.aitech_daemon_service",
+      "name": "aitech_daemon_service",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.aitech_daemon_service/shared/res/aitech_daemon_service.png",
+      "packageId": "org.tizen.aitech_daemon_service",
+      "version": "3.0.0"
+    },
+    {
+      "id": "org.tizen.ep-hotel-popup-ui",
+      "name": "ephotel-remote",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-popup-ui/shared/res/org.tizen.ep-hotel-popup-ui.png",
+      "packageId": "org.tizen.ep-hotel-popup-ui",
+      "version": "1.0"
+    },
+    {
+      "id": "com.samsung.tv.home.media",
+      "name": "HomeMedia",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.home.media/shared/res/Business.png",
+      "packageId": "com.samsung.tv.home.media",
+      "version": "3.5.26050"
+    },
+    {
+      "id": "com.samsung.tv.sdm",
+      "name": "sdm",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.sdm/shared/res/SPDeviceManager.png",
+      "packageId": "com.samsung.tv.sdm",
+      "version": "0.0.1"
+    },
+    {
+      "id": "org.tizen.pvrrecorder",
+      "name": "pvrrecorder",
+      "show": true,
+      "iconPath": "/usr/share/icons/default/small/org.tizen.pvrrecorder.png",
+      "packageId": "org.tizen.pvrrecorder",
+      "version": "22.11.9.1"
+    },
+    {
+      "id": "com.samsung.tizen.st-espp-service",
+      "name": "espp-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tizen.smartthings-streaming",
+      "version": "6.0.2"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.screenratio",
+      "name": "Setting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.screenratio",
+      "version": "1.0.0"
+    },
+    {
+      "id": "signlanguage-service",
+      "name": "signlanguage-service",
+      "show": true,
+      "iconPath": "",
+      "packageId": "signlanguage-service",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.easysetup-mediator",
+      "name": "easysetup-mediator",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.easysetup-mediator/shared/res/easysetup-mediator.png",
+      "packageId": "com.samsung.tv.easysetup-mediator",
+      "version": "1.0.33"
+    },
+    {
+      "id": "com.samsung.tv.context-aware-server-requester",
+      "name": "Context Aware Serer Requester",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.context-aware-service",
+      "version": "2.5.031"
+    },
+    {
+      "id": "org.tizen.voice-client",
+      "name": "Voice Client",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.voice-client/shared/res/voice-client.png",
+      "packageId": "org.tizen.voice-client",
+      "version": "26.25.08141"
+    },
+    {
+      "id": "com.samsung.tv.wakeupless",
+      "name": "wakeupless",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.wakeupless/shared/res/wakeupless.png",
+      "packageId": "com.samsung.tv.wakeupless",
+      "version": "25.25.07020"
+    },
+    {
+      "id": "org.tizen.hbbtv",
+      "name": "hbbtv",
+      "show": true,
+      "iconPath": "/usr/apps/ug-hbbtv-efl/shared/res/org.tizen.factory.png",
+      "packageId": "ug-hbbtv-efl",
+      "version": "0.2.2"
+    },
+    {
+      "id": "com.samsung.tv.hotkey-service",
+      "name": "Hotkey Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.hotkey-service/shared/res/com.samsung.tv.hotkey_service.png",
+      "packageId": "com.samsung.tv.hotkey-service",
+      "version": "1.0.19"
+    },
+    {
+      "id": "com.samsung.tv.demo-player",
+      "name": "demo-player",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.demo-player/shared/res/demo-player.png",
+      "packageId": "com.samsung.tv.demo-player",
+      "version": "25.06.10"
+    },
+    {
+      "id": "com.samsung.tv.ReflectionEliminatorService",
+      "name": "ReflectionEliminatorService",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.ReflectionEliminatorService/shared/res/ReflectionEliminatorService.png",
+      "packageId": "com.samsung.tv.ReflectionEliminatorService",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.sso-menu",
+      "name": "ui-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.sso-menu",
+      "version": "0.0.1"
+    },
+    {
+      "id": "9Ur5IzDKqV.TizenYouTube",
+      "name": "YouTube",
+      "show": true,
+      "iconPath": "/opt/usr/apps/9Ur5IzDKqV/shared/res/9Ur5IzDKqV.TizenYouTube.png",
+      "packageId": "9Ur5IzDKqV",
+      "version": "2.1.527"
+    },
+    {
+      "id": "com.samsung.tv.waapp-contents-provider",
+      "name": "dtv-com.samsung.tv.waapp-contents-provider",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.waapp-contents-provider",
+      "version": "0.0.1"
+    },
+    {
+      "id": "com.samsung.tv.hbbtv-dynamic-profile-service",
+      "name": "HbbTV Dynamic Profile Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.hbbtv-dynamic-profile-service/shared/res/org.tizen.message.png",
+      "packageId": "com.samsung.tv.hbbtv-dynamic-profile-service",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.was-appsync",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.was-appsync",
+      "version": "0.0.3"
+    },
+    {
+      "id": "com.samsung.tv.pvod-api",
+      "name": "pvod-api",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.pvod-api",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.cms-serviceapp",
+      "name": "cms-serviceapp",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.cms-service/shared/res/cms-serviceapp.png",
+      "packageId": "com.samsung.tv.cms-service",
+      "version": "125.26.04162"
+    },
+    {
+      "id": "com.samsung.tv.coba.viewdb",
+      "name": "CoBA ViewDB",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.viewdb",
+      "version": "3.5.26220"
+    },
+    {
+      "id": "org.tizen.remote-management",
+      "name": "Remote Management",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-management",
+      "version": "0.6"
+    },
+    {
+      "id": "com.samsung.tv.gamehome",
+      "name": "GameHome",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.gamehome/shared/res/GameHomeApp.png",
+      "packageId": "com.samsung.tv.gamehome",
+      "version": "6.26.08191"
+    },
+    {
+      "id": "org.tizen.pisa-control-service",
+      "name": "pisa-control-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.pisa-service/shared/res/org.tizen.pisa-control-service.png",
+      "packageId": "com.samsung.tv.pisa-service",
+      "version": "31.10.2825"
+    },
+    {
+      "id": "com.samsung.tv.tap-service-agent",
+      "name": "com.samsung.tv.tap-service-agent",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.tap-service-agent/shared/res/com.samsung.tv.tap-service-agent.png",
+      "packageId": "com.samsung.tv.tap-service-agent",
+      "version": "3.0.10"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-familycare",
+      "name": "SmartThingsFamilyCare",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsEnergy.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "com.samsung.ep-plateau-agent-service",
+      "name": "com.samsung.ep-plateau-agent-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.ep-plateau-agent-service",
+      "version": "1.4.0125"
+    },
+    {
+      "id": "com.samsung.tv.maintenance-mode",
+      "name": "maintenance-mode",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.maintenance-mode",
+      "version": "0.1.0"
+    },
+    {
+      "id": "hdmicec-service",
+      "name": "HdmiCec Service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "hdmicec-service",
+      "version": "0.38.3"
+    },
+    {
+      "id": "org.tizen.btapp",
+      "name": "btapp",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.btapp/shared/res/org.tizen.btapp.png",
+      "packageId": "org.tizen.btapp",
+      "version": "25.07.16.0"
+    },
+    {
+      "id": "org.tizen.was-appupdate",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.was-appupdate",
+      "version": "0.0.2"
+    },
+    {
+      "id": "com.samsung.tv.gaminghub",
+      "name": "GamingHub",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.gaminghub/shared/res/com.samsung.tv.gaminghub.png",
+      "packageId": "com.samsung.tv.gaminghub",
+      "version": "6.25.10311"
+    },
+    {
+      "id": "org.tizen.multi-assistant-service",
+      "name": "Multi Assistant Service",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.multi-assistant-service/shared/res/org.tizen.multi-assistant-service.png",
+      "packageId": "org.tizen.multi-assistant-service",
+      "version": "0.3.41"
+    },
+    {
+      "id": "org.tizen.automation-viewer",
+      "name": "automation-viewer",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.automation-viewer",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.dseal",
+      "name": "Dseal",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.dseal/shared/res/dseal.png",
+      "packageId": "org.tizen.dseal",
+      "version": "1.2.2225"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-thing",
+      "name": "smartthings-thing",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tizen.smartthings-thing",
+      "version": "6.0.25"
+    },
+    {
+      "id": "com.samsung.tv.quicksetting",
+      "name": "virtual-remote",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.quicksetting/shared/res/virtual-remote.png",
+      "packageId": "com.samsung.tv.quicksetting",
+      "version": "1.0.5"
+    },
+    {
+      "id": "com.samsung.tv.SmartThingsApp",
+      "name": "SmartThings",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.SmartThingsApp/shared/res/icon.png",
+      "packageId": "com.samsung.tv.SmartThingsApp",
+      "version": "10.2.47"
+    },
+    {
+      "id": "com.samsung.tv.health-mde-service-view",
+      "name": "health-mde-service-view",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.health-mde-service",
+      "version": "1.25.10"
+    },
+    {
+      "id": "com.samsung.tv.user-presence-ui",
+      "name": "user presence ui",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.user-presence-ui/shared/res/com.samsung.tv.user-presence-ui-Tizen.png",
+      "packageId": "com.samsung.tv.user-presence-ui",
+      "version": "25.03.05.1"
+    },
+    {
+      "id": "com.samsung.tizen.samsung-account",
+      "name": "SamsungAccountService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.samsung-account/shared/res/SamsungAccountService.png",
+      "packageId": "com.samsung.tizen.samsung-account",
+      "version": "4.0.7"
+    },
+    {
+      "id": "com.samsung.tv.nfc-daemon",
+      "name": "nfc-monitor",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.nfc-daemon/shared/res/com.samsung.tv.nfc-daemon-Tizen.png",
+      "packageId": "com.samsung.tv.nfc-daemon",
+      "version": "23.10.12"
+    },
+    {
+      "id": "org.tizen.nagsam-app",
+      "name": "CI application",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.nagsam-app",
+      "version": "1.4"
+    },
+    {
+      "id": "test-oqc-tv-QR_code",
+      "name": "TSI QR Code",
+      "show": true,
+      "iconPath": "",
+      "packageId": "test-oqc-tv-QR_code",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.mycontent-video-player-tv",
+      "name": "MyContent Video Player",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.mycontent-video-player-tv",
+      "version": "24.10.28"
+    },
+    {
+      "id": "com.samsung.tv.remoteapp",
+      "name": "RemoteApp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.remoteapp",
+      "version": "5.4.2"
+    },
+    {
+      "id": "unified-drm-WidevineCdm-RoseM",
+      "name": "unified-drm-WidevineCdm-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-WidevineCdm-RoseM",
+      "version": "25.18.01090"
+    },
+    {
+      "id": "org.tizen.rdm-client",
+      "name": "rdm-client",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.rdm-client",
+      "version": "1.0.17"
+    },
+    {
+      "id": "com.samsung.tv.coba.usbcam",
+      "name": "UsbCam CoBA Component",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.usbcam",
+      "version": "1.0.3"
+    },
+    {
+      "id": "com.samsung.tv.tvPlusDeeplinker",
+      "name": "Samsung TV Plus",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.tvPlusDeeplinker/shared/res/com.samsung.tv.tvPlusDeeplinker.Tizen.TV.png",
+      "packageId": "com.samsung.tv.tvPlusDeeplinker",
+      "version": "1.0.06"
+    },
+    {
+      "id": "com.samsung.SelfDiagnosis",
+      "name": "Self Diagnosis",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.SelfDiagnosis/shared/res/SelfDiagnosis.png",
+      "packageId": "com.samsung.SelfDiagnosis",
+      "version": "2.0.39"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-hub",
+      "name": "SmartThingsHub",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tizen.smartthings-hub",
+      "version": "6.62.13"
+    },
+    {
+      "id": "com.samsung.tv.appinfoviewer",
+      "name": "AppInfoViewer",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.appinfoviewer/shared/res/AppInfoViewer.png",
+      "packageId": "com.samsung.tv.appinfoviewer",
+      "version": "3.0.7"
+    },
+    {
+      "id": "org.tizen.ep-hotel-factory",
+      "name": "ep-hotel-factory",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-factory/shared/res/org.tizen.ep-hotel-factory.png",
+      "packageId": "org.tizen.ep-hotel-factory",
+      "version": "0.2.3"
+    },
+    {
+      "id": "org.tizen.voice-app-service",
+      "name": "voice application",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.voice-app/shared/res/voice-app-tpk.png",
+      "packageId": "org.tizen.voice-app",
+      "version": "25.26.07240"
+    },
+    {
+      "id": "com.samsung.tv.csft-serviceapp",
+      "name": "csft-serviceapp",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.csft-service/shared/res/csft-serviceapp.png",
+      "packageId": "com.samsung.tv.csft-service",
+      "version": "125.25.04171"
+    },
+    {
+      "id": "org.tizen.mycontent-photo-player-tv",
+      "name": "MyContent Photo Player",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.mycontent-photo-player-tv",
+      "version": "24.04.01"
+    },
+    {
+      "id": "com.samsung.tv.nfc-monitor",
+      "name": "nfc-monitor",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.nfc-monitor/shared/res/com.samsung.tv.nfc-monitor-Tizen.png",
+      "packageId": "com.samsung.tv.nfc-monitor",
+      "version": "24.11.01.2"
+    },
+    {
+      "id": "org.tizen.ssoservice",
+      "name": "sso-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.ssoservice",
+      "version": "125.25.05211"
+    },
+    {
+      "id": "com.samsung.tv.wizard.Woc",
+      "name": "Wizard Woc",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wizard.Woc",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.tvcamera-iot-indicator",
+      "name": "com.samsung.tv.tvcamera-iot-indicator",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.tvcamera-iot-indicator/shared/res/tvcamera-iot-indicator.png",
+      "packageId": "com.samsung.tv.tvcamera-iot-indicator",
+      "version": "1.0.7"
+    },
+    {
+      "id": "org.tizen.webappservice-commui",
+      "name": "ui-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.webappservice-commui",
+      "version": "0.0.2"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-test",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "org.tizen.ep-dataservice-app",
+      "name": "ep-dataservice-app",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-dataservice-app/shared/res/org.tizen.ep-dataservice-app.png",
+      "packageId": "org.tizen.ep-dataservice-app",
+      "version": "0.2"
+    },
+    {
+      "id": "com.samsung.tv.cis",
+      "name": "CISServiceApp",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cis-service-app",
+      "version": "25.1.14"
+    },
+    {
+      "id": "com.samsung.tv.av-sync-service",
+      "name": "av-sync-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.av-sync-service",
+      "version": "0.2"
+    },
+    {
+      "id": "com.samsung.tv.ondevice-voice",
+      "name": "com.samsung.tv.ondevice-voice",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ondevice-voice/shared/res/Icon_512_423.png",
+      "packageId": "com.samsung.tv.ondevice-voice",
+      "version": "26.25.01280"
+    },
+    {
+      "id": "org.tizen.ep-loggerwindow-ui",
+      "name": "ep-loggerwindow-ui",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.ep-loggerwindow-ui",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.easysetup-daemon",
+      "name": "easysetup-daemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/org.tizen.easysetup-daemon/shared/res/easysetup-daemon.png",
+      "packageId": "org.tizen.easysetup-daemon",
+      "version": "1.90.50"
+    },
+    {
+      "id": "rJeHak5zRg.Spotify",
+      "name": "Spotify - Music and Podcasts",
+      "show": true,
+      "iconPath": "/opt/usr/apps/rJeHak5zRg/shared/res/rJeHak5zRg.Spotify.png",
+      "packageId": "rJeHak5zRg",
+      "version": "2.1.71"
+    },
+    {
+      "id": "org.tizen.pvrplayer",
+      "name": "pvrplayer",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.pvrplayer/shared/res/org.tizen.pvrplayer.png",
+      "packageId": "org.tizen.pvrplayer",
+      "version": "2022.10.19"
+    },
+    {
+      "id": "com.samsung.tv.cms-daemon",
+      "name": "cms-daemon",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.cms-service/shared/res/cms-daemon.png",
+      "packageId": "com.samsung.tv.cms-service",
+      "version": "125.26.04162"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-3488",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.passthru-service",
+      "name": "passthru-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.passthru-service/shared/res/passthru-service.png",
+      "packageId": "com.samsung.tv.passthru-service",
+      "version": "25.25.09110"
+    },
+    {
+      "id": "org.tizen.channel-search",
+      "name": "TV App channel-search",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.channel-search/shared/res/org.tizen.channel-search.png",
+      "packageId": "org.tizen.channel-search",
+      "version": "0.2.2"
+    },
+    {
+      "id": "com.samsung.tv.contentimageapp",
+      "name": "ContentImageApp",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.contentimageapp/shared/res/Tizen.TV.Application.LightTV.png",
+      "packageId": "com.samsung.tv.contentimageapp",
+      "version": "2.2.16"
+    },
+    {
+      "id": "org.tizen.ep-hotel-protocolui",
+      "name": "ephotel-protocolui",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.ep-hotel-protocolui/shared/res/org.tizen.ep-hotel-protocolui.png",
+      "packageId": "org.tizen.ep-hotel-protocolui",
+      "version": "0.3.1"
+    },
+    {
+      "id": "com.samsung.tv.ai-discovery-ui",
+      "name": "ai-discovery-ui",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ai-discovery-ui/shared/res/AI_Discovery_UI.png",
+      "packageId": "com.samsung.tv.ai-discovery-ui",
+      "version": "0.3.20"
+    },
+    {
+      "id": "unified-drm-ReporterTA-RoseM",
+      "name": "unified-drm-ReporterTA-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-ReporterTA-RoseM",
+      "version": "24.09.13090"
+    },
+    {
+      "id": "com.samsung.tv.mybixby",
+      "name": "VoiceDiscoveryMenu",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.mybixby/shared/res/MyBixbyTest.png",
+      "packageId": "com.samsung.tv.mybixby",
+      "version": "8.26.01301"
+    },
+    {
+      "id": "com.samsung.tv.ContentsBrowser",
+      "name": "ContentsBrowser",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ContentsBrowser/shared/res/ContentsBrowser.png",
+      "packageId": "com.samsung.tv.ContentsBrowser",
+      "version": "5.26.08241"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-client",
+      "name": "smartthings-client",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tizen.smartthings-client",
+      "version": "6.0.169"
+    },
+    {
+      "id": "org.tizen.ep-system-manager",
+      "name": "ep-system-manager",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.ep-system-manager",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.cis-api-service-app",
+      "name": "cis api service app",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cis-api-service-app",
+      "version": "5.1.0"
+    },
+    {
+      "id": "org.tizen.btaudiolist",
+      "name": "btaudiolist",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.btaudiolist/shared/res/org.tizen.btaudiolist-Tizen.png",
+      "packageId": "org.tizen.btaudiolist",
+      "version": "23.10.17.3"
+    },
+    {
+      "id": "com.samsung.tv.targeted-ad-service",
+      "name": "Targeted Advertisment Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.targeted-ad-service/shared/res/org.tizen.message.png",
+      "packageId": "com.samsung.tv.targeted-ad-service",
+      "version": "0.0.37"
+    },
+    {
+      "id": "com.samsung.tv.speakerlocation-app-engine",
+      "name": "speakerlocationappengine",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.speakerlocation-app-engine/shared/res/speakerlocation-app-engine.png",
+      "packageId": "com.samsung.tv.speakerlocation-app-engine",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.pvod-appfw",
+      "name": "PvodFW",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.pvod-appfw",
+      "version": "1.80.19025"
+    },
+    {
+      "id": "org.tizen.video-player-tv",
+      "name": "Video Player",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.video-player-tv",
+      "version": "24.10.28"
+    },
+    {
+      "id": "com.samsung.tv.GenerativeWallpaper",
+      "name": "Generative Wallpaper",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.GenerativeWallpaper/shared/res/generationIcon.jpg",
+      "packageId": "com.samsung.tv.GenerativeWallpaper",
+      "version": "1.4.2"
+    },
+    {
+      "id": "com.samsung.tv.SSMPolicy",
+      "name": "Software Stability Monitor",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.SSMPolicy/shared/res/SSMPolicy.png",
+      "packageId": "com.samsung.tv.SSMPolicy",
+      "version": "1.0.12"
+    },
+    {
+      "id": "org.tizen.wizard",
+      "name": "wizard",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.wizard/shared/res/org.tizen.wizard.png",
+      "packageId": "org.tizen.wizard",
+      "version": "1.1"
+    },
+    {
+      "id": "com.samsung.tv.aisound-app-engine",
+      "name": "aisoundappengine",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.aisound-app-engine/shared/res/aisound-app-engine.png",
+      "packageId": "com.samsung.tv.aisound-app-engine",
+      "version": "3.0.0"
+    },
+    {
+      "id": "com.samsung.tv.download-content",
+      "name": "",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.ai-discovery-service",
+      "version": "0.2.73"
+    },
+    {
+      "id": "30IKH0OX8U.cwservice",
+      "name": "Aria Video CW BG Service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/30IKH0OX8U/shared/res/30IKH0OX8U.cwservice.png",
+      "packageId": "30IKH0OX8U",
+      "version": "16.2.0"
+    },
+    {
+      "id": "com.samsung.tv.googlecast-app",
+      "name": "googlecast-app",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.googlecast-app/shared/res/googlecast-app.png",
+      "packageId": "com.samsung.tv.googlecast-app",
+      "version": "1.38.90"
+    },
+    {
+      "id": "org.tizen.NetworkSpeaker",
+      "name": "NetworkSpeaker",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.NetworkSpeaker",
+      "version": "1.0.5"
+    },
+    {
+      "id": "org.tizen.tv-viewer",
+      "name": "tv-viewer",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "com.samsung.tv.coba.home-notification",
+      "name": "CoBAHomeNotification",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.home-notification",
+      "version": "1.0.0"
+    },
+    {
+      "id": "p2p-asm",
+      "name": "p2p-asm",
+      "show": false,
+      "iconPath": "",
+      "packageId": "p2p-asm",
+      "version": "23.12.27.0"
+    },
+    {
+      "id": "com.samsung.tv.context-aware-service",
+      "name": "ContextAwareService",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.context-aware-service",
+      "version": "2.5.031"
+    },
+    {
+      "id": "org.tizen.rct-app",
+      "name": "rct-app",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.rct-app/shared/res/org.tizen.rct-app.png",
+      "packageId": "org.tizen.rct-app",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.vc-elm-unittests",
+      "name": "Voice Control Elm unittests",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.vc-elm-unittests",
+      "version": "0.6.2"
+    },
+    {
+      "id": "w2VwCK465D.OTApp",
+      "name": "Samsung TV Plus Privacy Settings",
+      "show": true,
+      "iconPath": "/opt/usr/apps/w2VwCK465D/shared/res/w2VwCK465D.OTApp.png",
+      "packageId": "w2VwCK465D",
+      "version": "1.1.71"
+    },
+    {
+      "id": "com.samsung.tv.wocgadgets-settings",
+      "name": "woc-device",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.wocgadgets-settings",
+      "version": "25.02.12"
+    },
+    {
+      "id": "org.tizen.smarthub-reset",
+      "name": "org.tizen.smarthub-reset",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.smarthub-reset/shared/res/org.tizen.smarthub-reset.png",
+      "packageId": "org.tizen.smarthub-reset",
+      "version": "0.0.3"
+    },
+    {
+      "id": "com.samsung.tv.voiceid-service",
+      "name": "voiceid-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.voiceid-service/shared/res/voiceid-service.png",
+      "packageId": "com.samsung.tv.voiceid-service",
+      "version": "25.25.12230"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget",
+      "name": "IoTAoV Widget",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsSummary.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "usb-sound-service",
+      "name": "usb-sound-service",
+      "show": false,
+      "iconPath": "",
+      "packageId": "usb-sound-service",
+      "version": "22.04.26.0"
+    },
+    {
+      "id": "kupCeIdDkX.HueSync",
+      "name": "Hue Sync",
+      "show": true,
+      "iconPath": "/opt/usr/apps/kupCeIdDkX/shared/res/kupCeIdDkX.HueSync.png",
+      "packageId": "kupCeIdDkX",
+      "version": "1.11.71"
+    },
+    {
+      "id": "org.tizen.channel-manager",
+      "name": "Channel Manager",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.channel-manager/shared/res/org.tizen.channel-manager.png",
+      "packageId": "org.tizen.channel-manager",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.ambientfte",
+      "name": "AmbientFTE",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.ambientfte/shared/res/AmbientFTE.png",
+      "packageId": "com.samsung.tv.ambientfte",
+      "version": "1.9.12"
+    },
+    {
+      "id": "com.samsung.tizen.autofill-app",
+      "name": "AutofillApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.autofill-app/shared/res/autofill-app.png",
+      "packageId": "com.samsung.tizen.autofill-app",
+      "version": "7.1.07020"
+    },
+    {
+      "id": "com.samsung.tv.samsungdex",
+      "name": "SamsungDex",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.samsungdex/shared/res/SamsungDeX.png",
+      "packageId": "com.samsung.tv.samsungdex",
+      "version": "1.90.00003"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-detail",
+      "name": "com.samsung.tv.iotdetailView",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "com.samsung.tv.airplay-app-2-dummy",
+      "name": "airplay-app-2",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.airplay-app-2",
+      "version": "6.15.904"
+    },
+    {
+      "id": "unified-drm-fkp-RoseM",
+      "name": "unified-drm-fkp-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-fkp-RoseM",
+      "version": "25.01.13090"
+    },
+    {
+      "id": "org.tizen.rscm-syncplayer",
+      "name": "RSCM SyncPlayer",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-shop-care-hub",
+      "version": "0.3.18"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub1",
+      "name": "tv-viewer-sub1",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "com.samsung.tv.CSAccount",
+      "name": "CSAccount",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.CSAccount/shared/res/images.png",
+      "packageId": "com.samsung.tv.CSAccount",
+      "version": "125.26.05281"
+    },
+    {
+      "id": "25emanual2.emanual",
+      "name": "User Guide",
+      "show": true,
+      "iconPath": "/opt/usr/apps/25emanual2/shared/res/25emanual2.emanual.png",
+      "packageId": "25emanual2",
+      "version": "6.9.1"
+    },
+    {
+      "id": "com.samsung.tv.AICompanionUI",
+      "name": "AICompanionUI",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.AICompanionUI/shared/res/AICompanionUI.png",
+      "packageId": "com.samsung.tv.AICompanionUI",
+      "version": "3.0.43"
+    },
+    {
+      "id": "com.samsung.tv.otpdebug",
+      "name": "OTPDebug",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.otpdebug/shared/res/OTPDebug.png",
+      "packageId": "com.samsung.tv.otpdebug",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub2",
+      "name": "tv-viewer-sub2",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "MCmYXNxgcu.DisneyPlus",
+      "name": "Disney+",
+      "show": true,
+      "iconPath": "/opt/usr/apps/MCmYXNxgcu/shared/res/MCmYXNxgcu.DisneyPlus.png",
+      "packageId": "MCmYXNxgcu",
+      "version": "26.4.0"
+    },
+    {
+      "id": "org.tizen.tts-resource",
+      "name": "tts-resource",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tts-resource",
+      "version": "25.25.04290"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-yt",
+      "name": "Youtube",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "rJeHak5zRg.SpotifyService",
+      "name": "SpotifyRecomendationsService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/rJeHak5zRg/shared/res/rJeHak5zRg.SpotifyService.png",
+      "packageId": "rJeHak5zRg",
+      "version": "2.1.71"
+    },
+    {
+      "id": "com.samsung.tv.smartthingsfind-daemon",
+      "name": "SmartThings-Find",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.smartthingsfind-daemon/shared/res/smartthingsfind.png",
+      "packageId": "com.samsung.tv.smartthingsfind-daemon",
+      "version": "4.0.3"
+    },
+    {
+      "id": "com.samsung.tv.CSBilling",
+      "name": "CSBilling",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.CSBilling/shared/res/com.samsung.tv.CSBilling.png",
+      "packageId": "com.samsung.tv.CSBilling",
+      "version": "135.26.08042"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-security",
+      "name": "SmartThingsSecurity",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsEnergy.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "org.tizen.ScreenMirroring-app-tv",
+      "name": "ScreenMirroring-app-tv",
+      "show": true,
+      "iconPath": "/opt/usr/apps/org.tizen.ScreenMirroring-app-tv/shared/res/flip_ic_smartview.svg",
+      "packageId": "org.tizen.ScreenMirroring-app-tv",
+      "version": "3.2.10290"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub3",
+      "name": "tv-viewer-sub3",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "org.tizen.was-builtinupgrade",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.was-builtinupgrade",
+      "version": "0.0.2"
+    },
+    {
+      "id": "MCmYXNxgcu.DisneyPlusService",
+      "name": "DisneyPlusPreviewService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/MCmYXNxgcu/shared/res/MCmYXNxgcu.DisneyPlusService.png",
+      "packageId": "MCmYXNxgcu",
+      "version": "26.4.0"
+    },
+    {
+      "id": "com.samsung.tv.tv-scheduler",
+      "name": "",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.tv-scheduler",
+      "version": "0.2.2"
+    },
+    {
+      "id": "com.samsung.tv.AIInterpreterViewerApp",
+      "name": "AIInterpreterViewerApp",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.AIInterpreterViewerApp/shared/res/icon.png",
+      "packageId": "com.samsung.tv.AIInterpreterViewerApp",
+      "version": "1.3.7"
+    },
+    {
+      "id": "tv6pbVMQFF.PrivacyChoices",
+      "name": "Privacy Choices",
+      "show": false,
+      "iconPath": "/opt/usr/apps/tv6pbVMQFF/shared/res/tv6pbVMQFF.PrivacyChoices.png",
+      "packageId": "tv6pbVMQFF",
+      "version": "1.1.16"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub4",
+      "name": "tv-viewer-sub4",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "com.samsung.tv.CSAccountOOBE",
+      "name": "CSAccountOOBE",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.CSAccount/shared/res/images.png",
+      "packageId": "com.samsung.tv.CSAccount",
+      "version": "125.26.05281"
+    },
+    {
+      "id": "com.samsung.tv.coba.multiscreen",
+      "name": "CoBA MultiScreen App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.multiscreen",
+      "version": "1.0.0"
+    },
+    {
+      "id": "com.samsung.tv.CSCPP",
+      "name": "CSCPP",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.CSCPP",
+      "version": "125.26.05141"
+    },
+    {
+      "id": "com.samsung.tv.multiscreen",
+      "name": "MultiScreen",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.multiscreen/shared/res/MultiScreen.png",
+      "packageId": "com.samsung.tv.multiscreen",
+      "version": "0.1.9"
+    },
+    {
+      "id": "com.samsung.tv.wakeup-engine-bixby",
+      "name": "com.samsung.tv.wakeup-engine-bixby",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.wakeup-engine-bixby/shared/res/wakeup-engine-bixby.png",
+      "packageId": "com.samsung.tv.wakeup-engine-bixby",
+      "version": "26.25.08141"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-6019",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub5",
+      "name": "tv-viewer-sub5",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "com.samsung.tv.homeupdateview",
+      "name": "HomeUpdateView",
+      "show": true,
+      "iconPath": "/usr/apps/com.samsung.tv.homeupdateview/shared/res/HomeUpdateView.png",
+      "packageId": "com.samsung.tv.homeupdateview",
+      "version": "1.0.4"
+    },
+    {
+      "id": "com.samsung.tv.billing-helper",
+      "name": "BillingHelper",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.billing-helper/shared/res/billing-helper.png",
+      "packageId": "com.samsung.tv.billing-helper",
+      "version": "125.26.07021"
+    },
+    {
+      "id": "com.samsung.tv.AccountNudgeService",
+      "name": "NudgeService",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.AccountNudgeService/shared/res/images.png",
+      "packageId": "com.samsung.tv.AccountNudgeService",
+      "version": "125.26.03111"
+    },
+    {
+      "id": "com.samsung.tv.tvkey-preview",
+      "name": "TVKeyRecommendDownloader",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.tvkey-preview/shared/res/TVKeyRecommendDownloader.png",
+      "packageId": "com.samsung.tv.tvkey-preview",
+      "version": "1.0.1"
+    },
+    {
+      "id": "org.tizen.tv-viewer-sub6",
+      "name": "tv-viewer-sub6",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.tv-viewer",
+      "version": "0.3.7"
+    },
+    {
+      "id": "org.tizen.autofilld",
+      "name": "autofill daemon",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.autofilld",
+      "version": "1.1.6"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-sleepreport",
+      "name": "SmartThingsSleepReport",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsEnergy.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "com.samsung.tv.AICompanionUINotice",
+      "name": "Vision AI Notice",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.AICompanionUINotice/shared/res/AICompanionUINotice.png",
+      "packageId": "com.samsung.tv.AICompanionUINotice",
+      "version": "3.0.7"
+    },
+    {
+      "id": "com.samsung.ep.hotel-popup",
+      "name": "HotelPopupApp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.ep.hotel-popup",
+      "version": "3.0.3"
+    },
+    {
+      "id": "org.tizen.SmartRC",
+      "name": "SmartRC",
+      "show": true,
+      "iconPath": "/usr/apps/org.tizen.SmartRC/shared/res/org.tizen.SmartRC-Tizen.png",
+      "packageId": "org.tizen.SmartRC",
+      "version": "25.07.02"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.btdevicelist",
+      "name": "Setting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.btdevicelist",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.iotwidget-petcare",
+      "name": "SmartThingsPetCare",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.iotwidget/shared/res/SmartThingsEnergy.png",
+      "packageId": "com.samsung.tv.iotwidget",
+      "version": "225.26.09141"
+    },
+    {
+      "id": "com.sausng.tv.mbr-downloadable-feature",
+      "name": "mbr-downloadable-feature",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.mbr-downloadable-feature",
+      "version": "1.1.0"
+    },
+    {
+      "id": "org.tizen.litewebappservice",
+      "name": "service-application",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.litewebappservice",
+      "version": "0.0.4"
+    },
+    {
+      "id": "com.samsung.tv.knox-browser-win365",
+      "name": "Windows 365",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.knox-browser/shared/res/.png",
+      "packageId": "com.samsung.tv.knox-browser",
+      "version": "8.20.105"
+    },
+    {
+      "id": "org.tizen.schedule-manager",
+      "name": "schedule-manager",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.schedule-manager/shared/res/org.tizen.schedule-manager.png",
+      "packageId": "org.tizen.schedule-manager",
+      "version": "0.2.3"
+    },
+    {
+      "id": "org.tizen.widget_viewer_sdk",
+      "name": "Widget Viewer for SDK",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.widget_viewer_sdk/shared/res/org.tizen.widget_viewer_sdk",
+      "packageId": "org.tizen.widget_viewer_sdk",
+      "version": "1.0.0"
+    },
+    {
+      "id": "org.tizen.photo-player-tv",
+      "name": "Photo Player",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.photo-player-tv",
+      "version": "24.04.01"
+    },
+    {
+      "id": "com.samsung.tv.UsbCameraApp",
+      "name": "Samsung Camera App",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.UsbCameraApp/shared/res/i_icon_device_m_Logicam.svg",
+      "packageId": "com.samsung.tv.UsbCameraApp",
+      "version": "1.0.5"
+    },
+    {
+      "id": "org.tizen.mbr-app",
+      "name": "TV App MBRApp",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.mbr-app",
+      "version": "0.2.3"
+    },
+    {
+      "id": "ug-ttxUG-efl",
+      "name": "ug-ttxUG-efl",
+      "show": true,
+      "iconPath": "",
+      "packageId": "ug-ttxUG-efl",
+      "version": "0.1"
+    },
+    {
+      "id": "org.tizen.chromium-efl",
+      "name": "Tizen Web Engine based on Chromium",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.chromium-efl",
+      "version": "1.1.120"
+    },
+    {
+      "id": "com.samsung.tv.workspace-plugin",
+      "name": "workspace-plugin",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.workspace-plugin",
+      "version": "1.90.00004"
+    },
+    {
+      "id": "unified-drm-Nagsam-RoseM",
+      "name": "unified-drm-Nagsam-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-Nagsam-RoseM",
+      "version": "24.11.07090"
+    },
+    {
+      "id": "com.samsung.tizen.smartthings-streaming",
+      "name": "smartthings-streaming",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tizen.smartthings-streaming/shared/res/smartthings-streaming.png",
+      "packageId": "com.samsung.tizen.smartthings-streaming",
+      "version": "6.0.2"
+    },
+    {
+      "id": "org.tizen.UsbSyncDisplay.keygrab",
+      "name": "Key grab",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.UsbSyncDisplay",
+      "version": "0.0.1"
+    },
+    {
+      "id": "com.samsung.tv.airplay-app-2",
+      "name": "airplay-app-2",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.airplay-app-2/shared/res/airplay-app-2.png",
+      "packageId": "com.samsung.tv.airplay-app-2",
+      "version": "6.15.904"
+    },
+    {
+      "id": "com.samsung.tv.coba.setting.aitech",
+      "name": "Setting",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.coba.setting.aitech",
+      "version": "1.0.1"
+    },
+    {
+      "id": "com.samsung.tv.fuzzy-search-engine",
+      "name": "fuzzy-search-engine",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.fuzzy-search-engine/shared/res/fuzzy-search-engine.png",
+      "packageId": "com.samsung.tv.fuzzy-search-engine",
+      "version": "2.2.1625"
+    },
+    {
+      "id": "ep-log-manager",
+      "name": "ep-log-manager",
+      "show": true,
+      "iconPath": "",
+      "packageId": "ep-log-manager",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-2146",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "org.tizen.automation-alert",
+      "name": "automation-alert",
+      "show": true,
+      "iconPath": "",
+      "packageId": "org.tizen.automation-alert",
+      "version": "0.1"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-gpm",
+      "name": "GooglePlayMovie",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "gsl-controller",
+      "name": "gsl-controller",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.gsl-service",
+      "version": "0.2.1"
+    },
+    {
+      "id": "com.samsung.tv.quickpanel",
+      "name": "QuickPanel",
+      "show": true,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.quickpanel/shared/res/com.samsung.tv.quickpanel.png",
+      "packageId": "com.samsung.tv.quickpanel",
+      "version": "6.26.02021"
+    },
+    {
+      "id": "30IKH0OX8U.TestBGService",
+      "name": "AriaVideoBGService",
+      "show": false,
+      "iconPath": "/opt/usr/apps/30IKH0OX8U/shared/res/30IKH0OX8U.TestBGService.png",
+      "packageId": "30IKH0OX8U",
+      "version": "16.2.0"
+    },
+    {
+      "id": "org.tizen.pvrrecorder-syspopup",
+      "name": "sample-sys-popup",
+      "show": false,
+      "iconPath": "/usr/apps/org.tizen.pvrrecorder-syspopup/shared/res/org.tizen.pvrrecorder-syspopup.png",
+      "packageId": "org.tizen.pvrrecorder-syspopup",
+      "version": "0.01.29.01"
+    },
+    {
+      "id": "com.samsung.tv.contents-recognition-dbmgr",
+      "name": "contents-recognition-dbmgr",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.contents-recognition-dbmgr",
+      "version": "1.25.43"
+    },
+    {
+      "id": "unified-drm-WidevineClassic-RoseM",
+      "name": "unified-drm-WidevineClassic-RoseM",
+      "show": false,
+      "iconPath": "",
+      "packageId": "unified-drm-WidevineClassic-RoseM",
+      "version": "25.18.01090"
+    },
+    {
+      "id": "com.samsung.tv.AICompanionAgent",
+      "name": "AICompanionAgent",
+      "show": false,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.AICompanionAgent",
+      "version": "25.26.08060"
+    },
+    {
+      "id": "org.tizen.remote-service-logging-debug-menu",
+      "name": "Remote Service Debug Menu",
+      "show": false,
+      "iconPath": "",
+      "packageId": "org.tizen.remote-service-logging-debug-menu",
+      "version": "0.1"
+    },
+    {
+      "id": "emergency-log-transmitter",
+      "name": "ELT QR Display",
+      "show": true,
+      "iconPath": "",
+      "packageId": "emergency-log-transmitter",
+      "version": "0.2"
+    },
+    {
+      "id": "FrmHmPrb01.FrameProbe",
+      "name": "Frame Probe",
+      "show": true,
+      "iconPath": "/opt/usr/apps/FrmHmPrb01/shared/res/FrmHmPrb01.FrameProbe.png",
+      "packageId": "FrmHmPrb01",
+      "version": "0.1.0"
+    },
+    {
+      "id": "com.samsung.tv.cobalt-app-3436",
+      "name": "App",
+      "show": true,
+      "iconPath": "",
+      "packageId": "com.samsung.tv.cobalt",
+      "version": "25.30.103"
+    },
+    {
+      "id": "com.samsung.tv.glscreensaver-launcher",
+      "name": "com.samsung.tv.glscreensaver-launcher",
+      "show": false,
+      "iconPath": "/usr/apps/com.samsung.tv.glscreensaver-launcher/shared/res/ScreenSaver.png",
+      "packageId": "com.samsung.tv.glscreensaver-launcher",
+      "version": "1.0.7"
+    },
+    {
+      "id": "com.samsung.tv.alexa-client",
+      "name": "Alexa Client",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.alexa-client/shared/res/alexa_icon.png",
+      "packageId": "com.samsung.tv.alexa-client",
+      "version": "25.026.06160"
+    },
+    {
+      "id": "samsung-easy-support",
+      "name": "Samsung Easy Support",
+      "show": true,
+      "iconPath": "",
+      "packageId": "samsung-easy-support",
+      "version": "0.4"
+    },
+    {
+      "id": "org.tizen.bms-service",
+      "name": "bms-service",
+      "show": false,
+      "iconPath": "/opt/usr/apps/com.samsung.tv.slive-daemon/shared/res/bms-service.png",
+      "packageId": "com.samsung.tv.slive-daemon",
+      "version": "2.9.04422"
+    }
+  ],
+  "videoSources": {
+    "connected": [
+      {
+        "type": "TV",
+        "number": 1,
+        "signal": null,
+        "editName": null
+      }
+    ],
+    "disconnected": [
+      {
+        "type": "HDMI",
+        "number": 1,
+        "signal": null,
+        "editName": null
+      },
+      {
+        "type": "HDMI",
+        "number": 2,
+        "signal": null,
+        "editName": null
+      },
+      {
+        "type": "HDMI",
+        "number": 3,
+        "signal": null,
+        "editName": null
+      },
+      {
+        "type": "HDMI",
+        "number": 4,
+        "signal": null,
+        "editName": null
+      }
+    ]
+  }
+}

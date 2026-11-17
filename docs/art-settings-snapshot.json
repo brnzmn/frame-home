@@ -1,0 +1,25 @@
+{
+  "taken_at": "2026-11-10T21:11:01",
+  "art_settings": {
+    "brightness": "0",
+    "color_temperature": "0",
+    "motion_sensitivity": "2",
+    "motion_timer": "off",
+    "brightness_sensor_setting": "on"
+  },
+  "slideshow": {
+    "running": false,
+    "minutes": "off",
+    "category_id": "",
+    "type": "",
+    "images": 0
+  },
+  "images_listed": 2,
+  "landscape_mats": {
+    "none": 2
+  },
+  "portrait_mats": {
+    "none": 1,
+    "flexible_polar": 1
+  }
+}

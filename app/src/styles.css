@@ -1,0 +1,256 @@
+/* Frame Home. A gallery wall at night: a deep plum-charcoal wall, warm paper-white ink, and
+   the Frame's own mat colour for the Frame row.
+
+   Speed rule, measured on the TV: a focus move may only change `transform` and `opacity`.
+   Everything else (shadows, the lit card colour, the ambient wash) is painted once on its own
+   layer and only faded. Animated gradients with variables cost 5 fps; live backdrop blur 31. */
+:root {
+  --wall: #17151a;
+  --wall-lift: #24212a;
+  --paper: #f3efe8;
+  --muted: #a9a3b2;
+  --mat: #e8e1d3;
+  --mat-ink: #1b1820;
+
+  --edge: 96px;
+  --gap: 28.8px;
+  --tile-w: 264px;
+  --tile-h: 148px;
+  --card-h: 120px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--wall);
+  color: var(--paper);
+  font-family: "SamsungOneUI", "Samsung One", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  transform-origin: 0 0;
+  background: var(--wall);
+}
+
+/* Ambient colour that follows the focused tile. home.ts makes one of these per glow colour,
+   sets --wash-a and --wash-b once, and a focus move only fades two of them. */
+.washes { position: absolute; inset: 0; }
+.wash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 200ms linear;
+  background:
+    radial-gradient(1300px 760px at 80% 8%, var(--wash-a), transparent 68%),
+    radial-gradient(900px 620px at 6% 0%, var(--wash-b), transparent 70%),
+    linear-gradient(180deg, transparent 38%, var(--wall) 78%);
+}
+.wash.is-on { opacity: 1; }
+
+.clock {
+  position: absolute;
+  right: var(--edge);
+  top: 58px;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--paper) 82%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero and rows move together when the focus goes below the third row. */
+.content {
+  position: absolute;
+  inset: 0;
+  transition: transform 260ms var(--ease);
+}
+
+.hero {
+  position: absolute;
+  left: var(--edge);
+  top: 196px;
+  width: 1100px;
+}
+.hero-name {
+  margin: 0;
+  font-size: 92px;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+}
+.hero-line {
+  margin: 18px 0 0;
+  min-height: 36px;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.rows {
+  position: absolute;
+  left: var(--edge);
+  top: 452px;
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+}
+.row { display: flex; gap: var(--gap); }
+/* The Frame row spans the full width however many cards it holds. */
+.row-frame { width: 1728px; margin-bottom: -8px; }
+
+/* App tiles */
+.tile {
+  position: relative;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  flex: none;
+  will-change: transform;
+  transition: transform 120ms var(--ease);
+}
+.tile-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--from), var(--to));
+  box-shadow: 0 10px 24px rgba(8, 6, 12, 0.38);
+}
+/* The focus shadow and ring, drawn once; focus only fades it in. */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  pointer-events: none;
+  box-shadow: 0 36px 70px rgba(8, 6, 12, 0.62), 0 0 0 3px rgba(243, 239, 232, 0.92);
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 120ms linear;
+}
+.tile.is-focused::after { opacity: 1; }
+.tile-word {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 18px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+/* The TV's icons are square. Centred and drawn as wide as the tile they cover it; home.ts
+   draws the ones with tall logos smaller and continues their background colour. */
+.tile-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--tile-w);
+  height: var(--tile-w);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.tile-icon.is-loaded { opacity: 1; }
+.tile-face.has-icon .tile-word { opacity: 0; }
+.tile.is-focused { transform: scale(1.12) translateY(-6px); z-index: 2; }
+.tile.is-pressed { transform: scale(1.06) translateY(-2px); }
+
+/* Frame row: mat board. Quiet until focused, then lit like a mat under a picture light.
+   The lit colour is the ::before layer, the shadow the ::after layer; focus only fades them. */
+.card {
+  position: relative;
+  isolation: isolate;
+  height: var(--card-h);
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 28px;
+  border-radius: 30px;
+  color: var(--paper);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--mat) 11%, transparent), color-mix(in srgb, var(--mat) 5%, transparent));
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mat) 18%, transparent);
+  will-change: transform;
+  transition: transform 120ms var(--ease);
+}
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 120ms linear;
+}
+.card::before {
+  z-index: -1;
+  background: linear-gradient(135deg, var(--from), var(--to));
+}
+.card::after { box-shadow: 0 30px 60px rgba(8, 6, 12, 0.55); }
+.card.is-focused::before,
+.card.is-focused::after { opacity: 1; }
+.card-glyph { width: 46px; height: 46px; flex: none; opacity: 0.9; }
+.card-glyph svg { display: block; width: 100%; height: 100%; }
+.card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.card-name { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
+.card-line { font-size: 21px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The text colour flips at once (a few words, no repaint of anything large); the mat fades. */
+.card.is-focused { transform: scale(1.06) translateY(-4px); z-index: 2; color: var(--mat-ink); }
+.card.is-focused .card-line { color: rgba(27, 24, 32, 0.68); }
+.card.is-pressed { transform: scale(1.02); }
+
+/* Choose art (ui/picker.ts): pictures in the app tile's fixed box. A thumbnail fills it and only
+   fades in, so nothing moves when one arrives. Until then the kind shows as a quiet word. */
+.art-tile .tile-word {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.art-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.art-thumb.is-loaded { opacity: 1; }
+/* The first-use screen: one card, not stretched across the row. */
+.rows-art-empty .row-frame { width: 560px; }
+
+.note {
+  position: absolute;
+  left: var(--edge);
+  bottom: 44px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  background: var(--wall-lift);
+  font-size: 22px;
+  color: var(--paper);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.note.is-on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wash, .content, .tile, .tile::after, .card, .card::before, .card::after, .note, .art-thumb { transition: none; }
+}

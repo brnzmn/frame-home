@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.buildResult/
+*.wgt
+.sign/
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Anything that identifies the TV, this Mac or an account stays local
+.tv.json
+probe/probe-config.js
+tools/frame/.tokens/
+docs/private/
+build/
+.claude/worktrees/

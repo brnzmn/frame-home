@@ -1,0 +1,31 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+body { background: #0b0d12; color: #e8eaf0; font: 22px/1.35 -apple-system, "Samsung One", "Helvetica Neue", Arial, sans-serif; }
+body.hole { background: transparent; }
+body.hole header, body.hole main, body.hole footer { visibility: hidden; }
+
+header { display: flex; align-items: baseline; justify-content: space-between; padding: 28px 48px 8px; }
+h1 { margin: 0; font-size: 40px; font-weight: 600; }
+h2 { margin: 0 0 10px; font-size: 24px; font-weight: 600; color: #9aa3b5; }
+h2 small { font-size: 18px; font-weight: 400; }
+#status { color: #9aa3b5; }
+
+main { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 28px; padding: 12px 48px; height: 900px; }
+section { overflow: hidden; }
+ul { list-style: none; margin: 0; padding: 0; }
+li { padding: 4px 10px; border-radius: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 20px; }
+
+.check.ok { color: #7ee2a8; }
+.check.partial, .check.timeout, .check.closed, .check.skipped, .check.none { color: #f2cf73; }
+.check.fail { color: #ff8f8f; }
+#apps li.selected { background: #e8eaf0; color: #0b0d12; }
+#events li { color: #b9c0cf; font-size: 18px; }
+
+footer { position: absolute; left: 48px; bottom: 26px; color: #6f788a; font-size: 20px; }
+
+#fps-stage { display: none; }
+#fps-stage.on { display: grid; position: absolute; inset: 0; grid-template-columns: repeat(6, 1fr); gap: 40px; padding: 220px 120px; background: #0b0d12; }
+#fps-stage .tile { border-radius: 28px; background: linear-gradient(135deg, #3b6cff, #b14bff); animation: pulse 1.2s ease-in-out infinite alternate; }
+#fps-stage.shadow .tile, #fps-stage.blur .tile { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+#fps-stage.blur::after { content: ""; position: absolute; inset: 0 0 50% 0; -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px); background: rgba(20, 22, 30, 0.35); }
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.12) translateY(-12px); } }

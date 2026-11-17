@@ -1,0 +1,176 @@
+/* Look "paper": the light option. A warm wall in the Frame's mat colour, dark ink, tiles as
+   cards pinned on it. Fraunces for the title, Figtree for labels.
+   Speed: the wall is one static layer; focus changes only transform and opacity. */
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('@fontsource/fraunces/files/fraunces-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url('@fontsource/figtree/files/figtree-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url('@fontsource/figtree/files/figtree-latin-600-normal.woff2') format('woff2');
+}
+
+:root[data-look="paper"] {
+  --wall: #e8e1d3;
+  --wall-lift: #1b1820;
+  --paper: #1b1820;
+  --muted: #6e6676;
+  --card: #f6f2ea;
+  --p-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:root[data-look="paper"],
+:root[data-look="paper"] body {
+  background: var(--wall);
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: var(--paper);
+}
+
+:root[data-look="paper"] .stage { background: var(--wall); }
+
+/* The wall: lit from above like a gallery, with a faint laid-paper grain. Painted once. */
+:root[data-look="paper"] .stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  will-change: transform;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 100, 70, 0.025) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 38px),
+    radial-gradient(2200px 1300px at 50% 40%, rgba(0, 0, 0, 0) 55%, rgba(90, 70, 40, 0.08) 100%),
+    radial-gradient(1600px 700px at 50% -8%, rgba(255, 252, 245, 0.75), rgba(255, 252, 245, 0) 70%),
+    linear-gradient(180deg, #ebe5d8 0%, #e6dfd0 55%, #ddd5c4 100%);
+}
+
+:root[data-look="paper"] .wash { display: none; }
+:root[data-look="paper"] .content { z-index: 1; }
+
+:root[data-look="paper"] .clock {
+  z-index: 1;
+  top: 58px;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(27, 24, 32, 0.62);
+}
+
+:root[data-look="paper"] .hero { top: 182px; }
+:root[data-look="paper"] .hero-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 108px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+}
+:root[data-look="paper"] .hero-line {
+  margin-top: 20px;
+  min-height: 34px;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 34px;
+  color: var(--muted);
+}
+
+/* App tiles: the app's own colours, as cards with a real paper shadow. */
+:root[data-look="paper"] .tile {
+  isolation: isolate;
+  transition: transform 120ms var(--p-ease);
+}
+:root[data-look="paper"] .tile-face,
+:root[data-look="paper"] .tile.is-focused .tile-face {
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(70, 52, 28, 0.22), 0 10px 22px -8px rgba(70, 52, 28, 0.38);
+  transition: none;
+}
+:root[data-look="paper"] .tile-word {
+  font-family: 'Figtree', system-ui, sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+:root[data-look="paper"] .tile::before,
+:root[data-look="paper"] .tile::after,
+:root[data-look="paper"] .card::before,
+:root[data-look="paper"] .card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  border: 0;
+  background: none;
+  transition: opacity 120ms ease;
+  filter: none;
+}
+/* Focus: an ink frame with a mat-wide gap, and the card lifted off the wall. */
+:root[data-look="paper"] .tile::before,
+:root[data-look="paper"] .card::before {
+  inset: -10px;
+  z-index: 1;
+  border-radius: 22px;
+  box-shadow: inset 0 0 0 3.5px var(--paper);
+}
+:root[data-look="paper"] .tile::after,
+:root[data-look="paper"] .card::after {
+  inset: 0;
+  z-index: -1;
+  border-radius: 14px;
+  box-shadow: 0 30px 44px -16px rgba(70, 52, 28, 0.55), 0 12px 18px -8px rgba(70, 52, 28, 0.3);
+}
+:root[data-look="paper"] .tile.is-focused { transform: scale(1.08) translateY(-6px); z-index: 2; }
+:root[data-look="paper"] .tile.is-pressed { transform: scale(1.04) translateY(-2px); }
+:root[data-look="paper"] .tile.is-focused::before,
+:root[data-look="paper"] .tile.is-focused::after,
+:root[data-look="paper"] .card.is-focused::before,
+:root[data-look="paper"] .card.is-focused::after { opacity: 1; }
+
+/* The Frame row: lighter paper cards. */
+:root[data-look="paper"] .card,
+:root[data-look="paper"] .card.is-focused {
+  isolation: isolate;
+  border-radius: 14px;
+  color: var(--paper);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(70, 52, 28, 0.16), 0 8px 18px -10px rgba(70, 52, 28, 0.3);
+  transition: transform 120ms var(--p-ease);
+}
+:root[data-look="paper"] .card.is-focused { transform: scale(1.03) translateY(-4px); z-index: 2; }
+:root[data-look="paper"] .card.is-pressed { transform: scale(1.02); }
+:root[data-look="paper"] .card-glyph { opacity: 0.85; }
+:root[data-look="paper"] .card-name {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+:root[data-look="paper"] .card-line,
+:root[data-look="paper"] .card.is-focused .card-line {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: none;
+}
+
+:root[data-look="paper"] .note {
+  z-index: 3;
+  border-radius: 12px;
+  background: var(--wall-lift);
+  color: var(--wall);
+  font-size: 22px;
+  font-weight: 500;
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "probe-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8791", "--directory", "probe"],
+      "port": 8791
+    },
+    {
+      "name": "probe-server",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/probe-server.mjs"],
+      "port": 8787
+    }
+  ]
+}

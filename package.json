@@ -1,0 +1,27 @@
+{
+  "name": "frame-home",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A tvOS-style launcher and a global frame look for a Samsung Frame Pro",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.26.2",
+  "scripts": {
+    "tv:find": "node tools/find-tv.mjs",
+    "tv:inspect": "node tools/tv-inspect.mjs",
+    "probe:server": "node tools/probe-server.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.7",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/inter": "^5.3.0"
+  }
+}
