@@ -5,6 +5,7 @@ A tvOS-style launcher ("Frame Home") and a global frame look for Baran's Samsung
 ## Rules
 
 - Flashing or rooting the TV is out. Do not reopen it without new public evidence.
+- Frame Home was removed from the TV on 2026-11-18 because Baran found it slowed the whole TV. Install nothing on the TV unless he asks.
 - Nothing is done until it is seen working on the TV. Label anything else unverified.
 - The gate in `docs/decisions.md` comes before any launcher UI work.
 - Never commit anything that identifies the TV, this Mac or an account: DUID, MAC addresses, pairing tokens, certificates, API keys. Local values live in `.tv.json`, `tools/frame/.tokens/` and `.env.local`, all gitignored.
